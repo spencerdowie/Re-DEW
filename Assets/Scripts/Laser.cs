@@ -13,21 +13,30 @@ public class Laser : MonoBehaviour
     private int maxSegments = 3;
     [SerializeField]
     private float laserLifetime = 5f;
+    [SerializeField]
+    private Transform laserPoint;
+    [SerializeField]
+    private GameObject hitboxPrefab;
+    private BoxCollider currentHitbox;
     private Queue<Vector3> points;
     private Vector3 destination;
     private UnityAction returnAmmo;
+    public UnityAction<int> giveKill;
+    private int playerNumber = -1;
 
-    public void Setup(int player, UnityAction returnAmmoAction)
+    public void Setup(int player, UnityAction returnAmmoAction, UnityAction<int> giveKillAction)
     {
         returnAmmo = returnAmmoAction;
+        giveKill = giveKillAction;
+        playerNumber = player;
         points = new Queue<Vector3>();
         float distanceLeft = laserMaxDistance;
 
         int numSegments = 0;
-        Vector3 segmentOrigin = transform.position, segmentDir = transform.forward;
+        Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
 
         while (distanceLeft > 0 && numSegments < maxSegments &&
-            Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, distanceLeft))
+            Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, distanceLeft, LayerMask.GetMask("Default")))
         {
             numSegments++;
             distanceLeft -= hit.distance;
@@ -40,19 +49,34 @@ public class Laser : MonoBehaviour
         StartCoroutine(DespawnCountdown());
     }
 
+    private BoxCollider SpawnHitbox()
+    {
+        BoxCollider hitbox = Instantiate(hitboxPrefab, transform).GetComponent<BoxCollider>();
+        hitbox.transform.position = laserPoint.position;
+        hitbox.gameObject.layer = 6 + playerNumber;
+        hitbox.transform.LookAt(destination);
+        hitbox.name = "Player " + playerNumber + " Laser";
+        return hitbox;
+    }
+
     private IEnumerator MoveLaser()
     {
         bool hasDest = true;
         destination = points.Dequeue();
+        currentHitbox = SpawnHitbox();
         while (hasDest)
         {
             float distance = laserSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, destination, distance);
+            laserPoint.position = Vector3.MoveTowards(laserPoint.position, destination, distance);
 
-            float remainingDistance = Vector3.Distance(transform.position, destination);
+            currentHitbox.size = currentHitbox.size + Vector3.forward * distance;
+            currentHitbox.center = currentHitbox.center + Vector3.forward * (distance / 2f);
+
+            float remainingDistance = Vector3.Distance(laserPoint.position, destination);
             if (remainingDistance <= distance)
             {
                 hasDest = points.TryDequeue(out destination);
+                currentHitbox = SpawnHitbox();
             }
 
             yield return null;
@@ -67,7 +91,7 @@ public class Laser : MonoBehaviour
             despawnTimer += Time.deltaTime;
             yield return null;
         }
-        returnAmmo.Invoke();
+        returnAmmo?.Invoke();
         yield return new WaitForFixedUpdate();
         Destroy(gameObject);
     }
