@@ -230,22 +230,22 @@
                 },
                 {
                     "name": "",
-                    "id": "9e4f6392-d430-4c83-afc1-1c389fe7fb10",
-                    "path": "<Gamepad>/rightTrigger",
+                    "id": "ad547537-cc89-4310-8ece-90feb09c8728",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "KeyboardMouse",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "ad547537-cc89-4310-8ece-90feb09c8728",
-                    "path": "<Keyboard>/space",
+                    "id": "9e4f6392-d430-4c83-afc1-1c389fe7fb10",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "KeyboardMouse",
+                    "groups": "Gamepad",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false

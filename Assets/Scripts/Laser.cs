@@ -24,13 +24,17 @@ public class Laser : MonoBehaviour
     public UnityAction<int> giveKill;
     private int playerNumber = -1;
 
-    public void Setup(int player, UnityAction returnAmmoAction, UnityAction<int> giveKillAction)
+    public void Setup(int player, Color playerColour, UnityAction returnAmmoAction, UnityAction<int> giveKillAction)
     {
         returnAmmo = returnAmmoAction;
         giveKill = giveKillAction;
         playerNumber = player;
         points = new Queue<Vector3>();
         float distanceLeft = laserMaxDistance;
+
+        TrailRenderer trail = GetComponentInChildren<TrailRenderer>();
+        trail.startColor = playerColour;
+        trail.endColor = playerColour;
 
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
