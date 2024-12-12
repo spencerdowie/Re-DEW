@@ -299,6 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779b2968c2d8d05458616deab43d368c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
   playerNumber: 0
   playerColour: {r: 1, g: 1, b: 1, a: 1}
   laserSpawn: {fileID: 7336288443647335580}

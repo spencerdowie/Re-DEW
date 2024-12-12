@@ -6,7 +6,10 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private int playerNumber = 0;
+    private PlayerDataSO playerData;
+    private PlayerManager playerManager;
+    [SerializeField]
+    private int playerIndex = 0;
     [SerializeField]
     private Color playerColour = Color.white;
     [SerializeField]
@@ -20,12 +23,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private MeshRenderer playerIndicator;
 
-    public void SetupPlayer(int playerNumber, Color playerColour, Vector3 spawnPos)
+    public void SetupPlayer(PlayerManager playerManager, int playerIndex, Vector3 spawnPos)
     {
-        name = "Player " + playerNumber;
-        this.playerNumber = playerNumber;
-        this.playerColour = playerColour;
+        this.playerManager = playerManager;
+        this.playerIndex = playerIndex;
+        name = "Player " + playerIndex;
+        playerColour = playerData.playerColours[playerIndex];
         playerIndicator.material.color = playerColour;
+        SpawnPlayer(spawnPos);
+    }
+
+    public void SpawnPlayer(Vector3 spawnPos)
+    {
         transform.position = spawnPos;
         GetComponent<CharacterController>().enabled = true; //Otherwise it resets postion to origin
     }
@@ -35,27 +44,21 @@ public class Player : MonoBehaviour
         if (ammo > 0)
         {
             Instantiate(laserPrefab, laserSpawn.position, laserSpawn.rotation)
-                .GetComponent<Laser>().Setup(playerNumber, playerColour, () => ammo++, RecieveKill);
+                .GetComponent<Laser>().Setup(playerIndex, playerColour, () => ammo++);
             ammo--;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Collision with " + other.name);
-        other.GetComponentInParent<Laser>().giveKill?.Invoke(playerNumber);
-        KillPlayer();
+        if (other.TryGetComponent(out Laser laser))
+            playerManager.PlayerHit(playerIndex, laser.PlayerIndex);
     }
 
-    private void RecieveKill(int player)
-    {
-        //Debug.Log("Player" + playerNumber + " Killed Player" + player);
-        score++;
-    }
-
-    private void KillPlayer()
+    public void KillPlayer()
     {
         transform.position = Vector3.left * 6f;
+        GetComponent<CharacterController>().enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);
     }
 }
