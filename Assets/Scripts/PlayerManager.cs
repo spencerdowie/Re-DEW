@@ -24,7 +24,7 @@ public class PlayerManager : MonoBehaviour
 
     public IEnumerator LoadGameUI()
     {
-        yield return SceneManager.LoadSceneAsync(0, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
     }
 

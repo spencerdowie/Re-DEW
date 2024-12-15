@@ -28,6 +28,9 @@ public class Laser : MonoBehaviour
     {
         returnAmmo = returnAmmoAction;
         this.playerIndex = playerIndex;
+
+        name = "Player " + playerIndex + " Laser";
+
         points = new Queue<Vector3>();
         float distanceLeft = laserMaxDistance;
 
@@ -37,16 +40,37 @@ public class Laser : MonoBehaviour
 
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
-
-        while (distanceLeft > 0 && numSegments < maxSegments &&
-            Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, 50, LayerMask.GetMask("Default")))
+        float beamHeight = laserPoint.position.y;
+        if (beamHeight < 0.2f)
         {
+            Debug.LogWarning("Broken Laser");
+        }
+        segmentOrigin.y = 0.2f;
+        segmentDir.y = 0;
+
+        Debug.Log("Laser Origin: " + segmentOrigin.ToString());
+
+        while (distanceLeft > 0 && numSegments < maxSegments)
+        {
+            bool missed = !Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, 100, LayerMask.GetMask("Default"));
+            if (missed)
+            {
+                hit.point = segmentOrigin + (segmentDir * distanceLeft);
+                hit.distance = laserMaxDistance;
+            }
+
+            Vector3 point = hit.point;
+            point.y = 0.2f;
+
+            Vector3 normal = hit.normal;
+            normal.y = 0;
+
             numSegments++;
             distanceLeft -= hit.distance;
-            Debug.DrawLine(segmentOrigin, hit.point, Color.red, 3);
-            segmentOrigin = hit.point;
-            segmentDir = Vector3.Reflect(segmentDir, hit.normal);
-            points.Enqueue(hit.point);
+            Debug.DrawLine(segmentOrigin, point, Color.red, 3);
+            segmentOrigin = point;
+            segmentDir = Vector3.Reflect(segmentDir, normal);
+            points.Enqueue(point);
         }
         StartCoroutine(MoveLaser());
         StartCoroutine(DespawnCountdown());
@@ -58,7 +82,7 @@ public class Laser : MonoBehaviour
         hitbox.transform.position = laserPoint.position;
         hitbox.gameObject.layer = 6 + playerIndex;
         hitbox.transform.LookAt(destination);
-        hitbox.name = "Player " + playerIndex + " Laser";
+        hitbox.name = "Player " + playerIndex + " Laser Hitbox";
         return hitbox;
     }
 
@@ -71,7 +95,9 @@ public class Laser : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
             float distance = laserSpeed * Time.deltaTime;
-            laserPoint.position = Vector3.MoveTowards(laserPoint.position, destination, distance);
+            Vector3 newPos =Vector3.MoveTowards(laserPoint.position, destination, distance);
+            newPos.y = 0.2f;
+            laserPoint.position = newPos;
 
             currentHitbox.size = currentHitbox.size + Vector3.forward * distance;
             currentHitbox.center = currentHitbox.center + Vector3.forward * (distance / 2f);

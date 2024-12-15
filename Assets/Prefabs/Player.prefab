@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583619178921942476}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.266}
+  m_LocalPosition: {x: 0, y: 0, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -124,7 +124,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1
   m_Radius: 0.4
-  m_SlopeLimit: 45
+  m_SlopeLimit: 5
   m_StepOffset: 0
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
@@ -142,11 +142,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 4
+  SprintSpeed: 4
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   LandingAudioClip: {fileID: 0}
   FootstepAudioClips: []
   FootstepAudioVolume: 0.5
+  JumpHeight: 1.2
+  Gravity: -5
+  JumpTimeout: 0.5
+  FallTimeout: 0.15
+  Grounded: 1
+  GroundedOffset: -0.14
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
   CinemachineCameraTarget: {fileID: 1447891110840671820}
   TopClamp: 70
   BottomClamp: -30
@@ -300,13 +311,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  playerNumber: 0
+  playerIndex: 0
   playerColour: {r: 1, g: 1, b: 1, a: 1}
   laserSpawn: {fileID: 7336288443647335580}
   laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
     type: 3}
   ammo: 3
-  score: 0
   playerIndicator: {fileID: 5380626662340909674}
 --- !u!54 &3324381966747773105
 Rigidbody:
@@ -330,7 +340,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

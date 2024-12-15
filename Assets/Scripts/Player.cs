@@ -19,8 +19,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int ammo = 3;
     [SerializeField]
-    private int score = 0;
-    [SerializeField]
     private MeshRenderer playerIndicator;
 
     public void SetupPlayer(PlayerManager playerManager, int playerIndex, Vector3 spawnPos)
@@ -43,8 +41,9 @@ public class Player : MonoBehaviour
     {
         if (ammo > 0)
         {
-            Instantiate(laserPrefab, laserSpawn.position, laserSpawn.rotation)
-                .GetComponent<Laser>().Setup(playerIndex, playerColour, () => ammo++);
+            Transform laserTransform = Instantiate(laserPrefab, laserSpawn.position, laserSpawn.rotation).transform;
+            //laserTransform.SetParent(playerManager.transform);
+            laserTransform.GetComponent<Laser>().Setup(playerIndex, playerColour, () => ammo++);
             ammo--;
         }
     }
