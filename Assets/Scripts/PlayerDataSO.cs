@@ -9,4 +9,5 @@ public class PlayerDataSO : ScriptableObject
     [SerializeField]
     private float respawnTime;
     public float RespawnTime { get => respawnTime; }
+    public GameObject playerCharacterPrefab;
 }

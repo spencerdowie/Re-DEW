@@ -18,3 +18,5 @@ MonoBehaviour:
   - {r: 0.101960786, g: 0.1254902, b: 0.8509804, a: 1}
   - {r: 0.90588236, g: 0.09803922, b: 0.8235294, a: 1}
   respawnTime: 3
+  playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
+    type: 3}

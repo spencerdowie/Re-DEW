@@ -95,7 +95,7 @@ public class Laser : MonoBehaviour
         {
             yield return new WaitForFixedUpdate();
             float distance = laserSpeed * Time.deltaTime;
-            Vector3 newPos =Vector3.MoveTowards(laserPoint.position, destination, distance);
+            Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
             newPos.y = 0.2f;
             laserPoint.position = newPos;
 

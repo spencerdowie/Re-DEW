@@ -1,32 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField]
-    private PlayerDataSO playerData;
-    private GameUIManager gameUI;
-    [SerializeField]
-    private Transform[] spawnPositions;
-    [SerializeField]
     private Player[] players = new Player[4];
-    [SerializeField]
-    private int[] scores = new int[] { 0, 0, 0, 0 };
-    private bool isPaused = false;
-
-    private void Awake()
-    {
-        StartCoroutine(LoadGameUI());
-    }
-
-    public IEnumerator LoadGameUI()
-    {
-        yield return SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
-        gameUI = FindObjectOfType<GameUIManager>();
-    }
+    public UnityAction<Player> onPlayerJoin, onPlayerLeave;
 
     private void CleanUserDevices(PlayerInput input)
     {    //Hack to stop it joining both xbox and ps controllers to one user
@@ -57,30 +39,25 @@ public class PlayerManager : MonoBehaviour
         //}
 
         int playerIndex = playerInput.playerIndex;
-        playerInput.GetComponent<Player>()
-            .SetupPlayer(this, playerIndex, spawnPositions[playerIndex].position);
+        Player player = playerInput.GetComponent<Player>();
+        player.Setup(this, playerInput);
+        player.transform.SetParent(transform);
+        players[playerIndex] = player;
+        onPlayerJoin?.Invoke(player);
 
         Debug.Log(playerInput.name + " joined");
     }
 
-    public void PlayerHit(int playerHit, int shootingPlayer)
+    public void StartGame(GameManager gameManager)
     {
-        players[playerHit].KillPlayer();
-        scores[shootingPlayer]++;
-        gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
-        StartCoroutine(RespawnPlayer(playerHit));
-    }
-
-    public IEnumerator RespawnPlayer(int playerIndex)
-    {
-        float timer = 0f;
-        while (timer < playerData.RespawnTime)
+        foreach (Player player in players)
         {
-            if (!isPaused)
-                timer += Time.deltaTime;
-
-            yield return null;
+            if (player != null)
+            {
+                gameManager.AddPlayerController(player);
+            }
         }
-        players[playerIndex].SpawnPlayer(spawnPositions[playerIndex].position);
+
+        gameManager.StartGame();
     }
 }
