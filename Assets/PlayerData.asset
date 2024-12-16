@@ -20,3 +20,7 @@ MonoBehaviour:
   respawnTime: 3
   playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
     type: 3}
+  <MoveSpeed>k__BackingField: 6
+  <SpeedChangeRate>k__BackingField: 10
+  <RotationSmoothTime>k__BackingField: 0.12
+  <Gravity>k__BackingField: -9.81

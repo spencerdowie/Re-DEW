@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class Laser : MonoBehaviour
 {
     [SerializeField]
+    private PlayerDataSO playerData;
+    [SerializeField]
     private float laserSpeed = 2f;
     [SerializeField]
     private float laserMaxDistance = 10f;
@@ -28,6 +30,7 @@ public class Laser : MonoBehaviour
     {
         returnAmmo = returnAmmoAction;
         this.playerIndex = playerIndex;
+        Debug.Log("Laser Spawned by Player " + playerIndex);
 
         name = "Player " + playerIndex + " Laser";
 
@@ -38,17 +41,19 @@ public class Laser : MonoBehaviour
         trail.startColor = playerColour;
         trail.endColor = playerColour;
 
+        transform.SetParent(null);
+
+        Vector3 position = transform.position;
+        position.y = playerData.LaserHeight;
+        transform.position = position;
+
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
-        float beamHeight = laserPoint.position.y;
-        if (beamHeight < 0.2f)
-        {
-            Debug.LogWarning("Broken Laser");
-        }
-        segmentOrigin.y = 0.2f;
+
+        segmentOrigin.y = playerData.LaserHeight;
         segmentDir.y = 0;
 
-        Debug.Log("Laser Origin: " + segmentOrigin.ToString());
+        //Debug.Log("Laser Origin: " + segmentOrigin.ToString());
 
         while (distanceLeft > 0 && numSegments < maxSegments)
         {
@@ -60,7 +65,7 @@ public class Laser : MonoBehaviour
             }
 
             Vector3 point = hit.point;
-            point.y = 0.2f;
+            point.y = playerData.LaserHeight;
 
             Vector3 normal = hit.normal;
             normal.y = 0;
@@ -80,7 +85,7 @@ public class Laser : MonoBehaviour
     {
         BoxCollider hitbox = Instantiate(hitboxPrefab, transform).GetComponent<BoxCollider>();
         hitbox.transform.position = laserPoint.position;
-        hitbox.gameObject.layer = 6 + playerIndex;
+        hitbox.gameObject.layer = LayerMask.NameToLayer("Player" + playerIndex);
         hitbox.transform.LookAt(destination);
         hitbox.name = "Player " + playerIndex + " Laser Hitbox";
         return hitbox;

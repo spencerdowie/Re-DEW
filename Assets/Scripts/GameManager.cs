@@ -27,6 +27,20 @@ public class GameManager : MonoBehaviour
         gameUI = FindObjectOfType<GameUIManager>();
     }
 
+    public void Setup(PlayerManager playerManager)
+    {
+        foreach (Player player in playerManager.players)
+        {
+            if (player != null)
+            {
+                AddPlayerController(player);
+            }
+        }
+
+        StartGame();
+
+    }
+
     public void StartGame()
     {
         foreach (PlayerController player in players)
@@ -39,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void AddPlayerController(Player player)
     {
         PlayerController playerController =
-            Instantiate(playerData.playerCharacterPrefab).GetComponent<PlayerController>();
+            Instantiate(playerData.playerCharacterPrefab, transform).GetComponent<PlayerController>();
         playerController.Setup(this, player);
         players[playerController.PlayerIndex] = playerController;
     }

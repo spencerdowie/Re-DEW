@@ -441,7 +441,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  spawnPositions: []
+  spawnPositions:
+  - {fileID: 1412674434}
+  - {fileID: 1066817107}
+  - {fileID: 982984991}
+  - {fileID: 147812858}
   players:
   - {fileID: 0}
   - {fileID: 0}

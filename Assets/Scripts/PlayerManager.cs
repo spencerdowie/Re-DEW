@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField]
-    private Player[] players = new Player[4];
+    [field: SerializeField]
+    public Player[] players { get; private set;} = new Player[4];
     public UnityAction<Player> onPlayerJoin, onPlayerLeave;
 
     private void CleanUserDevices(PlayerInput input)
@@ -46,18 +46,5 @@ public class PlayerManager : MonoBehaviour
         onPlayerJoin?.Invoke(player);
 
         Debug.Log(playerInput.name + " joined");
-    }
-
-    public void StartGame(GameManager gameManager)
-    {
-        foreach (Player player in players)
-        {
-            if (player != null)
-            {
-                gameManager.AddPlayerController(player);
-            }
-        }
-
-        gameManager.StartGame();
     }
 }

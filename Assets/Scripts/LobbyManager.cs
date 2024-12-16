@@ -59,6 +59,7 @@ public class LobbyManager : MonoBehaviour
 
             players[i].PlayerInput.actions["Interact"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
+            //Destroy(players[i].GetComponent<PlayerController>().gameObject);
         }
     }
 
@@ -73,9 +74,9 @@ public class LobbyManager : MonoBehaviour
         players[player.PlayerIndex] = player;
 
         PlayerController playerController =
-            Instantiate(playerData.playerCharacterPrefab).GetComponent<PlayerController>();
-        playerController.transform.position = spawnPositions[player.PlayerIndex].position;
-        playerController.GetComponent<CharacterController>().enabled = true;
+            Instantiate(playerData.playerCharacterPrefab, transform).GetComponent<PlayerController>();
+        playerController.Setup(null, player);
+        playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
     }
 
     private void OnPlayerLeave(Player player)
@@ -124,7 +125,7 @@ public class LobbyManager : MonoBehaviour
         SceneManager.MoveGameObjectToScene(playerManager.gameObject, SceneManager.GetSceneByBuildIndex(sceneIndex));
 
         GameManager gameManager = FindObjectOfType<GameManager>();
-        playerManager.StartGame(gameManager);
+        gameManager.Setup(playerManager);
 
         SceneManager.UnloadSceneAsync(3);
     }

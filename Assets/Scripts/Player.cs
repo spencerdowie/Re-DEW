@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,22 +10,27 @@ public class Player : MonoBehaviour
     private PlayerDataSO playerData;
     private PlayerManager playerManager;
     private PlayerInput playerInput;
-    [SerializeField]
-    private int playerIndex = 0;
-    [SerializeField]
-    private Color playerColour = Color.white;
     private PlayerController playerController;
-
-    public int PlayerIndex { get => playerIndex; }
-    public Color PlayerColour { get => playerColour; }
-    public PlayerInput PlayerInput { get => playerInput;}
+    public int PlayerIndex { get; private set; } = 0;
+    public Color PlayerColour { get; private set; } = Color.white;
+    public PlayerInput PlayerInput { get => playerInput; }
+    public Vector2 inputMove { get => playerInput.actions["Move"].ReadValue<Vector2>(); }
+    public Vector2 inputAim { get => playerInput.actions["Aim"].ReadValue<Vector2>(); }
+    public InputAction onFire;
 
     public void Setup(PlayerManager playerManager, PlayerInput playerInput)
     {
         this.playerManager = playerManager;
         this.playerInput = playerInput;
-        playerIndex = playerInput.playerIndex;
-        name = "Player " + playerIndex;
-        playerColour = playerData.playerColours[playerIndex];
+        PlayerIndex = playerInput.playerIndex;
+        name = "Player " + PlayerIndex;
+        PlayerColour = playerData.playerColours[PlayerIndex];
+        onFire = playerInput.actions["Fire"];
+    }
+
+    public void RemoveFireCallback(Action<InputAction.CallbackContext> callback)
+    {
+        if (playerInput != null)
+            playerInput.actions["Fire"].performed -= callback;
     }
 }

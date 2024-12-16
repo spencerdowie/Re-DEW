@@ -97,5 +97,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  playerIndex: 0
-  playerColour: {r: 1, g: 1, b: 1, a: 1}
+  onFire:
+    m_Name: On Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 97fc9619-32dd-4a51-b338-e6b99c0db41f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
