@@ -9,4 +9,14 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(3);
     }
+
+    public void OpenItchio()
+    {
+        Application.OpenURL("https://augex.itch.io/");
+    }
+
+    public void OpenBluesky()
+    {
+        Application.OpenURL("https://augex.bsky.social");
+    }
 }

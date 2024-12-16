@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     private PlayerController[] players = new PlayerController[4];
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
-    private bool isPaused = false;
 
     private void Awake()
     {
@@ -71,8 +70,7 @@ public class GameManager : MonoBehaviour
         float timer = 0f;
         while (timer < playerData.RespawnTime)
         {
-            if (!isPaused)
-                timer += Time.deltaTime;
+            timer += Time.deltaTime;
 
             yield return null;
         }

@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 1319413285}
   - component: {fileID: 1319413284}
   - component: {fileID: 1319413283}
-  - component: {fileID: 1319413282}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -143,29 +142,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1319413282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319413281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db01681508c3b6c42b4416bcdb4f2690, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  scorePanels:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  scoreText:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &1319413283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,8 +372,9 @@ GameObject:
   - component: {fileID: 1802850846}
   - component: {fileID: 1802850848}
   - component: {fileID: 1802850847}
+  - component: {fileID: 1802850849}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: PauseMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,3 +439,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1802850845}
   m_CullTransparentMesh: 1
+--- !u!114 &1802850849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802850845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ba0f58e092aab4f95445a3d1aeeda6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animTimeMax: 0.5
+  isPaused: 0
+  resumeBtn: {fileID: 0}

@@ -52,6 +52,8 @@ public class LobbyManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        playerManager.onPlayerJoin -= OnPlayerJoin;
+        playerManager.onPlayerLeave -= OnPlayerLeave;
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null)
@@ -91,7 +93,7 @@ public class LobbyManager : MonoBehaviour
 
     private void OnReady(int playerIndex)
     {
-        if (playerStatuses[playerIndex] == LobbyStatus.Joined)
+        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Joined)
         {
             playerStatuses[playerIndex] = LobbyStatus.Ready;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Ready);
@@ -101,7 +103,7 @@ public class LobbyManager : MonoBehaviour
 
     private void OnUnReady(int playerIndex)
     {
-        if (playerStatuses[playerIndex] == LobbyStatus.Ready)
+        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Ready)
         {
             playerStatuses[playerIndex] = LobbyStatus.Joined;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);

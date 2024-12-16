@@ -23,13 +23,13 @@ public class Laser : MonoBehaviour
     private Queue<Vector3> points;
     private Vector3 destination;
     private UnityAction returnAmmo;
-    private int playerIndex = -1;
-    public int PlayerIndex { get => playerIndex; }
+    private TrailRenderer trail;
+    public int PlayerIndex { get; private set; } = -1;
 
     public void Setup(int playerIndex, Color playerColour, UnityAction returnAmmoAction)
     {
         returnAmmo = returnAmmoAction;
-        this.playerIndex = playerIndex;
+        PlayerIndex = playerIndex;
         Debug.Log("Laser Spawned by Player " + playerIndex);
 
         name = "Player " + playerIndex + " Laser";
@@ -37,7 +37,7 @@ public class Laser : MonoBehaviour
         points = new Queue<Vector3>();
         float distanceLeft = laserMaxDistance;
 
-        TrailRenderer trail = GetComponentInChildren<TrailRenderer>();
+        trail = GetComponentInChildren<TrailRenderer>();
         trail.startColor = playerColour;
         trail.endColor = playerColour;
 
@@ -85,9 +85,9 @@ public class Laser : MonoBehaviour
     {
         BoxCollider hitbox = Instantiate(hitboxPrefab, transform).GetComponent<BoxCollider>();
         hitbox.transform.position = laserPoint.position;
-        hitbox.gameObject.layer = LayerMask.NameToLayer("Player" + playerIndex);
+        hitbox.gameObject.layer = LayerMask.NameToLayer("Player" + PlayerIndex);
         hitbox.transform.LookAt(destination);
-        hitbox.name = "Player " + playerIndex + " Laser Hitbox";
+        hitbox.name = "Player " + PlayerIndex + " Laser Hitbox";
         return hitbox;
     }
 
@@ -99,6 +99,10 @@ public class Laser : MonoBehaviour
         while (hasDest)
         {
             yield return new WaitForFixedUpdate();
+
+            if (PauseMenu.Instance.IsPaused)
+                continue;
+
             float distance = laserSpeed * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
             newPos.y = 0.2f;
@@ -121,7 +125,8 @@ public class Laser : MonoBehaviour
         float despawnTimer = 0f;
         while (despawnTimer < laserLifetime)
         {
-            despawnTimer += Time.deltaTime;
+            if (!PauseMenu.Instance.IsPaused)
+                despawnTimer += Time.deltaTime;
             yield return null;
         }
         returnAmmo?.Invoke();

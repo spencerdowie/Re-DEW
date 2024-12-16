@@ -3,12 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
     [field: SerializeField]
-    public Player[] players { get; private set;} = new Player[4];
+    public Player[] players { get; private set; } = new Player[4];
     public UnityAction<Player> onPlayerJoin, onPlayerLeave;
+
+    private void Start()
+    {
+        StartCoroutine(LoadPauseMenu());
+    }
+
+    private IEnumerator LoadPauseMenu()
+    {
+        yield return SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        PauseMenu pause = FindObjectOfType<PauseMenu>();
+        foreach (Player player in players)
+        {
+            if (player != null)
+                pause.AddPlayerInput(player.PlayerInput);
+        }
+    }
 
     private void CleanUserDevices(PlayerInput input)
     {    //Hack to stop it joining both xbox and ps controllers to one user
@@ -44,7 +61,13 @@ public class PlayerManager : MonoBehaviour
         player.transform.SetParent(transform);
         players[playerIndex] = player;
         onPlayerJoin?.Invoke(player);
+        PauseMenu.Instance.AddPlayerInput(playerInput);
 
         Debug.Log(playerInput.name + " joined");
+    }
+
+    private void OnPlayerLeft(PlayerInput playerInput)
+    {
+        PauseMenu.Instance.RemovePlayerInput(playerInput);
     }
 }

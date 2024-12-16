@@ -45,6 +45,18 @@ public class PlayerController : MonoBehaviour
         player.onFire.performed += OnFire;
         player.onFire.Disable();
         gameObject.SetActive(false);
+
+        PauseMenu.Instance.AddPauseListeners(Pause, Resume);
+    }
+
+    private void Pause()
+    {
+        player.onFire.Disable();
+    }
+
+    private void Resume()
+    {
+        player.onFire.Enable();
     }
 
     public void SpawnPlayer(Vector3 spawnPos)
@@ -57,11 +69,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        //if (!PauseMenu.Instance.IsPaused)
+        {
+            Move();
+        }
     }
 
     private void Move()
     {
+        float deltaTime = Time.deltaTime;
         float speed = 0f;
         float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed;
 
@@ -70,7 +86,7 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(targetSpeed - currentSpeed) > 0.1f)
         {
             //to use analog movement targetSpeed * inputMove.magnitude
-            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude, Time.deltaTime * playerData.SpeedChangeRate);
+            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude, deltaTime * playerData.SpeedChangeRate);
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
@@ -87,7 +103,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        controller.Move(moveDirection * (speed * Time.deltaTime));
+        controller.Move(moveDirection * (speed * deltaTime));
     }
 
     public void OnFire(InputAction.CallbackContext ctx)
