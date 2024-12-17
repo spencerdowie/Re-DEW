@@ -16,11 +16,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject laserPrefab;
     [SerializeField]
-    private int ammo = 3;
-    [SerializeField]
     private MeshRenderer playerIndicator;
     public int PlayerIndex { get => player?.PlayerIndex ?? -1; }
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
+    [SerializeField]
+    private int ammo = 3;
+    public bool isInvuln { get => controller.detectCollisions; }
+    [SerializeField]
+    private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
 
     private void Awake()
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour
         gameObject.SetActive(true);
         transform.position = spawnPos;
         controller.enabled = true; //Otherwise it resets postion to origin
-        player.onFire.Enable();
+        StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
     }
 
     private void FixedUpdate()
@@ -108,8 +111,8 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext ctx)
     {
-        Debug.Log(name);
-        if (ammo > 0)
+        //Debug.Log(name);
+        if (ammo > 0 && !Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
             Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
@@ -127,8 +130,29 @@ public class PlayerController : MonoBehaviour
 
     public void KillPlayer()
     {
-        transform.position = Vector3.left * 6f;
-        GetComponent<CharacterController>().enabled = false; //Otherwise it resets postion to origin
+        transform.position = Vector3.down * 6f;
+        controller.enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);
+    }
+
+    public IEnumerator MakeInvuln(float invulnTime, bool disableFire = false)
+    {
+        controller.detectCollisions = false;
+        foreach (SkinnedMeshRenderer renderer in materials)
+        {
+            renderer.material.SetFloat("_IsInvuln", 1);
+        }
+        if (disableFire)
+            player.onFire.Disable();
+
+        yield return new WaitForSeconds(invulnTime);
+
+        controller.detectCollisions = true;
+        foreach (SkinnedMeshRenderer renderer in materials)
+        {
+            renderer.material.SetFloat("_IsInvuln", 0);
+        }
+        if (disableFire)
+            player.onFire.Enable();
     }
 }

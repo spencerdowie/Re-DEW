@@ -30,7 +30,7 @@ public class Laser : MonoBehaviour
     {
         returnAmmo = returnAmmoAction;
         PlayerIndex = playerIndex;
-        Debug.Log("Laser Spawned by Player " + playerIndex);
+        //Debug.Log("Laser Spawned by Player " + playerIndex);
 
         name = "Player " + playerIndex + " Laser";
 

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private PlayerController[] players = new PlayerController[4];
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
+    private bool[] isPlayer = new bool[] { false, false, false, false };
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
+        StartGame();
     }
 
     public void Setup(PlayerManager playerManager)
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        StartGame();
+        PauseMenu.Instance.EnablePause();
 
     }
 
@@ -45,8 +47,13 @@ public class GameManager : MonoBehaviour
         foreach (PlayerController player in players)
         {
             if (player != null)
+            {
                 StartCoroutine(RespawnPlayer(player.PlayerIndex));
+                isPlayer[player.PlayerIndex] = true;
+            }
         }
+        gameUI.Setup(isPlayer);
+        gameUI.StartClock(5, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -75,5 +82,17 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         players[playerIndex].SpawnPlayer(spawnPositions[playerIndex].position);
+    }
+
+    private IEnumerator EndGame()
+    {
+        Debug.Log("Game Over");
+        Time.timeScale = 0f;
+        SceneManager.UnloadSceneAsync(2);
+        PauseMenu.Instance.DisablePause();
+        yield return SceneManager.LoadSceneAsync(6, LoadSceneMode.Additive);
+        GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
+        gameOverUI.Setup(new int[] { 1, 2, 0, 0 }, new bool[] { true, true, false, false });
+        SceneManager.UnloadSceneAsync(4);
     }
 }

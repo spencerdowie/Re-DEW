@@ -19,4 +19,6 @@ public class PlayerDataSO : ScriptableObject
     public float RotationSmoothTime { get; private set; } = 0.12f;
     [field: SerializeField]
     public float RespawnTime { get; private set; } = 3f;
+    [field: SerializeField]
+    public float RespawnInvulnTime { get; private set; } = 2f;
 }

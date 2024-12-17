@@ -61,6 +61,24 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    public void EnablePause()
+    {
+        foreach (InputAction pauseAction in pauseActions)
+        {
+            if (pauseAction != null)
+                pauseAction.Enable();
+        }
+    }
+
+    public void DisablePause()
+    {
+        foreach (InputAction pauseAction in pauseActions)
+        {
+            if (pauseAction != null)
+                pauseAction.Disable();
+        }
+    }
+
     public void AddPlayerInput(PlayerInput playerInput)
     {
         pauseActions[playerInput.playerIndex] = playerInput.actions["Pause"];
@@ -123,6 +141,16 @@ public class PauseMenu : MonoBehaviour
                 pauseAction.started -= TogglePause;
         }
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    public void ReturnToLobby()
+    {
+        foreach (InputAction pauseAction in pauseActions)
+        {
+            if (pauseAction != null)
+                pauseAction.started -= TogglePause;
+        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene(3);
     }
 
     public void QuitGame()

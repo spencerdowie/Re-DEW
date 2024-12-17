@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1056,9 +1056,9 @@ MonoBehaviour:
     type: 3}
   m_SubmitAction: {fileID: -1916377846673030204, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_CancelAction: {fileID: 0}
-  m_LeftClickAction: {fileID: -1916377846673030204, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+  m_CancelAction: {fileID: 5307094526794531536, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
+  m_LeftClickAction: {fileID: 0}
   m_MiddleClickAction: {fileID: 0}
   m_RightClickAction: {fileID: 0}
   m_ScrollWheelAction: {fileID: 0}

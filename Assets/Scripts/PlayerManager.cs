@@ -19,12 +19,13 @@ public class PlayerManager : MonoBehaviour
     private IEnumerator LoadPauseMenu()
     {
         yield return SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-        PauseMenu pause = FindObjectOfType<PauseMenu>();
+        PauseMenu pause = FindObjectOfType<PauseMenu>(true);
         foreach (Player player in players)
         {
             if (player != null)
                 pause.AddPlayerInput(player.PlayerInput);
         }
+        pause.DisablePause();
     }
 
     private void CleanUserDevices(PlayerInput input)
