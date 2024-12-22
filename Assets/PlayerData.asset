@@ -17,10 +17,11 @@ MonoBehaviour:
   - {r: 0.1764706, g: 0.7372549, b: 0.06666667, a: 1}
   - {r: 0.101960786, g: 0.1254902, b: 0.8509804, a: 1}
   - {r: 0.90588236, g: 0.09803922, b: 0.8235294, a: 1}
-  respawnTime: 3
+  <LaserHeight>k__BackingField: 0.2
   playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
     type: 3}
   <MoveSpeed>k__BackingField: 6
   <SpeedChangeRate>k__BackingField: 10
   <RotationSmoothTime>k__BackingField: 0.12
-  <Gravity>k__BackingField: -9.81
+  <RespawnTime>k__BackingField: 3
+  <RespawnInvulnTime>k__BackingField: 2

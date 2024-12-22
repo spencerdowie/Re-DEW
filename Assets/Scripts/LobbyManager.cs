@@ -27,6 +27,8 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer };
     [SerializeField]
     private Transform[] spawnPositions;
+    [SerializeField]
+    private Transform playerHolder;
     private Action<InputAction.CallbackContext>[] readyActions, unreadyActions;
 
     [SerializeField]
@@ -34,6 +36,7 @@ public class LobbyManager : MonoBehaviour
 
     private void Awake()
     {
+        playerManager = FindObjectOfType<PlayerManager>();
         playerManager.onPlayerJoin += OnPlayerJoin;
         playerManager.onPlayerLeave += OnPlayerLeave;
         readyActions = new Action<InputAction.CallbackContext>[] {
@@ -48,6 +51,8 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>OnUnReady(2),
             (ctx)=>OnUnReady(3)
         };
+
+        playerManager.LoadPause();
     }
 
     private void OnDestroy()
@@ -65,6 +70,15 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        foreach (Player player in playerManager.players)
+        {
+            if (player != null)
+                OnPlayerJoin(player);
+        }
+    }
+
     private void OnPlayerJoin(Player player)
     {
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
@@ -76,7 +90,7 @@ public class LobbyManager : MonoBehaviour
         players[player.PlayerIndex] = player;
 
         PlayerController playerController =
-            Instantiate(playerData.playerCharacterPrefab, transform).GetComponent<PlayerController>();
+            Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
         playerController.Setup(null, player);
         playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
     }
@@ -123,8 +137,6 @@ public class LobbyManager : MonoBehaviour
     private IEnumerator LoadGameScene(int sceneIndex)
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-
-        SceneManager.MoveGameObjectToScene(playerManager.gameObject, SceneManager.GetSceneByBuildIndex(sceneIndex));
 
         GameManager gameManager = FindObjectOfType<GameManager>();
         gameManager.Setup(playerManager);

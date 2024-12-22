@@ -140,6 +140,7 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.started -= TogglePause;
         }
+        Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
@@ -150,6 +151,7 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.started -= TogglePause;
         }
+        Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(3);
     }
 

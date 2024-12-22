@@ -11,7 +11,15 @@ public class PlayerManager : MonoBehaviour
     public Player[] players { get; private set; } = new Player[4];
     public UnityAction<Player> onPlayerJoin, onPlayerLeave;
 
-    private void Start()
+    private void Awake()
+    {
+        if (FindObjectsOfType<PlayerManager>().Length > 1)
+            Destroy(this.gameObject);
+
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    public void LoadPause()
     {
         StartCoroutine(LoadPauseMenu());
     }
@@ -23,7 +31,7 @@ public class PlayerManager : MonoBehaviour
         foreach (Player player in players)
         {
             if (player != null)
-                pause.AddPlayerInput(player.PlayerInput);
+                OnPlayerJoined(player.PlayerInput);
         }
         pause.DisablePause();
     }
@@ -47,7 +55,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private void OnPlayerJoined(PlayerInput playerInput)
+    public void OnPlayerJoined(PlayerInput playerInput)
     {
         CleanUserDevices(playerInput);
 
