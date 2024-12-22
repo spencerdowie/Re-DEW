@@ -20,7 +20,6 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private GameObject hitboxPrefab;
     private BoxCollider currentHitbox;
-    private Queue<Vector3> points;
     private Vector3 destination;
     private UnityAction returnAmmo;
     private TrailRenderer trail;
@@ -34,8 +33,6 @@ public class Laser : MonoBehaviour
 
         name = "Player " + playerIndex + " Laser";
 
-        points = new Queue<Vector3>();
-        float distanceLeft = laserMaxDistance;
 
         trail = GetComponentInChildren<TrailRenderer>();
         trail.startColor = playerColour;
@@ -47,6 +44,15 @@ public class Laser : MonoBehaviour
         position.y = playerData.LaserHeight;
         transform.position = position;
 
+
+        StartCoroutine(MoveLaser(CreatePoints()));
+        StartCoroutine(DespawnCountdown());
+    }
+
+    private Queue<Vector3> CreatePoints()
+    {
+        Queue<Vector3> points = new Queue<Vector3>();
+        float distanceLeft = laserMaxDistance;
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
 
@@ -77,8 +83,7 @@ public class Laser : MonoBehaviour
             segmentDir = Vector3.Reflect(segmentDir, normal);
             points.Enqueue(point);
         }
-        StartCoroutine(MoveLaser());
-        StartCoroutine(DespawnCountdown());
+        return points;
     }
 
     private BoxCollider SpawnHitbox()
@@ -91,7 +96,7 @@ public class Laser : MonoBehaviour
         return hitbox;
     }
 
-    private IEnumerator MoveLaser()
+    private IEnumerator MoveLaser(Queue<Vector3> points)
     {
         bool hasDest = true;
         destination = points.Dequeue();

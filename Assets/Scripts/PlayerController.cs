@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
         playerIndicator.material.color = PlayerColour;
         player.onFire.performed += OnFire;
+        player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();
         gameObject.SetActive(false);
 
@@ -117,6 +118,19 @@ public class PlayerController : MonoBehaviour
             //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, () => ammo++);
             ammo--;
+        }
+    }
+
+    public void OnDebugFire(InputAction.CallbackContext ctx)
+    {
+        //Debug.Log(name);
+        if (!Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
+        {
+            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
+            //laserTransform.SetParent(playerManager.transform);
+            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, null);
+
+            Destroy(laserTransform.gameObject);
         }
     }
 

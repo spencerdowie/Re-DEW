@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public PlayerInput PlayerInput { get => playerInput; }
     public Vector2 inputMove { get => playerInput.actions["Move"].ReadValue<Vector2>(); }
     public Vector2 inputAim { get => playerInput.actions["Aim"].ReadValue<Vector2>(); }
-    public InputAction onFire;
+    public InputAction onFire, onDebugFire;
 
     public void Setup(PlayerManager playerManager, PlayerInput playerInput)
     {
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
         name = "Player " + PlayerIndex;
         PlayerColour = playerData.playerColours[PlayerIndex];
         onFire = playerInput.actions["Fire"];
+        onDebugFire = playerInput.actions["DebugFire"];
     }
 
     public void RemoveFireCallback(Action<InputAction.CallbackContext> callback)

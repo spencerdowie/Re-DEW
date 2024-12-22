@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayer = new bool[] { false, false, false, false };
     [SerializeField]
-    private int gameTime = 300;
+    private int gameTime = 300, scoreLimit = 10;
 
     private void Awake()
     {
@@ -72,6 +72,10 @@ public class GameManager : MonoBehaviour
         scores[shootingPlayer]++;
         gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
         StartCoroutine(RespawnPlayer(playerHit));
+        if (scores[shootingPlayer] >= scoreLimit)
+        {
+            StartCoroutine(EndGame());
+        }
     }
 
     public IEnumerator RespawnPlayer(int playerIndex)
