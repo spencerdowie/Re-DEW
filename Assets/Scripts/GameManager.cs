@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayer = new bool[] { false, false, false, false };
+    [SerializeField]
+    private int gameTime = 300;
 
     private void Awake()
     {
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
             }
         }
         gameUI.Setup(isPlayer);
-        gameUI.StartClock(5, () => StartCoroutine(EndGame()));
+        gameUI.StartClock(gameTime, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         PauseMenu.Instance.DisablePause();
         yield return SceneManager.LoadSceneAsync(6, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
-        gameOverUI.Setup(new int[] { 1, 2, 0, 0 }, new bool[] { true, true, false, false });
+        gameOverUI.Setup(new int[] { 1, 2, 4, 4 }, new bool[] { true, true, true, true });
         SceneManager.UnloadSceneAsync(4);
     }
 }

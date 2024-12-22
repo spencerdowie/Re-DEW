@@ -20,6 +20,8 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
+    private Camera[] playerCams = new Camera[4];
+    [SerializeField]
     private Image[] scorePanels = new Image[4];
     private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
     [SerializeField]
@@ -27,14 +29,34 @@ public class GameOverUI : MonoBehaviour
 
     public void Setup(int[] scores, bool[] isPlayer)
     {
-        int maxScore = scores.Max();
-        winnerText.text = "Winner Player " + (scores.ToList().IndexOf(maxScore) + 1);
+        List<Score> scoreList = new List<Score>();
         for (int i = 0; i < 4; i++)
         {
+            scoreList.Add(new Score(i, scores[i]));
+
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scorePanels[i].CrossFadeColor(playerData.playerColours[i], 0, false, false);
             scoreText[i].text = scores[i].ToString();
-            scorePanels[i].gameObject.SetActive(isPlayer[i]);
+            playerCams[i].backgroundColor = playerData.playerColours[i];
+            scorePanels[i].transform.parent.gameObject.SetActive(isPlayer[i]);
         }
+
+
+
+        scoreList.Sort((scoreA, scoreB) => scoreB.score.CompareTo(scoreA.score));
+        int maxScore = scoreList[0].score;
+        string winnersNames = "";
+        for (int i = 0; i < 4; i++)
+        {
+            //Debug.Log(scoreList[i].index + " - " + scoreList[i].score);
+            scorePanels[scoreList[i].index].transform.parent.SetSiblingIndex(i);
+            if (scoreList[i].score == maxScore)
+            {
+                if (i > 0)
+                    winnersNames += " ";
+                winnersNames += "Player " + (scoreList[i].index + 1);
+            }
+        }
+        winnerText.text = winnersNames;
     }
 }

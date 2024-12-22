@@ -41,11 +41,11 @@ public class GameUIManager : MonoBehaviour
         int timer = clockTime;
         while (timer > 0)
         {
-            yield return new WaitForSeconds(1f);
-            timer--;
             int minutes = timer / 60;
             int seconds = timer % 60;
             clockText.text = minutes + ":" + seconds.ToString("D2");
+            yield return new WaitForSeconds(1f);
+            timer--;
         }
         onClockEnd?.Invoke();
     }
