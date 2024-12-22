@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
     private GameManager gameManager;
-    private CharacterController controller;
+    private new Rigidbody rigidbody;
     private Player player;
     [SerializeField]
     private Transform laserSpawn;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
     [SerializeField]
     private int ammo = 3;
-    public bool isInvuln { get => controller.detectCollisions; }
+    public bool isInvuln { get => rigidbody.detectCollisions; }
     [SerializeField]
     private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
@@ -29,13 +29,14 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         //Debug.Log(name + " Spawned");
-        controller = GetComponent<CharacterController>();
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnDestroy()
     {
         Debug.Log(name + " Destroyed");
-        player.RemoveFireCallback(OnFire);
+        if (player != null)
+            player.RemoveFireCallback(OnFire);
     }
 
     public void Setup(GameManager gameManager, Player player)
@@ -66,16 +67,13 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.SetActive(true);
         transform.position = spawnPos;
-        controller.enabled = true; //Otherwise it resets postion to origin
+        //rigidbody.enabled = true; //Otherwise it resets postion to origin
         StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
     }
 
     private void FixedUpdate()
     {
-        //if (!PauseMenu.Instance.IsPaused)
-        {
-            Move();
-        }
+        Move();
     }
 
     private void Move()
@@ -84,29 +82,30 @@ public class PlayerController : MonoBehaviour
         float speed = 0f;
         float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed;
 
-        float currentSpeed = new Vector2(controller.velocity.x, controller.velocity.z).magnitude;
+        float currentSpeed = new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude;
 
         if (Mathf.Abs(targetSpeed - currentSpeed) > 0.1f)
         {
-            //to use analog movement targetSpeed * inputMove.magnitude
-            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude, deltaTime * playerData.SpeedChangeRate);
+            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude,
+                deltaTime * playerData.SpeedChangeRate);
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
 
-        //Add aim here
-        if (player.inputMove != Vector2.zero)
+        if (player.inputMove != Vector2.zero || player.inputAim != Vector2.zero)
         {
+            Vector3 aimDirection = player.inputAim != Vector2.zero ?
+                new Vector3(player.inputAim.x, 0f, player.inputAim.y).normalized : moveDirection;
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y,
-                Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg,
+                Mathf.Atan2(aimDirection.x, aimDirection.z) * Mathf.Rad2Deg,
                 ref rotationVelocity,
                 playerData.RotationSmoothTime);
 
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        controller.Move(moveDirection * (speed * deltaTime));
+        rigidbody.velocity = moveDirection * (speed);
     }
 
     public void OnFire(InputAction.CallbackContext ctx)
@@ -131,13 +130,13 @@ public class PlayerController : MonoBehaviour
     public void KillPlayer()
     {
         transform.position = Vector3.down * 6f;
-        controller.enabled = false; //Otherwise it resets postion to origin
+        //rigidbody.enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);
     }
 
     public IEnumerator MakeInvuln(float invulnTime, bool disableFire = false)
     {
-        controller.detectCollisions = false;
+        rigidbody.detectCollisions = false;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
@@ -147,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(invulnTime);
 
-        controller.detectCollisions = true;
+        rigidbody.detectCollisions = true;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 0);
