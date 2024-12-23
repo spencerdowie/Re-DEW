@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         SceneManager.UnloadSceneAsync(2);
         PauseMenu.Instance.DisablePause();
-        yield return SceneManager.LoadSceneAsync(6, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync(5, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
         gameOverUI.Setup(new int[] { 1, 2, 4, 4 }, new bool[] { true, true, true, true });
         SceneManager.UnloadSceneAsync(4);

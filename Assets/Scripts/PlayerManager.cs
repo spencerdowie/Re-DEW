@@ -79,4 +79,13 @@ public class PlayerManager : MonoBehaviour
     {
         PauseMenu.Instance.RemovePlayerInput(playerInput);
     }
+
+    public void RemoveAllPlayers()
+    {
+        foreach (Player player in players)
+        {
+            if (player != null)
+                Destroy(player.gameObject);
+        }
+    }
 }

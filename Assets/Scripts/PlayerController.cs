@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
     [SerializeField]
     private int ammo = 3;
-    public bool isInvuln { get => rigidbody.detectCollisions; }
+    public bool isInvuln { get; private set; }
     [SerializeField]
     private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log(name + " Destroyed");
         if (player != null)
-            player.RemoveFireCallback(OnFire);
+            player.RemoveFireCallback(OnFire, OnDebugFire);
     }
 
     public void Setup(GameManager gameManager, Player player)
@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
         }
 
         rigidbody.velocity = moveDirection * (speed);
+        rigidbody.angularVelocity = Vector3.zero;
     }
 
     public void OnFire(InputAction.CallbackContext ctx)
@@ -150,7 +151,10 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator MakeInvuln(float invulnTime, bool disableFire = false)
     {
-        rigidbody.detectCollisions = false;
+        int layer = gameObject.layer;
+        gameObject.layer = LayerMask.NameToLayer("Invuln");
+        isInvuln = true;
+        //rigidbody.detectCollisions = false;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
@@ -160,7 +164,9 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(invulnTime);
 
-        rigidbody.detectCollisions = true;
+        gameObject.layer = layer;
+        isInvuln = false;
+        //rigidbody.detectCollisions = true;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 0);

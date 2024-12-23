@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
 
     public static PauseMenu Instance { get; private set; }
 
-
+    private bool IsDisabled { get; set; }
     public bool IsPaused
     {
         get => isPaused;
@@ -54,7 +54,7 @@ public class PauseMenu : MonoBehaviour
             Instance = this;
         }
 
-        rectTransform = GetComponentInChildren<RectTransform>();
+        rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;
         rectTransform.gameObject.SetActive(false);
@@ -68,6 +68,7 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.Enable();
         }
+        IsDisabled = false;
     }
 
     public void DisablePause()
@@ -77,12 +78,15 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.Disable();
         }
+        IsDisabled = true;
     }
 
     public void AddPlayerInput(PlayerInput playerInput)
     {
         pauseActions[playerInput.playerIndex] = playerInput.actions["Pause"];
         pauseActions[playerInput.playerIndex].started += TogglePause;
+        if (IsDisabled)
+            pauseActions[playerInput.playerIndex].Disable();
     }
 
     public void RemovePlayerInput(PlayerInput playerInput)
@@ -203,7 +207,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        if (!focus)
+        if (!focus && !IsDisabled)
         {
             Pause();
         }

@@ -8,9 +8,9 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
-    private PlayerManager playerManager;
+    //private PlayerManager playerManager;
     private PlayerInput playerInput;
-    private PlayerController playerController;
+    //private PlayerController playerController;
     public int PlayerIndex { get; private set; } = 0;
     public Color PlayerColour { get; private set; } = Color.white;
     public PlayerInput PlayerInput { get => playerInput; }
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     public void Setup(PlayerManager playerManager, PlayerInput playerInput)
     {
-        this.playerManager = playerManager;
+        //this.playerManager = playerManager;
         this.playerInput = playerInput;
         PlayerIndex = playerInput.playerIndex;
         name = "Player " + PlayerIndex;
@@ -29,9 +29,15 @@ public class Player : MonoBehaviour
         onDebugFire = playerInput.actions["DebugFire"];
     }
 
-    public void RemoveFireCallback(Action<InputAction.CallbackContext> callback)
+    public void RemoveFireCallback(Action<InputAction.CallbackContext> callback, Action<InputAction.CallbackContext> debugCallback = null)
     {
         if (playerInput != null)
+        {
             playerInput.actions["Fire"].performed -= callback;
+            if(debugCallback!= null)
+            {
+                playerInput.actions["DebugFire"].performed -= debugCallback;
+            }
+        }
     }
 }

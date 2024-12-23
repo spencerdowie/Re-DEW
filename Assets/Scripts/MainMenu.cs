@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private void Start()
+    {
+#if PLATFORM_WEBGL
+        GameObject.Find("Quit").SetActive(false);
+#endif
+    }
+
     public void LoadGame()
     {
         SceneManager.LoadScene(3);

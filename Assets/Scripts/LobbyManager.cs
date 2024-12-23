@@ -31,7 +31,6 @@ public class LobbyManager : MonoBehaviour
     private Transform playerHolder;
     private Action<InputAction.CallbackContext>[] readyActions, unreadyActions;
 
-    [SerializeField]
     private int minPlayers = 2;
 
     private void Awake()
@@ -51,6 +50,10 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>OnUnReady(2),
             (ctx)=>OnUnReady(3)
         };
+
+#if UNITY_EDITOR
+        minPlayers = 1;
+#endif
 
         playerManager.LoadPause();
     }
@@ -72,11 +75,11 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (Player player in playerManager.players)
-        {
-            if (player != null)
-                OnPlayerJoin(player);
-        }
+        //foreach (Player player in playerManager.players)
+        //{
+        //    if (player != null)
+        //        OnPlayerJoin(player);
+        //}
     }
 
     private void OnPlayerJoin(Player player)
