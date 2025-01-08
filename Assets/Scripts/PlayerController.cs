@@ -140,6 +140,8 @@ public class PlayerController : MonoBehaviour
         Laser laser = other.GetComponentInParent<Laser>();
         if (laser != null)
             gameManager.PlayerHit(PlayerIndex, laser.PlayerIndex);
+        if(other.gameObject.layer == LayerMask.NameToLayer("KillPlane"))
+            gameManager.PlayerFall(PlayerIndex);
     }
 
     public void KillPlayer()

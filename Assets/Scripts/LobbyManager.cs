@@ -182,7 +182,8 @@ public class LobbyManager : MonoBehaviour
             return;
 
         Player player = players[playerIndex];
-        int colourIndex = (player.PlayerColourIndex + direction) % playerData.playerColoursOptions.Length;
+        int colourIndex = (player.PlayerColourIndex + playerData.playerColoursOptions.Length + direction)
+            % playerData.playerColoursOptions.Length;
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);

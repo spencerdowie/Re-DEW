@@ -79,6 +79,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void PlayerFall(int playerIndex)
+    {
+        players[playerIndex].KillPlayer();
+        StartCoroutine(RespawnPlayer(playerIndex));
+        if (!players[playerIndex].isInvuln)
+        {
+            scores[playerIndex]--;
+            gameUI.SetScore(playerIndex, scores[playerIndex]);
+        }
+    }
+
     public IEnumerator RespawnPlayer(int playerIndex)
     {
         float timer = 0f;
