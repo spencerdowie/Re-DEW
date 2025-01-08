@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     private PlayerInput playerInput;
     //private PlayerController playerController;
     public int PlayerIndex { get; private set; } = 0;
-    public Color PlayerColour { get; private set; } = Color.white;
+    public int PlayerColourIndex { get; private set; } = 0;
+    public Color PlayerColour { get => playerData.playerColoursOptions[PlayerColourIndex]; }
     public PlayerInput PlayerInput { get => playerInput; }
     public Vector2 inputMove { get => playerInput.actions["Move"].ReadValue<Vector2>(); }
     public Vector2 inputAim { get => playerInput.actions["Aim"].ReadValue<Vector2>(); }
@@ -24,9 +25,14 @@ public class Player : MonoBehaviour
         this.playerInput = playerInput;
         PlayerIndex = playerInput.playerIndex;
         name = "Player " + PlayerIndex;
-        PlayerColour = playerData.playerColours[PlayerIndex];
+        PlayerColourIndex = PlayerIndex;
         onFire = playerInput.actions["Fire"];
         onDebugFire = playerInput.actions["DebugFire"];
+    }
+
+    public void SetPlayerColour(int colourIndex)
+    {
+        PlayerColourIndex = colourIndex;
     }
 
     public void RemoveFireCallback(Action<InputAction.CallbackContext> callback, Action<InputAction.CallbackContext> debugCallback = null)
@@ -34,7 +40,7 @@ public class Player : MonoBehaviour
         if (playerInput != null)
         {
             playerInput.actions["Fire"].performed -= callback;
-            if(debugCallback!= null)
+            if (debugCallback != null)
             {
                 playerInput.actions["DebugFire"].performed -= debugCallback;
             }

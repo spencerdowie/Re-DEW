@@ -67,6 +67,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LeftBumper",
+                    "type": "Button",
+                    "id": "831f86b9-7897-4ba0-a42b-b3893d041ed0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightBumper",
+                    "type": "Button",
+                    "id": "edece06f-054a-4b4b-8aec-34225bf61cf3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -144,6 +162,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "DebugFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "110aff0f-9b1a-4b41-85aa-1e43008a33e4",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "LeftBumper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d5b69ca-3975-4521-82e3-4199297565a4",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "RightBumper",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

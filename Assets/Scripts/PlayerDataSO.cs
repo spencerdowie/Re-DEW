@@ -1,13 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class PlayerProfile
+{
+    public string name;
+    public int playerColourIndex;
+}
+
 public class PlayerDataSO : ScriptableObject
 {
     [SerializeField]
-    public Color[] playerColours;
-    [field:SerializeField]
-    public float LaserHeight { get; private set;} = 0.2f;
+    public PlayerProfile[] playerProfiles;
+
+    [SerializeField]
+    public Color[] playerColoursOptions;
+
+    [field: SerializeField]
+    public float LaserHeight { get; private set; } = 0.2f;
 
     [Space, Header("Player Settings")]
     public GameObject playerCharacterPrefab;

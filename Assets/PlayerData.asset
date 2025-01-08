@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab603eb30a462b948b91274fcd84013e, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  playerColours:
-  - {r: 0.90588236, g: 0.11372549, b: 0.09803922, a: 1}
-  - {r: 0.1764706, g: 0.7372549, b: 0.06666667, a: 1}
-  - {r: 0.101960786, g: 0.1254902, b: 0.8509804, a: 1}
-  - {r: 0.90588236, g: 0.09803922, b: 0.8235294, a: 1}
+  playerProfiles: []
+  playerColoursOptions:
+  - {r: 0.9056604, g: 0.11440039, b: 0.09825563, a: 1}
+  - {r: 0.9056604, g: 0.09825563, b: 0.8253909, a: 1}
+  - {r: 0.10012458, g: 0.12557375, b: 0.8490566, a: 1}
+  - {r: 1, g: 0.9526108, b: 0.1745283, a: 1}
+  - {r: 0.17809314, g: 0.735849, b: 0.06594872, a: 1}
   <LaserHeight>k__BackingField: 0.2
   playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
     type: 3}

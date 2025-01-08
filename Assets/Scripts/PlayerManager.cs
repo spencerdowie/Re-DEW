@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour
             if (player != null)
                 OnPlayerJoined(player.PlayerInput);
         }
-        pause.DisablePause();
+        //pause.DisablePause();
     }
 
     private void CleanUserDevices(PlayerInput input)
@@ -44,7 +44,8 @@ public class PlayerManager : MonoBehaviour
             string deviceClass = device.description.deviceClass;
             if (!(deviceClass.Equals("Keyboard") || deviceClass.Equals("Mouse")))
             {
-                foreach (InputDevice inputDevice in input.user.pairedDevices)
+                InputDevice[] devices = input.user.pairedDevices.ToArray();
+                foreach (InputDevice inputDevice in devices)
                 {
                     if (inputDevice != device)
                     {
