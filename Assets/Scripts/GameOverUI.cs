@@ -35,9 +35,9 @@ public class GameOverUI : MonoBehaviour
             scoreList.Add(new Score(i, scores[i]));
 
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            scorePanels[i].CrossFadeColor(playerData.playerColours[i], 0, false, false);
+            scorePanels[i].CrossFadeColor(playerData.playerColoursOptions[i], 0, false, false);
             scoreText[i].text = scores[i].ToString();
-            playerCams[i].backgroundColor = playerData.playerColours[i];
+            playerCams[i].backgroundColor = playerData.playerColoursOptions[i];
             scorePanels[i].transform.parent.gameObject.SetActive(isPlayer[i]);
         }
 

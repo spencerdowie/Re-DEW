@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
     private PlayerController[] players = new PlayerController[4];
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
-    private bool[] isPlayer = new bool[] { false, false, false, false };
+    private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
     [SerializeField]
     private int gameTime = 300, scoreLimit = 10;
 
@@ -51,10 +52,10 @@ public class GameManager : MonoBehaviour
             if (player != null)
             {
                 StartCoroutine(RespawnPlayer(player.PlayerIndex));
-                isPlayer[player.PlayerIndex] = true;
+                isPlayerArray[player.PlayerIndex] = true;
             }
         }
-        gameUI.Setup(isPlayer);
+        gameUI.Setup(players);
         gameUI.StartClock(gameTime, () => StartCoroutine(EndGame()));
     }
 
@@ -98,7 +99,7 @@ public class GameManager : MonoBehaviour
         PauseMenu.Instance.DisablePause();
         yield return SceneManager.LoadSceneAsync(5, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
-        gameOverUI.Setup(new int[] { 1, 2, 4, 4 }, new bool[] { true, true, true, true });
+        gameOverUI.Setup(scores, isPlayerArray);
         SceneManager.UnloadSceneAsync(4);
     }
 }

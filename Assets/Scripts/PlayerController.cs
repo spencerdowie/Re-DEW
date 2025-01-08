@@ -81,14 +81,13 @@ public class PlayerController : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
         float speed = 0f;
-        float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed;
+        float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed * player.inputMove.magnitude;
 
         float currentSpeed = new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude;
 
         if (Mathf.Abs(targetSpeed - currentSpeed) > 0.1f)
         {
-            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude,
-                deltaTime * playerData.SpeedChangeRate);
+            speed = Mathf.Lerp(currentSpeed, targetSpeed, deltaTime * playerData.SpeedChangeRate);
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
@@ -106,7 +105,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        rigidbody.velocity = moveDirection * (speed);
+        Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
+        rigidbody.velocity = (moveDirection * speed) + gravVel;
         rigidbody.angularVelocity = Vector3.zero;
     }
 

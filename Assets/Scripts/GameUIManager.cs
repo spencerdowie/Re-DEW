@@ -14,14 +14,20 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI clockText;
 
-    public void Setup(bool[] isPlayer)
+    public void Setup(PlayerController[] players)
     {
         for (int i = 0; i < 4; i++)
         {
-            scorePanels[i].CrossFadeColor(playerData.playerColours[i], 0, false, false);
+            if (players[i] == null)
+            {
+                scorePanels[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            scorePanels[i].CrossFadeColor(players[i].PlayerColour, 0, false, false);
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scoreText[i].text = "0";
-            scorePanels[i].gameObject.SetActive(isPlayer[i]);
+            scorePanels[i].gameObject.SetActive(true);
         }
     }
 
