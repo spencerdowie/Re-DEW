@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
-    [SerializeField]
-    private int gameTime = 300, scoreLimit = 10;
 
     private void Awake()
     {
@@ -56,7 +54,7 @@ public class GameManager : MonoBehaviour
             }
         }
         gameUI.Setup(players);
-        gameUI.StartClock(gameTime, () => StartCoroutine(EndGame()));
+        gameUI.StartClock(30, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -69,11 +67,11 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHit(int playerHit, int shootingPlayer)
     {
-        players[playerHit].KillPlayer();
+        StartCoroutine(players[playerHit].KillPlayer());
         scores[shootingPlayer]++;
         gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
         StartCoroutine(RespawnPlayer(playerHit));
-        if (scores[shootingPlayer] >= scoreLimit)
+        if (scores[shootingPlayer] >= playerData.ScoreLimit)
         {
             StartCoroutine(EndGame());
         }
@@ -81,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerFall(int playerIndex)
     {
-        players[playerIndex].KillPlayer();
+        StartCoroutine(players[playerIndex].KillPlayer());
         StartCoroutine(RespawnPlayer(playerIndex));
         if (!players[playerIndex].isInvuln)
         {
@@ -110,7 +108,7 @@ public class GameManager : MonoBehaviour
         PauseMenu.Instance.DisablePause();
         yield return SceneManager.LoadSceneAsync(5, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
-        gameOverUI.Setup(scores, isPlayerArray);
+        gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
         SceneManager.UnloadSceneAsync(4);
     }
 }

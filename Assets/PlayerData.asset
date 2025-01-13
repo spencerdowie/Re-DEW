@@ -19,7 +19,6 @@ MonoBehaviour:
   - {r: 0.10012458, g: 0.12557375, b: 0.8490566, a: 1}
   - {r: 1, g: 0.9526108, b: 0.1745283, a: 1}
   - {r: 0.17809314, g: 0.735849, b: 0.06594872, a: 1}
-  <LaserHeight>k__BackingField: 0.2
   playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
     type: 3}
   <MoveSpeed>k__BackingField: 6
@@ -27,3 +26,13 @@ MonoBehaviour:
   <RotationSmoothTime>k__BackingField: 0.12
   <RespawnTime>k__BackingField: 3
   <RespawnInvulnTime>k__BackingField: 2
+  laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+    type: 3}
+  <LaserSpeed>k__BackingField: 6
+  <LaserHeight>k__BackingField: 0.2
+  <LaserMaxDistance>k__BackingField: 20
+  <MaxSegments>k__BackingField: 3
+  <LaserLifetime>k__BackingField: 5
+  mapScene: 4
+  <GameTime>k__BackingField: 10
+  <ScoreLimit>k__BackingField: 10

@@ -10,15 +10,16 @@ public class PlayerController : MonoBehaviour
     private PlayerDataSO playerData;
     private GameManager gameManager;
     private new Rigidbody rigidbody;
+    [SerializeField]
+    private Animator animator;
     private Player player;
     [SerializeField]
     private Transform laserSpawn;
     [SerializeField]
-    private GameObject laserPrefab;
-    [SerializeField]
     private MeshRenderer playerIndicator;
     public int PlayerIndex { get => player?.PlayerIndex ?? -1; }
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
+    public int PlayerColourIndex { get => player?.PlayerColourIndex ?? -1; }
     [SerializeField]
     private int ammo = 3;
     public bool isInvuln { get; private set; }
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
         transform.position = spawnPos;
         //rigidbody.enabled = true; //Otherwise it resets postion to origin
         StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
+        rigidbody.velocity = Vector3.zero;
     }
 
     private void FixedUpdate()
@@ -108,6 +110,9 @@ public class PlayerController : MonoBehaviour
         Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
         rigidbody.velocity = (moveDirection * speed) + gravVel;
         rigidbody.angularVelocity = Vector3.zero;
+        animator.SetFloat("MoveSpeed", speed);
+        if (gravVel.y < -1)
+            animator.SetBool("Fall", true);
     }
 
     public void OnFire(InputAction.CallbackContext ctx)
@@ -115,7 +120,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (ammo > 0 && !Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, () => ammo++);
             ammo--;
@@ -127,7 +132,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (!Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, null);
 
@@ -140,12 +145,22 @@ public class PlayerController : MonoBehaviour
         Laser laser = other.GetComponentInParent<Laser>();
         if (laser != null)
             gameManager.PlayerHit(PlayerIndex, laser.PlayerIndex);
-        if(other.gameObject.layer == LayerMask.NameToLayer("KillPlane"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("KillPlane"))
             gameManager.PlayerFall(PlayerIndex);
     }
 
-    public void KillPlayer()
+    public IEnumerator KillPlayer()
     {
+        float killTime = 1f;
+        float timer = 0f;
+        animator.SetBool("Die", true);
+        animator.SetBool("Fall", false);
+        while (timer < killTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
         //rigidbody.enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);

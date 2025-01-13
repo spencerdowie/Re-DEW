@@ -27,18 +27,25 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI winnerText;
 
-    public void Setup(int[] scores, bool[] isPlayer)
+    public void Setup(int[] scores, int[] playerColourIndex)
     {
         List<Score> scoreList = new List<Score>();
         for (int i = 0; i < 4; i++)
         {
             scoreList.Add(new Score(i, scores[i]));
 
+            if (playerColourIndex[i] < 0)
+            {
+                scorePanels[i].transform.parent.gameObject.SetActive(false);
+                continue;
+            }
+
+            Color playerColour = playerData.playerColoursOptions[playerColourIndex[i]];
+
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            scorePanels[i].CrossFadeColor(playerData.playerColoursOptions[i], 0, false, false);
+            scorePanels[i].CrossFadeColor(playerColour, 0, false, false);
             scoreText[i].text = scores[i].ToString();
-            playerCams[i].backgroundColor = playerData.playerColoursOptions[i];
-            scorePanels[i].transform.parent.gameObject.SetActive(isPlayer[i]);
+            playerCams[i].backgroundColor = playerColour;
         }
 
 
