@@ -2,12 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class PlayerProfile
 {
     public string name;
     public int playerColourIndex;
+}
+
+[Serializable]
+public struct MapPreview
+{
+    public int sceneID;
+    public Sprite sprite;
 }
 
 public class PlayerDataSO : ScriptableObject
@@ -45,9 +53,23 @@ public class PlayerDataSO : ScriptableObject
     public float LaserLifetime { get; private set; } = 5f;
 
     [Space, Header("Game Settings")]
-    public int mapScene = 4;
+    [SerializeField]
+    public int GameTime = 300;
+    [SerializeField]
+    public int ScoreLimit = 10;
+
+    [Space, Header("Scenes")]
+    public GameObject mapSelectButtonPrefab;
     [field: SerializeField]
-    public int GameTime { get; private set; } = 300;
+    public int GameUI { get; private set; } = 2;
     [field: SerializeField]
-    public int ScoreLimit { get; private set; } = 10;
+    public int Lobby { get; private set; } = 3;
+    [field: SerializeField]
+    public int MapSelect { get; private set; } = 4;
+    [field: SerializeField]
+    public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
+    [field: SerializeField]
+    public int MapScene { get; private set; } = 4;
+    [field: SerializeField]
+    public int EndScene { get; private set; } = 5;
 }
