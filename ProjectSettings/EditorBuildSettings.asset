@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Smash Lobby.unity
     guid: 8211556b95f9a474a8400bd241dcbe8c
   - enabled: 0
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/Old Scenes/Lobby.unity
     guid: c27a5f3757955a44bb3041fb3a5fdc74
   - enabled: 1
     path: Assets/Scenes/Gameplay.unity

@@ -20,8 +20,6 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
-    private Camera[] playerCams = new Camera[4];
-    [SerializeField]
     private Image[] scorePanels = new Image[4];
     private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
     [SerializeField]
@@ -36,7 +34,7 @@ public class GameOverUI : MonoBehaviour
 
             if (playerColourIndex[i] < 0)
             {
-                scorePanels[i].transform.parent.gameObject.SetActive(false);
+                scorePanels[i].gameObject.SetActive(false);
                 continue;
             }
 
@@ -45,7 +43,6 @@ public class GameOverUI : MonoBehaviour
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scorePanels[i].CrossFadeColor(playerColour, 0, false, false);
             scoreText[i].text = scores[i].ToString();
-            playerCams[i].backgroundColor = playerColour;
         }
 
 
@@ -65,5 +62,10 @@ public class GameOverUI : MonoBehaviour
             }
         }
         winnerText.text = winnersNames;
+    }
+
+    public void ReturnToLobby()
+    {
+        PauseMenu.Instance.ReturnToLobby();
     }
 }

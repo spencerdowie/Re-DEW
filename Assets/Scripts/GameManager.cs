@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             }
         }
         gameUI.Setup(players);
-        gameUI.StartClock(30, () => StartCoroutine(EndGame()));
+        gameUI.StartClock(playerData.GameTime, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -105,7 +105,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over");
         Time.timeScale = 0f;
         SceneManager.UnloadSceneAsync(2);
-        PauseMenu.Instance.DisablePause();
         yield return SceneManager.LoadSceneAsync(5, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
         gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
