@@ -158,10 +158,18 @@ public class PlayerController : MonoBehaviour
         while (timer < killTime)
         {
             timer += Time.deltaTime;
+            foreach (SkinnedMeshRenderer renderer in materials)
+            {
+                renderer.material.SetFloat("_DissolveTime", timer);
+            }
             yield return null;
         }
         animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
+        foreach (SkinnedMeshRenderer renderer in materials)
+        {
+            renderer.material.SetFloat("_DissolveTime", 0);
+        }
         //rigidbody.enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);
     }
