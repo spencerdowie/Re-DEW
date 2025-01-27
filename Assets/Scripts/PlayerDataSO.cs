@@ -61,6 +61,8 @@ public class PlayerDataSO : ScriptableObject
     [Space, Header("Scenes")]
     public GameObject mapSelectButtonPrefab;
     [field: SerializeField]
+    public int PauseMenu { get; private set; } = 1;
+    [field: SerializeField]
     public int GameUI { get; private set; } = 2;
     [field: SerializeField]
     public int Lobby { get; private set; } = 3;
@@ -69,7 +71,5 @@ public class PlayerDataSO : ScriptableObject
     [field: SerializeField]
     public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
     [field: SerializeField]
-    public int MapScene { get; private set; } = 4;
-    [field: SerializeField]
-    public int EndScene { get; private set; } = 5;
+    public int EndScene { get; private set; } = 6;
 }

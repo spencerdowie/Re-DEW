@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
+    private int mapID = -1;
 
     private void Awake()
     {
@@ -24,13 +25,14 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadGameUI()
     {
-        yield return SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
         StartGame();
     }
 
-    public void Setup(PlayerManager playerManager)
+    public void Setup(PlayerManager playerManager, int mapID)
     {
+        this.mapID = mapID;
         foreach (Player player in playerManager.players)
         {
             if (player != null)
@@ -104,10 +106,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Over");
         Time.timeScale = 0f;
-        SceneManager.UnloadSceneAsync(2);
-        yield return SceneManager.LoadSceneAsync(5, LoadSceneMode.Additive);
+        PauseMenu.Instance.DisablePause();
+        SceneManager.UnloadSceneAsync(playerData.GameUI);
+        yield return SceneManager.LoadSceneAsync(playerData.EndScene, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
         gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
-        SceneManager.UnloadSceneAsync(4);
+        SceneManager.UnloadSceneAsync(mapID);
     }
 }

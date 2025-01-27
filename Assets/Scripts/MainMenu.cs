@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerDataSO playerData;
     private void Start()
     {
 #if PLATFORM_WEBGL
@@ -14,7 +16,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(playerData.Lobby);
     }
 
     public void OpenItchio()

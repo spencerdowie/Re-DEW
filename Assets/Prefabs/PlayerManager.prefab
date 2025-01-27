@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 0
   m_MaxPlayerCount: 4
-  m_AllowJoining: 1
+  m_AllowJoining: 0
   m_JoinBehavior: 1
   m_PlayerJoinedEvent:
     m_PersistentCalls:
@@ -74,7 +74,7 @@ MonoBehaviour:
         m_Action: Join
         m_Flags: 0
       m_Flags: 0
-    m_Reference: {fileID: -1916377846673030204, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    m_Reference: {fileID: -3670841627554190709, guid: 4419d82f33d36e848b3ed5af4c8da37e,
       type: 3}
   m_PlayerPrefab: {fileID: 5814247304081078790, guid: 4ba420a0e05df5c4f9abd9d877fe67d8,
     type: 3}
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1df497af24e3774ab1be39ccf9036f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
   <players>k__BackingField:
   - {fileID: 0}
   - {fileID: 0}

@@ -87,16 +87,8 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        //foreach (Player player in playerManager.players)
-        //{
-        //    if (player != null)
-        //        OnPlayerJoin(player);
-        //}
-    }
 
-    private void OnPlayerJoin(Player player)
+    public void OnPlayerJoin(Player player)
     {
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
@@ -120,11 +112,7 @@ public class LobbyManager : MonoBehaviour
         playerStatuses[player.PlayerIndex] = LobbyStatus.NoPlayer;
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.NoPlayer);
-        icon.SetPlayerColour(Color.black);
-        player.PlayerInput.actions["Interact"].performed -= readyActions[player.PlayerIndex];
-        player.PlayerInput.actions["Cancel"].performed -= unreadyActions[player.PlayerIndex];
-        player.PlayerInput.actions["RightBumper"].performed -= rightBumpActions[player.PlayerIndex];
-        player.PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[player.PlayerIndex];
+        icon.SetPlayerColour(Color.grey);
     }
 
     private void OnReady(int playerIndex)
@@ -139,10 +127,21 @@ public class LobbyManager : MonoBehaviour
 
     private void OnUnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Ready)
+        if (!PauseMenu.Instance.IsPaused)
         {
-            playerStatuses[playerIndex] = LobbyStatus.Joined;
-            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            if (playerStatuses[playerIndex] == LobbyStatus.Ready)
+            {
+                playerStatuses[playerIndex] = LobbyStatus.Joined;
+                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            }
+            if (playerStatuses[playerIndex] == LobbyStatus.Joined)
+            {
+                playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
+                playerIcons[playerIndex].SetPlayerColour(Color.grey);
+                spawnPositions[playerIndex].gameObject.SetActive(false);
+                playerManager.RemovePlayer(playerIndex);
+            }
         }
     }
 
@@ -152,7 +151,7 @@ public class LobbyManager : MonoBehaviour
             playerStatuses.Count(s => s == LobbyStatus.Joined) == 0)
         {
             Debug.Log("Start Game");
-            StartCoroutine(LoadGameScene(4));
+            StartCoroutine(LoadGameScene(playerData.MapSelect));
         }
     }
 
@@ -160,10 +159,7 @@ public class LobbyManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.Setup(playerManager);
-
-        SceneManager.UnloadSceneAsync(3);
+        SceneManager.UnloadSceneAsync(playerData.Lobby);
     }
 
     public void NextColour(int playerIndex)

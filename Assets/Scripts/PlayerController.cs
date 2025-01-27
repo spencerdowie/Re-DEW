@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
+    private int hitLayer;
 
     private void Awake()
     {
@@ -45,7 +46,8 @@ public class PlayerController : MonoBehaviour
         this.gameManager = gameManager;
         this.player = player;
         name = player.name + " Character";
-        gameObject.layer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
+        hitLayer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
+        gameObject.layer = hitLayer;
         playerIndicator.material.color = PlayerColour;
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
@@ -153,7 +155,7 @@ public class PlayerController : MonoBehaviour
     {
         float killTime = 1f;
         float timer = 0f;
-        animator.SetBool("Die", true);
+        //animator.SetBool("Die", true);
         animator.SetBool("Fall", false);
         while (timer < killTime)
         {
@@ -164,7 +166,7 @@ public class PlayerController : MonoBehaviour
             }
             yield return null;
         }
-        animator.SetBool("Die", false);
+        //animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
@@ -176,10 +178,8 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator MakeInvuln(float invulnTime, bool disableFire = false)
     {
-        int layer = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("Invuln");
         isInvuln = true;
-        //rigidbody.detectCollisions = false;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
@@ -189,9 +189,8 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(invulnTime);
 
-        gameObject.layer = layer;
+        gameObject.layer = hitLayer;
         isInvuln = false;
-        //rigidbody.detectCollisions = true;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 0);
