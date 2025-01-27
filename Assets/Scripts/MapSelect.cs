@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MapSelect : MonoBehaviour
@@ -23,6 +24,7 @@ public class MapSelect : MonoBehaviour
                 .GetComponent<MapButton>();
             button.Setup(index);
             button.onSelect += SelectMap;
+            button.GetComponent<Button>().onClick.AddListener(ConfirmMap);
             index++;
         }
         FindObjectOfType<EventSystem>().SetSelectedGameObject(mapButtonHolder.GetChild(0).gameObject);
@@ -33,5 +35,21 @@ public class MapSelect : MonoBehaviour
         MapPreview preview = playerData.Maps[mapID];
         selectedMapID = preview.sceneID;
         selectedMapImage.sprite = preview.sprite;
+    }
+
+    public void ConfirmMap()
+    {
+        StartCoroutine(LoadGameScene(selectedMapID));
+    }
+
+
+    private IEnumerator LoadGameScene(int mapID)
+    {
+        yield return SceneManager.LoadSceneAsync(mapID, LoadSceneMode.Additive);
+
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        gameManager.Setup(FindObjectOfType<PlayerManager>(), mapID);
+
+        SceneManager.UnloadSceneAsync(playerData.MapSelect);
     }
 }
