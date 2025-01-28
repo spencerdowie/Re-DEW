@@ -106,3 +106,12 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  onDebugFire:
+    m_Name: On Debug Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a073b2b3-e06c-4963-8be8-12cf26adfbd3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0

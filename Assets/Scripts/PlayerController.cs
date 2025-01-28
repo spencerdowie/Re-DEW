@@ -10,21 +10,23 @@ public class PlayerController : MonoBehaviour
     private PlayerDataSO playerData;
     private GameManager gameManager;
     private new Rigidbody rigidbody;
+    [SerializeField]
+    private Animator animator;
     private Player player;
     [SerializeField]
     private Transform laserSpawn;
     [SerializeField]
-    private GameObject laserPrefab;
-    [SerializeField]
     private MeshRenderer playerIndicator;
     public int PlayerIndex { get => player?.PlayerIndex ?? -1; }
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
+    public int PlayerColourIndex { get => player?.PlayerColourIndex ?? -1; }
     [SerializeField]
     private int ammo = 3;
-    public bool isInvuln { get => rigidbody.detectCollisions; }
+    public bool isInvuln { get; private set; }
     [SerializeField]
     private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
+    private int hitLayer;
 
     private void Awake()
     {
@@ -36,7 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log(name + " Destroyed");
         if (player != null)
-            player.RemoveFireCallback(OnFire);
+            player.RemoveFireCallback(OnFire, OnDebugFire);
     }
 
     public void Setup(GameManager gameManager, Player player)
@@ -44,7 +46,8 @@ public class PlayerController : MonoBehaviour
         this.gameManager = gameManager;
         this.player = player;
         name = player.name + " Character";
-        gameObject.layer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
+        hitLayer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
+        gameObject.layer = hitLayer;
         playerIndicator.material.color = PlayerColour;
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
         transform.position = spawnPos;
         //rigidbody.enabled = true; //Otherwise it resets postion to origin
         StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
+        rigidbody.velocity = Vector3.zero;
     }
 
     private void FixedUpdate()
@@ -81,14 +85,13 @@ public class PlayerController : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
         float speed = 0f;
-        float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed;
+        float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed * player.inputMove.magnitude;
 
         float currentSpeed = new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude;
 
         if (Mathf.Abs(targetSpeed - currentSpeed) > 0.1f)
         {
-            speed = Mathf.Lerp(currentSpeed, targetSpeed * player.inputMove.magnitude,
-                deltaTime * playerData.SpeedChangeRate);
+            speed = Mathf.Lerp(currentSpeed, targetSpeed, deltaTime * playerData.SpeedChangeRate);
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
@@ -106,7 +109,12 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        rigidbody.velocity = moveDirection * (speed);
+        Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
+        rigidbody.velocity = (moveDirection * speed) + gravVel;
+        rigidbody.angularVelocity = Vector3.zero;
+        animator.SetFloat("MoveSpeed", speed);
+        if (gravVel.y < -1)
+            animator.SetBool("Fall", true);
     }
 
     public void OnFire(InputAction.CallbackContext ctx)
@@ -114,7 +122,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (ammo > 0 && !Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, () => ammo++);
             ammo--;
@@ -126,7 +134,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (!Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, null);
 
@@ -139,18 +147,39 @@ public class PlayerController : MonoBehaviour
         Laser laser = other.GetComponentInParent<Laser>();
         if (laser != null)
             gameManager.PlayerHit(PlayerIndex, laser.PlayerIndex);
+        if (other.gameObject.layer == LayerMask.NameToLayer("KillPlane"))
+            gameManager.PlayerFall(PlayerIndex);
     }
 
-    public void KillPlayer()
+    public IEnumerator KillPlayer()
     {
+        float killTime = 1f;
+        float timer = 0f;
+        //animator.SetBool("Die", true);
+        animator.SetBool("Fall", false);
+        while (timer < killTime)
+        {
+            timer += Time.deltaTime;
+            foreach (SkinnedMeshRenderer renderer in materials)
+            {
+                renderer.material.SetFloat("_DissolveTime", timer);
+            }
+            yield return null;
+        }
+        //animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
+        foreach (SkinnedMeshRenderer renderer in materials)
+        {
+            renderer.material.SetFloat("_DissolveTime", 0);
+        }
         //rigidbody.enabled = false; //Otherwise it resets postion to origin
         gameObject.SetActive(false);
     }
 
     public IEnumerator MakeInvuln(float invulnTime, bool disableFire = false)
     {
-        rigidbody.detectCollisions = false;
+        gameObject.layer = LayerMask.NameToLayer("Invuln");
+        isInvuln = true;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
@@ -160,7 +189,8 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(invulnTime);
 
-        rigidbody.detectCollisions = true;
+        gameObject.layer = hitLayer;
+        isInvuln = false;
         foreach (SkinnedMeshRenderer renderer in materials)
         {
             renderer.material.SetFloat("_IsInvuln", 0);

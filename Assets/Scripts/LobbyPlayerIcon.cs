@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LobbyPlayerIcon : MonoBehaviour
 {
     [SerializeField]
-    private Image background;
+    private Image background, banner;
     [SerializeField]
     private GameObject noPlayerPrompt, joinedPrompt, readyPrompt;
 
@@ -14,6 +14,12 @@ public class LobbyPlayerIcon : MonoBehaviour
     {
         playerColour.a = background.color.a;
         background.color = playerColour;
+
+        if (banner != null)
+        {
+            playerColour.a = banner.color.a;
+            banner.color = playerColour;
+        }
     }
 
     public void SetPlayerStatus(LobbyManager.LobbyStatus status)

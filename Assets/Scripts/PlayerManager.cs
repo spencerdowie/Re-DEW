@@ -5,8 +5,12 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(PlayerInputManager))]
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerDataSO playerData;
+    private PlayerInputManager inputManager;
     [field: SerializeField]
     public Player[] players { get; private set; } = new Player[4];
     public UnityAction<Player> onPlayerJoin, onPlayerLeave;
@@ -17,6 +21,24 @@ public class PlayerManager : MonoBehaviour
             Destroy(this.gameObject);
 
         DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        inputManager = GetComponent<PlayerInputManager>();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode LoadSceneMode)
+    {
+        if (scene.buildIndex == playerData.Lobby)
+        {
+            if (!inputManager.joiningEnabled)
+            {
+                inputManager.EnableJoining();
+                RemoveAllPlayers();
+            }
+        }
+        else if (scene.buildIndex == 0)
+        {
+            inputManager.DisableJoining();
+        }
     }
 
     public void LoadPause()
@@ -26,14 +48,17 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator LoadPauseMenu()
     {
-        yield return SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-        PauseMenu pause = FindObjectOfType<PauseMenu>(true);
+        yield return SceneManager.LoadSceneAsync(playerData.PauseMenu, LoadSceneMode.Additive);
+
+        LobbyManager lobby = FindObjectOfType<LobbyManager>();
         foreach (Player player in players)
         {
             if (player != null)
-                OnPlayerJoined(player.PlayerInput);
+            {
+                lobby.OnPlayerJoin(player);
+                PauseMenu.Instance.AddPlayerInput(player.PlayerInput);
+            }
         }
-        pause.DisablePause();
     }
 
     private void CleanUserDevices(PlayerInput input)
@@ -44,7 +69,8 @@ public class PlayerManager : MonoBehaviour
             string deviceClass = device.description.deviceClass;
             if (!(deviceClass.Equals("Keyboard") || deviceClass.Equals("Mouse")))
             {
-                foreach (InputDevice inputDevice in input.user.pairedDevices)
+                InputDevice[] devices = input.user.pairedDevices.ToArray();
+                foreach (InputDevice inputDevice in devices)
                 {
                     if (inputDevice != device)
                     {
@@ -64,6 +90,8 @@ public class PlayerManager : MonoBehaviour
         //    Debug.Log(device.name + " - " + device.description);
         //}
 
+        playerInput.deviceLostEvent.AddListener(OnDeviceLost);
+
         int playerIndex = playerInput.playerIndex;
         Player player = playerInput.GetComponent<Player>();
         player.Setup(this, playerInput);
@@ -75,8 +103,36 @@ public class PlayerManager : MonoBehaviour
         Debug.Log(playerInput.name + " joined");
     }
 
-    private void OnPlayerLeft(PlayerInput playerInput)
+    public void OnDeviceLost(PlayerInput playerInput)
     {
-        PauseMenu.Instance.RemovePlayerInput(playerInput);
+        Debug.Log(playerInput.name + " disconnected");
+
+        //int playerIndex = playerInput.playerIndex;
+        //onPlayerLeave?.Invoke(players[playerIndex]);
+        //Destroy(players[playerIndex].gameObject);
+        //players[playerIndex] = null;
+    }
+
+    public void RemoveAllPlayers()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] != null)
+            {
+                players[i].PlayerInput.user.UnpairDevicesAndRemoveUser();
+                Destroy(players[i].gameObject);
+                players[i] = null;
+            }
+        }
+    }
+    public void RemovePlayer(int playerIndex)
+    {
+        if (players[playerIndex] != null)
+        {
+            players[playerIndex].PlayerInput.user.UnpairDevicesAndRemoveUser();
+            Destroy(players[playerIndex].gameObject);
+            players[playerIndex] = null;
+        }
+
     }
 }

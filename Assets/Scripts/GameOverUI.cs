@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -20,25 +21,29 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
-    private Camera[] playerCams = new Camera[4];
-    [SerializeField]
     private Image[] scorePanels = new Image[4];
     private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
     [SerializeField]
     private TMPro.TextMeshProUGUI winnerText;
 
-    public void Setup(int[] scores, bool[] isPlayer)
+    public void Setup(int[] scores, int[] playerColourIndex)
     {
         List<Score> scoreList = new List<Score>();
         for (int i = 0; i < 4; i++)
         {
             scoreList.Add(new Score(i, scores[i]));
 
+            if (playerColourIndex[i] < 0)
+            {
+                scorePanels[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            Color playerColour = playerData.playerColoursOptions[playerColourIndex[i]];
+
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            scorePanels[i].CrossFadeColor(playerData.playerColours[i], 0, false, false);
+            scorePanels[i].CrossFadeColor(playerColour, 0, false, false);
             scoreText[i].text = scores[i].ToString();
-            playerCams[i].backgroundColor = playerData.playerColours[i];
-            scorePanels[i].transform.parent.gameObject.SetActive(isPlayer[i]);
         }
 
 
@@ -58,5 +63,17 @@ public class GameOverUI : MonoBehaviour
             }
         }
         winnerText.text = winnersNames;
+
+        FindObjectOfType<EventSystem>().SetSelectedGameObject(GameObject.Find("LobbyBtn"));
+    }
+
+    public void ReturnToLobby()
+    {
+        PauseMenu.Instance.ReturnToLobby();
+    }
+
+    public void ReturnToMenu()
+    {
+        PauseMenu.Instance.ReturnToMenu();
     }
 }

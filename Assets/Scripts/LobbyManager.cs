@@ -29,9 +29,8 @@ public class LobbyManager : MonoBehaviour
     private Transform[] spawnPositions;
     [SerializeField]
     private Transform playerHolder;
-    private Action<InputAction.CallbackContext>[] readyActions, unreadyActions;
+    private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
 
-    [SerializeField]
     private int minPlayers = 2;
 
     private void Awake()
@@ -51,6 +50,22 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>OnUnReady(2),
             (ctx)=>OnUnReady(3)
         };
+        rightBumpActions = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>NextColour(0),
+            (ctx)=>NextColour(1),
+            (ctx)=>NextColour(2),
+            (ctx)=>NextColour(3)
+        };
+        leftBumpActions = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>PrevColour(0),
+            (ctx)=>PrevColour(1),
+            (ctx)=>PrevColour(2),
+            (ctx)=>PrevColour(3)
+        };
+
+#if UNITY_EDITOR
+        minPlayers = 1;
+#endif
 
         playerManager.LoadPause();
     }
@@ -66,20 +81,14 @@ public class LobbyManager : MonoBehaviour
 
             players[i].PlayerInput.actions["Interact"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
+            players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
+            players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
             //Destroy(players[i].GetComponent<PlayerController>().gameObject);
         }
     }
 
-    private void Start()
-    {
-        foreach (Player player in playerManager.players)
-        {
-            if (player != null)
-                OnPlayerJoin(player);
-        }
-    }
 
-    private void OnPlayerJoin(Player player)
+    public void OnPlayerJoin(Player player)
     {
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
@@ -87,12 +96,15 @@ public class LobbyManager : MonoBehaviour
         icon.SetPlayerColour(player.PlayerColour);
         player.PlayerInput.actions["Interact"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
+        player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
+        player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
         players[player.PlayerIndex] = player;
 
-        PlayerController playerController =
-            Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
-        playerController.Setup(null, player);
-        playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
+        spawnPositions[player.PlayerIndex].gameObject.SetActive(true);
+        //PlayerController playerController =
+        //    Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
+        //playerController.Setup(null, player);
+        //playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
     }
 
     private void OnPlayerLeave(Player player)
@@ -100,9 +112,7 @@ public class LobbyManager : MonoBehaviour
         playerStatuses[player.PlayerIndex] = LobbyStatus.NoPlayer;
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.NoPlayer);
-        icon.SetPlayerColour(Color.black);
-        player.PlayerInput.actions["Interact"].performed -= readyActions[player.PlayerIndex];
-        player.PlayerInput.actions["Cancel"].performed -= unreadyActions[player.PlayerIndex];
+        icon.SetPlayerColour(Color.grey);
     }
 
     private void OnReady(int playerIndex)
@@ -117,10 +127,21 @@ public class LobbyManager : MonoBehaviour
 
     private void OnUnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Ready)
+        if (!PauseMenu.Instance.IsPaused)
         {
-            playerStatuses[playerIndex] = LobbyStatus.Joined;
-            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            if (playerStatuses[playerIndex] == LobbyStatus.Ready)
+            {
+                playerStatuses[playerIndex] = LobbyStatus.Joined;
+                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            }
+            if (playerStatuses[playerIndex] == LobbyStatus.Joined)
+            {
+                playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
+                playerIcons[playerIndex].SetPlayerColour(Color.grey);
+                spawnPositions[playerIndex].gameObject.SetActive(false);
+                playerManager.RemovePlayer(playerIndex);
+            }
         }
     }
 
@@ -130,7 +151,7 @@ public class LobbyManager : MonoBehaviour
             playerStatuses.Count(s => s == LobbyStatus.Joined) == 0)
         {
             Debug.Log("Start Game");
-            StartCoroutine(LoadGameScene(4));
+            StartCoroutine(LoadGameScene(playerData.MapSelect));
         }
     }
 
@@ -138,9 +159,29 @@ public class LobbyManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.Setup(playerManager);
+        SceneManager.UnloadSceneAsync(playerData.Lobby);
+    }
 
-        SceneManager.UnloadSceneAsync(3);
+    public void NextColour(int playerIndex)
+    {
+        ChangeColour(playerIndex, 1);
+    }
+
+    public void PrevColour(int playerIndex)
+    {
+        ChangeColour(playerIndex, -1);
+    }
+
+    public void ChangeColour(int playerIndex, int direction)
+    {
+        if (PauseMenu.Instance.IsPaused)
+            return;
+
+        Player player = players[playerIndex];
+        int colourIndex = (player.PlayerColourIndex + playerData.playerColoursOptions.Length + direction)
+            % playerData.playerColoursOptions.Length;
+
+        player.SetPlayerColour(colourIndex);
+        playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
     }
 }

@@ -7,7 +7,12 @@ using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerDataSO playerData;
     private RectTransform rectTransform;
+    [SerializeField]
+    private EventSystem eventSystem;
+    private GameObject prevSelected;
     [SerializeField]
     private float animTimeMax = 0.5f;
     [SerializeField]
@@ -21,7 +26,7 @@ public class PauseMenu : MonoBehaviour
 
     public static PauseMenu Instance { get; private set; }
 
-
+    private bool IsDisabled { get; set; }
     public bool IsPaused
     {
         get => isPaused;
@@ -54,7 +59,7 @@ public class PauseMenu : MonoBehaviour
             Instance = this;
         }
 
-        rectTransform = GetComponentInChildren<RectTransform>();
+        rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;
         rectTransform.gameObject.SetActive(false);
@@ -68,6 +73,7 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.Enable();
         }
+        IsDisabled = false;
     }
 
     public void DisablePause()
@@ -77,12 +83,15 @@ public class PauseMenu : MonoBehaviour
             if (pauseAction != null)
                 pauseAction.Disable();
         }
+        IsDisabled = true;
     }
 
     public void AddPlayerInput(PlayerInput playerInput)
     {
         pauseActions[playerInput.playerIndex] = playerInput.actions["Pause"];
         pauseActions[playerInput.playerIndex].started += TogglePause;
+        if (IsDisabled)
+            pauseActions[playerInput.playerIndex].Disable();
     }
 
     public void RemovePlayerInput(PlayerInput playerInput)
@@ -112,6 +121,9 @@ public class PauseMenu : MonoBehaviour
         rectTransform.gameObject.SetActive(true);
         Time.timeScale = 0f;
 
+        prevSelected = eventSystem.currentSelectedGameObject;
+        eventSystem.SetSelectedGameObject(resumeBtn);
+
         lerp = Vector2Int.up;
         if (timer > 0)
         {
@@ -125,6 +137,7 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("Resume Game.");
         lerp = Vector2Int.right;
+
         if (timer > 0)
         {
             timer = animTimeMax - timer;
@@ -135,10 +148,13 @@ public class PauseMenu : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        foreach (InputAction pauseAction in pauseActions)
+        for (int i = 0; i < 4; i++)
         {
-            if (pauseAction != null)
-                pauseAction.started -= TogglePause;
+            if (pauseActions[i] != null)
+            {
+                pauseActions[i].started -= TogglePause;
+                pauseActions[i] = null;
+            }
         }
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -146,13 +162,16 @@ public class PauseMenu : MonoBehaviour
 
     public void ReturnToLobby()
     {
-        foreach (InputAction pauseAction in pauseActions)
+        for (int i = 0; i < 4; i++)
         {
-            if (pauseAction != null)
-                pauseAction.started -= TogglePause;
+            if (pauseActions[i] != null)
+            {
+                pauseActions[i].started -= TogglePause;
+                pauseActions[i] = null;
+            }
         }
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(3);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(playerData.Lobby);
     }
 
     public void QuitGame()
@@ -186,6 +205,10 @@ public class PauseMenu : MonoBehaviour
             rectTransform.gameObject.SetActive(false);
             IsPaused = false;
             Time.timeScale = 1f;
+
+            if (prevSelected != null)
+                eventSystem.SetSelectedGameObject(prevSelected);
+            prevSelected = null;
         }
     }
 
@@ -203,7 +226,7 @@ public class PauseMenu : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        if (!focus)
+        if (!focus && !IsDisabled)
         {
             Pause();
         }

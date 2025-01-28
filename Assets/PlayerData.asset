@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab603eb30a462b948b91274fcd84013e, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  playerColours:
-  - {r: 0.90588236, g: 0.11372549, b: 0.09803922, a: 1}
-  - {r: 0.1764706, g: 0.7372549, b: 0.06666667, a: 1}
-  - {r: 0.101960786, g: 0.1254902, b: 0.8509804, a: 1}
-  - {r: 0.90588236, g: 0.09803922, b: 0.8235294, a: 1}
-  <LaserHeight>k__BackingField: 0.2
+  playerProfiles: []
+  playerColoursOptions:
+  - {r: 0.9056604, g: 0.11440039, b: 0.09825563, a: 1}
+  - {r: 0.9056604, g: 0.09825563, b: 0.8253909, a: 1}
+  - {r: 0.10012458, g: 0.12557375, b: 0.8490566, a: 1}
+  - {r: 1, g: 0.9526108, b: 0.1745283, a: 1}
+  - {r: 0.17809314, g: 0.735849, b: 0.06594872, a: 1}
   playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
     type: 3}
   <MoveSpeed>k__BackingField: 6
@@ -25,3 +26,26 @@ MonoBehaviour:
   <RotationSmoothTime>k__BackingField: 0.12
   <RespawnTime>k__BackingField: 3
   <RespawnInvulnTime>k__BackingField: 2
+  laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+    type: 3}
+  <LaserSpeed>k__BackingField: 6
+  <LaserHeight>k__BackingField: 0.2
+  <LaserMaxDistance>k__BackingField: 20
+  <MaxSegments>k__BackingField: 3
+  <LaserLifetime>k__BackingField: 5
+  GameTime: 10
+  ScoreLimit: 10
+  mapSelectButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
+    type: 3}
+  <PauseMenu>k__BackingField: 1
+  <GameUI>k__BackingField: 2
+  <Lobby>k__BackingField: 3
+  <MapSelect>k__BackingField: 4
+  <Maps>k__BackingField:
+  - sceneID: 5
+    sprite: {fileID: 21300000, guid: f6a7288990f22d64097f89a45d336618, type: 3}
+  - sceneID: 5
+    sprite: {fileID: 21300000, guid: cd79eb809ac5a6a4ebe22a02ff16763a, type: 3}
+  - sceneID: 5
+    sprite: {fileID: 21300000, guid: f6a7288990f22d64097f89a45d336618, type: 3}
+  <EndScene>k__BackingField: 6

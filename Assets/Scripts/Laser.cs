@@ -8,14 +8,6 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
-    private float laserSpeed = 2f;
-    [SerializeField]
-    private float laserMaxDistance = 10f;
-    [SerializeField]
-    private int maxSegments = 3;
-    [SerializeField]
-    private float laserLifetime = 5f;
-    [SerializeField]
     private Transform laserPoint;
     [SerializeField]
     private GameObject hitboxPrefab;
@@ -52,7 +44,7 @@ public class Laser : MonoBehaviour
     private Queue<Vector3> CreatePoints()
     {
         Queue<Vector3> points = new Queue<Vector3>();
-        float distanceLeft = laserMaxDistance;
+        float distanceLeft = playerData.LaserMaxDistance;
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
 
@@ -61,13 +53,13 @@ public class Laser : MonoBehaviour
 
         //Debug.Log("Laser Origin: " + segmentOrigin.ToString());
 
-        while (distanceLeft > 0 && numSegments < maxSegments)
+        while (distanceLeft > 0 && numSegments < playerData.MaxSegments)
         {
             bool missed = !Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, 100, LayerMask.GetMask("Default"));
             if (missed)
             {
                 hit.point = segmentOrigin + (segmentDir * distanceLeft);
-                hit.distance = laserMaxDistance;
+                hit.distance = playerData.LaserMaxDistance;
             }
 
             Vector3 point = hit.point;
@@ -108,7 +100,7 @@ public class Laser : MonoBehaviour
             if (PauseMenu.Instance.IsPaused)
                 continue;
 
-            float distance = laserSpeed * Time.deltaTime;
+            float distance = playerData.LaserSpeed * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
             newPos.y = 0.2f;
             laserPoint.position = newPos;
@@ -128,7 +120,7 @@ public class Laser : MonoBehaviour
     private IEnumerator DespawnCountdown()
     {
         float despawnTimer = 0f;
-        while (despawnTimer < laserLifetime)
+        while (despawnTimer < playerData.LaserLifetime)
         {
             if (!PauseMenu.Instance.IsPaused)
                 despawnTimer += Time.deltaTime;

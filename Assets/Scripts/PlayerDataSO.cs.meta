@@ -6,6 +6,10 @@ MonoImporter:
   defaultReferences:
   - playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
       type: 3}
+  - laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+      type: 3}
+  - mapSelectButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

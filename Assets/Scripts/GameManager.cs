@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,9 +15,8 @@ public class GameManager : MonoBehaviour
     private PlayerController[] players = new PlayerController[4];
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
-    private bool[] isPlayer = new bool[] { false, false, false, false };
-    [SerializeField]
-    private int gameTime = 300, scoreLimit = 10;
+    private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
+    private int mapID = -1;
 
     private void Awake()
     {
@@ -25,13 +25,14 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadGameUI()
     {
-        yield return SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
         StartGame();
     }
 
-    public void Setup(PlayerManager playerManager)
+    public void Setup(PlayerManager playerManager, int mapID)
     {
+        this.mapID = mapID;
         foreach (Player player in playerManager.players)
         {
             if (player != null)
@@ -51,11 +52,11 @@ public class GameManager : MonoBehaviour
             if (player != null)
             {
                 StartCoroutine(RespawnPlayer(player.PlayerIndex));
-                isPlayer[player.PlayerIndex] = true;
+                isPlayerArray[player.PlayerIndex] = true;
             }
         }
-        gameUI.Setup(isPlayer);
-        gameUI.StartClock(gameTime, () => StartCoroutine(EndGame()));
+        gameUI.Setup(players);
+        gameUI.StartClock(playerData.GameTime, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -68,13 +69,24 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHit(int playerHit, int shootingPlayer)
     {
-        players[playerHit].KillPlayer();
+        StartCoroutine(players[playerHit].KillPlayer());
         scores[shootingPlayer]++;
         gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
         StartCoroutine(RespawnPlayer(playerHit));
-        if (scores[shootingPlayer] >= scoreLimit)
+        if (scores[shootingPlayer] >= playerData.ScoreLimit)
         {
             StartCoroutine(EndGame());
+        }
+    }
+
+    public void PlayerFall(int playerIndex)
+    {
+        StartCoroutine(players[playerIndex].KillPlayer());
+        StartCoroutine(RespawnPlayer(playerIndex));
+        if (!players[playerIndex].isInvuln)
+        {
+            scores[playerIndex]--;
+            gameUI.SetScore(playerIndex, scores[playerIndex]);
         }
     }
 
@@ -94,11 +106,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Over");
         Time.timeScale = 0f;
-        SceneManager.UnloadSceneAsync(2);
         PauseMenu.Instance.DisablePause();
-        yield return SceneManager.LoadSceneAsync(6, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(playerData.GameUI);
+        yield return SceneManager.LoadSceneAsync(playerData.EndScene, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
-        gameOverUI.Setup(new int[] { 1, 2, 4, 4 }, new bool[] { true, true, true, true });
-        SceneManager.UnloadSceneAsync(4);
+        gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
+        SceneManager.UnloadSceneAsync(mapID);
     }
 }

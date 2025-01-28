@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 6098289435160492733}
   - component: {fileID: 394979266599625065}
   - component: {fileID: 2100839887189311953}
+  - component: {fileID: 6341245229889716534}
   m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -122,7 +123,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
@@ -180,14 +181,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  animator: {fileID: 6341245229889716534}
   laserSpawn: {fileID: 7336288443647335580}
-  laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
-    type: 3}
   playerIndicator: {fileID: 5380626662340909674}
   ammo: 3
   materials:
   - {fileID: 7156476140484314006}
   - {fileID: 9024858431117878272}
+--- !u!95 &6341245229889716534
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8587156342998301510}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: ab95edf0dba059b40ab9422e9348d5b1, type: 3}
+  m_Controller: {fileID: 9100000, guid: e7aff13859767eb4faab258029e73c42, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &352964259392670611
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,9 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerDataSO playerData;
+    private void Start()
+    {
+#if PLATFORM_WEBGL
+        GameObject.Find("Quit").SetActive(false);
+#endif
+    }
+
     public void LoadGame()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(playerData.Lobby);
     }
 
     public void OpenItchio()
