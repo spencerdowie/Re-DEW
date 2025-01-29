@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -27,10 +29,10 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer };
     [SerializeField]
     private Transform[] spawnPositions;
-    [SerializeField]
-    private Transform playerHolder;
     private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
-
+    [SerializeField]
+    private GameObject readyBanner;
+    private bool gameReady = false;
     private int minPlayers = 2;
 
     private void Awake()
@@ -66,7 +68,6 @@ public class LobbyManager : MonoBehaviour
 #if UNITY_EDITOR
         minPlayers = 1;
 #endif
-
         playerManager.LoadPause();
     }
 
@@ -79,7 +80,7 @@ public class LobbyManager : MonoBehaviour
             if (players[i] == null)
                 continue;
 
-            players[i].PlayerInput.actions["Interact"].performed -= readyActions[i];
+            players[i].PlayerInput.actions["Join"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
             players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
             players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
@@ -87,6 +88,19 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    private void SelectUI(Player player)
+    {
+        if (!EventSystem.current.alreadySelecting)
+        {
+            EventSystem.current.SetSelectedGameObject(playerIcons[player.PlayerIndex].gameObject);
+        }
+    }
+
+    private void DeselectUI()
+    {
+        if (EventSystem.current.alreadySelecting)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
 
     public void OnPlayerJoin(Player player)
     {
@@ -94,7 +108,7 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
         icon.SetPlayerColour(player.PlayerColour);
-        player.PlayerInput.actions["Interact"].performed += readyActions[player.PlayerIndex];
+        player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
@@ -105,6 +119,7 @@ public class LobbyManager : MonoBehaviour
         //    Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
         //playerController.Setup(null, player);
         //playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
+        SelectUI(player);
     }
 
     private void OnPlayerLeave(Player player)
@@ -113,11 +128,20 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.NoPlayer);
         icon.SetPlayerColour(Color.grey);
+
+        if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
+        {
+            DeselectUI();
+        }
     }
 
     private void OnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Joined)
+        if (gameReady)
+        {
+            StartGame();
+        }
+        else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
         {
             playerStatuses[playerIndex] = LobbyStatus.Ready;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Ready);
@@ -127,21 +151,19 @@ public class LobbyManager : MonoBehaviour
 
     private void OnUnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused)
+        if (playerStatuses[playerIndex] == LobbyStatus.Ready)
         {
-            if (playerStatuses[playerIndex] == LobbyStatus.Ready)
-            {
-                playerStatuses[playerIndex] = LobbyStatus.Joined;
-                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
-            }
-            if (playerStatuses[playerIndex] == LobbyStatus.Joined)
-            {
-                playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
-                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
-                playerIcons[playerIndex].SetPlayerColour(Color.grey);
-                spawnPositions[playerIndex].gameObject.SetActive(false);
-                playerManager.RemovePlayer(playerIndex);
-            }
+            playerStatuses[playerIndex] = LobbyStatus.Joined;
+            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            ReadyCheck();
+        }
+        else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
+        {
+            playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
+            playerIcons[playerIndex].SetPlayerColour(Color.grey);
+            spawnPositions[playerIndex].gameObject.SetActive(false);
+            playerManager.RemovePlayer(playerIndex);
         }
     }
 
@@ -150,14 +172,32 @@ public class LobbyManager : MonoBehaviour
         if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) >= minPlayers &&
             playerStatuses.Count(s => s == LobbyStatus.Joined) == 0)
         {
-            Debug.Log("Start Game");
-            StartCoroutine(LoadGameScene(playerData.MapSelect));
+            readyBanner.SetActive(true);
+            gameReady = true;
         }
+        else
+        {
+            readyBanner.SetActive(false);
+            gameReady = false;
+        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        PauseMenu.Instance.ReturnToMenu();
+    }
+
+    public void StartGame()
+    {
+        Debug.Log("Start Game");
+        StartCoroutine(LoadGameScene(playerData.MapSelect));
     }
 
     private IEnumerator LoadGameScene(int sceneIndex)
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting());
 
         SceneManager.UnloadSceneAsync(playerData.Lobby);
     }

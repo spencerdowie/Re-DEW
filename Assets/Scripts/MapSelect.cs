@@ -14,6 +14,7 @@ public class MapSelect : MonoBehaviour
     [SerializeField]
     private Image selectedMapImage;
     private int selectedMapID = 1;
+    private GameSetting gameSetting;
 
     private void Awake()
     {
@@ -42,13 +43,18 @@ public class MapSelect : MonoBehaviour
         StartCoroutine(LoadGameScene(selectedMapID));
     }
 
+    public void SetGameSetting(GameSetting gameSetting)
+    {
+        this.gameSetting = gameSetting;
+    }
+
 
     private IEnumerator LoadGameScene(int mapID)
     {
         yield return SceneManager.LoadSceneAsync(mapID, LoadSceneMode.Additive);
 
         GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.Setup(FindObjectOfType<PlayerManager>(), mapID);
+        gameManager.Setup(gameSetting, mapID);
 
         SceneManager.UnloadSceneAsync(playerData.MapSelect);
     }

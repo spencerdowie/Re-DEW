@@ -226,9 +226,11 @@ public class PauseMenu : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
+#if !UNITY_EDITOR
         if (!focus && !IsDisabled)
         {
             Pause();
         }
+#endif
     }
 }
