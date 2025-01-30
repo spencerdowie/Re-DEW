@@ -472,6 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  gameCamera: {fileID: 806647287}
   spawnPositions:
   - {fileID: 1412674434}
   - {fileID: 1066817107}
@@ -483,8 +484,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   scores: 00000000000000000000000000000000
-  gameTime: 300
-  scoreLimit: 10
+  countdownTime: 5
 --- !u!1001 &414459981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1047,7 +1047,7 @@ GameObject:
   - component: {fileID: 806647286}
   - component: {fileID: 806647289}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Game Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

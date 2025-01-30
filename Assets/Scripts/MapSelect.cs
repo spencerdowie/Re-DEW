@@ -28,7 +28,7 @@ public class MapSelect : MonoBehaviour
             button.GetComponent<Button>().onClick.AddListener(ConfirmMap);
             index++;
         }
-        FindObjectOfType<EventSystem>().SetSelectedGameObject(mapButtonHolder.GetChild(0).gameObject);
+        EventSystem.current.SetSelectedGameObject(mapButtonHolder.GetChild(0).gameObject);
     }
 
     public void SelectMap(int mapID)

@@ -34,6 +34,10 @@ public class LobbyManager : MonoBehaviour
     private GameObject readyBanner;
     private bool gameReady = false;
     private int minPlayers = 2;
+    private bool isTeams = false, winCon = true;
+    private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
 
     private void Awake()
     {
@@ -88,11 +92,18 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    private void SelectUI(Player player)
+    private void Start()
+    {
+        SetGameTime(gameTime);
+        SetStockAmount(stockAmt);
+        SetScoreGoal(scoreGoal);
+    }
+
+    private void SelectUI()
     {
         if (!EventSystem.current.alreadySelecting)
         {
-            EventSystem.current.SetSelectedGameObject(playerIcons[player.PlayerIndex].gameObject);
+            EventSystem.current.SetSelectedGameObject(playerIcons[0].gameObject);
         }
     }
 
@@ -115,11 +126,8 @@ public class LobbyManager : MonoBehaviour
         players[player.PlayerIndex] = player;
 
         spawnPositions[player.PlayerIndex].gameObject.SetActive(true);
-        //PlayerController playerController =
-        //    Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
-        //playerController.Setup(null, player);
-        //playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
-        SelectUI(player);
+
+        SelectUI();
     }
 
     private void OnPlayerLeave(Player player)
@@ -197,7 +205,7 @@ public class LobbyManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
-        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting());
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, winCon, stockAmt, scoreGoal, isTeams));
 
         SceneManager.UnloadSceneAsync(playerData.Lobby);
     }
@@ -223,5 +231,50 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
+    }
+
+    public void ToggleTeamMode(bool teamMode)
+    {
+        isTeams = teamMode;
+    }
+
+    //true = stock - false = score
+    public void ToggleWinCondition(bool winCon)
+    {
+        this.winCon = winCon;
+    }
+
+    private void SetStockAmount(int stockAmt)
+    {
+        this.stockAmt = stockAmt;
+        stockText.text = stockAmt.ToString();
+    }
+
+    private void SetScoreGoal(int scoreGoal)
+    {
+        this.scoreGoal = scoreGoal;
+        scoreText.text = scoreGoal.ToString();
+    }
+
+    public void SetGameTime(int gameTime)
+    {
+        this.gameTime = gameTime;
+        gameTimeText.text = gameTime.ToString();
+    }
+
+    public void ChangeStockScore(int change)
+    {
+        if (winCon)
+        {
+            int newStock = stockAmt + change;
+            if (newStock > 0 && newStock <= maxStocks)
+                SetStockAmount(newStock);
+        }
+        else
+        {
+            int newScore = scoreGoal + change;
+            if (newScore > 0 && newScore <= maxScore)
+                SetScoreGoal(newScore);
+        }
     }
 }
