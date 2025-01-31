@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class GameUIManager : MonoBehaviour
 {
     [SerializeField]
+    private Canvas canvas;
+    [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
     private Image[] scorePanels = new Image[4];
@@ -14,7 +16,12 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI clockText;
 
-    public void Setup(PlayerController[] players)
+    public void SetUICamera(Camera camera)
+    {
+        canvas.worldCamera = camera;
+    }
+
+    public void SetupPlayers(PlayerController[] players)
     {
         for (int i = 0; i < 4; i++)
         {
@@ -24,7 +31,7 @@ public class GameUIManager : MonoBehaviour
                 continue;
             }
 
-            scorePanels[i].CrossFadeColor(players[i].PlayerColour, 0, false, false);
+            //scorePanels[i].CrossFadeColor(players[i].PlayerColour, 0, false, false);
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scoreText[i].text = "0";
             scorePanels[i].gameObject.SetActive(true);

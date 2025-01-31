@@ -4,10 +4,30 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public struct GameSetting
+{
+    public int GameTime { get; private set; }
+    public int MaxStocks { get; private set; }
+    public int ScoreLimit { get; private set; }
+    public bool IsTeams { get; private set; }
+    public bool WinCon { get; private set; }
+
+    public GameSetting(int gameTime, bool winCon, int maxStocks, int scoreLimit, bool isTeams)
+    {
+        GameTime = gameTime;
+        MaxStocks = maxStocks;
+        ScoreLimit = scoreLimit;
+        IsTeams = isTeams;
+        WinCon = winCon;
+    }
+}
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
+    [SerializeField]
+    private Camera gameCamera;
     private GameUIManager gameUI;
     [SerializeField]
     private Transform[] spawnPositions;
@@ -17,6 +37,9 @@ public class GameManager : MonoBehaviour
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
     private int mapID = -1;
+    private GameSetting gameSetting;
+    [SerializeField]
+    private int countdownTime = 5;
 
     private void Awake()
     {
@@ -27,13 +50,15 @@ public class GameManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
-        StartGame();
+        gameUI.SetUICamera(gameCamera);
+        StartCoroutine(StartGameCountdown());
     }
 
-    public void Setup(PlayerManager playerManager, int mapID)
+    public void Setup(GameSetting gameSetting, int mapID)
     {
+        this.gameSetting = gameSetting;
         this.mapID = mapID;
-        foreach (Player player in playerManager.players)
+        foreach (Player player in PlayerManager.Instance.players)
         {
             if (player != null)
             {
@@ -45,18 +70,27 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void StartGame()
+    public IEnumerator StartGameCountdown()
     {
+        gameUI.SetupPlayers(players);
         foreach (PlayerController player in players)
         {
             if (player != null)
             {
                 StartCoroutine(RespawnPlayer(player.PlayerIndex));
                 isPlayerArray[player.PlayerIndex] = true;
+                player.HoldPlayer();
             }
         }
-        gameUI.Setup(players);
-        gameUI.StartClock(playerData.GameTime, () => StartCoroutine(EndGame()));
+        yield return new WaitForSeconds(countdownTime);
+        foreach (PlayerController player in players)
+        {
+            if (player != null)
+            {
+                player.HoldPlayer(false);
+            }
+        }
+        gameUI.StartClock(gameSetting.GameTime * 60, () => StartCoroutine(EndGame()));
     }
 
     public void AddPlayerController(Player player)
@@ -73,7 +107,7 @@ public class GameManager : MonoBehaviour
         scores[shootingPlayer]++;
         gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
         StartCoroutine(RespawnPlayer(playerHit));
-        if (scores[shootingPlayer] >= playerData.ScoreLimit)
+        if (scores[shootingPlayer] >= gameSetting.ScoreLimit)
         {
             StartCoroutine(EndGame());
         }

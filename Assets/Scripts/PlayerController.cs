@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private SkinnedMeshRenderer[] materials;
     private float rotationVelocity = 0f;
     private int hitLayer;
+    private bool holdPlayer = false;
 
     private void Awake()
     {
@@ -78,7 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if (!holdPlayer)
+            Move();
     }
 
     private void Move()
@@ -196,6 +198,15 @@ public class PlayerController : MonoBehaviour
             renderer.material.SetFloat("_IsInvuln", 0);
         }
         if (disableFire)
+            player.onFire.Enable();
+    }
+
+    public void HoldPlayer(bool holdPlayer = true)
+    {
+        this.holdPlayer = holdPlayer;
+        if(holdPlayer)
+            player.onFire.Disable();
+        else
             player.onFire.Enable();
     }
 }

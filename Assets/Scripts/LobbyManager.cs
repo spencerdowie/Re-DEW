@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -27,11 +29,15 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer };
     [SerializeField]
     private Transform[] spawnPositions;
-    [SerializeField]
-    private Transform playerHolder;
     private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
-
+    [SerializeField]
+    private GameObject readyBanner;
+    private bool gameReady = false;
     private int minPlayers = 2;
+    private bool isTeams = false, winCon = true;
+    private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
 
     private void Awake()
     {
@@ -66,7 +72,6 @@ public class LobbyManager : MonoBehaviour
 #if UNITY_EDITOR
         minPlayers = 1;
 #endif
-
         playerManager.LoadPause();
     }
 
@@ -79,7 +84,7 @@ public class LobbyManager : MonoBehaviour
             if (players[i] == null)
                 continue;
 
-            players[i].PlayerInput.actions["Interact"].performed -= readyActions[i];
+            players[i].PlayerInput.actions["Join"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
             players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
             players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
@@ -87,6 +92,26 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        SetGameTime(gameTime);
+        SetStockAmount(stockAmt);
+        SetScoreGoal(scoreGoal);
+    }
+
+    private void SelectUI()
+    {
+        if (!EventSystem.current.alreadySelecting)
+        {
+            EventSystem.current.SetSelectedGameObject(playerIcons[0].gameObject);
+        }
+    }
+
+    private void DeselectUI()
+    {
+        if (EventSystem.current.alreadySelecting)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
 
     public void OnPlayerJoin(Player player)
     {
@@ -94,17 +119,15 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
         icon.SetPlayerColour(player.PlayerColour);
-        player.PlayerInput.actions["Interact"].performed += readyActions[player.PlayerIndex];
+        player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
         players[player.PlayerIndex] = player;
 
         spawnPositions[player.PlayerIndex].gameObject.SetActive(true);
-        //PlayerController playerController =
-        //    Instantiate(playerData.playerCharacterPrefab, playerHolder).GetComponent<PlayerController>();
-        //playerController.Setup(null, player);
-        //playerController.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
+
+        SelectUI();
     }
 
     private void OnPlayerLeave(Player player)
@@ -113,11 +136,20 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.NoPlayer);
         icon.SetPlayerColour(Color.grey);
+
+        if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
+        {
+            DeselectUI();
+        }
     }
 
     private void OnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused && playerStatuses[playerIndex] == LobbyStatus.Joined)
+        if (gameReady)
+        {
+            StartGame();
+        }
+        else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
         {
             playerStatuses[playerIndex] = LobbyStatus.Ready;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Ready);
@@ -127,21 +159,19 @@ public class LobbyManager : MonoBehaviour
 
     private void OnUnReady(int playerIndex)
     {
-        if (!PauseMenu.Instance.IsPaused)
+        if (playerStatuses[playerIndex] == LobbyStatus.Ready)
         {
-            if (playerStatuses[playerIndex] == LobbyStatus.Ready)
-            {
-                playerStatuses[playerIndex] = LobbyStatus.Joined;
-                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
-            }
-            if (playerStatuses[playerIndex] == LobbyStatus.Joined)
-            {
-                playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
-                playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
-                playerIcons[playerIndex].SetPlayerColour(Color.grey);
-                spawnPositions[playerIndex].gameObject.SetActive(false);
-                playerManager.RemovePlayer(playerIndex);
-            }
+            playerStatuses[playerIndex] = LobbyStatus.Joined;
+            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            ReadyCheck();
+        }
+        else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
+        {
+            playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
+            playerIcons[playerIndex].SetPlayerColour(Color.grey);
+            spawnPositions[playerIndex].gameObject.SetActive(false);
+            playerManager.RemovePlayer(playerIndex);
         }
     }
 
@@ -150,14 +180,32 @@ public class LobbyManager : MonoBehaviour
         if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) >= minPlayers &&
             playerStatuses.Count(s => s == LobbyStatus.Joined) == 0)
         {
-            Debug.Log("Start Game");
-            StartCoroutine(LoadGameScene(playerData.MapSelect));
+            readyBanner.SetActive(true);
+            gameReady = true;
         }
+        else
+        {
+            readyBanner.SetActive(false);
+            gameReady = false;
+        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        PauseMenu.Instance.ReturnToMenu();
+    }
+
+    public void StartGame()
+    {
+        Debug.Log("Start Game");
+        StartCoroutine(LoadGameScene(playerData.MapSelect));
     }
 
     private IEnumerator LoadGameScene(int sceneIndex)
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, winCon, stockAmt, scoreGoal, isTeams));
 
         SceneManager.UnloadSceneAsync(playerData.Lobby);
     }
@@ -183,5 +231,50 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
+    }
+
+    public void ToggleTeamMode(bool teamMode)
+    {
+        isTeams = teamMode;
+    }
+
+    //true = stock - false = score
+    public void ToggleWinCondition(bool winCon)
+    {
+        this.winCon = winCon;
+    }
+
+    private void SetStockAmount(int stockAmt)
+    {
+        this.stockAmt = stockAmt;
+        stockText.text = stockAmt.ToString();
+    }
+
+    private void SetScoreGoal(int scoreGoal)
+    {
+        this.scoreGoal = scoreGoal;
+        scoreText.text = scoreGoal.ToString();
+    }
+
+    public void SetGameTime(int gameTime)
+    {
+        this.gameTime = gameTime;
+        gameTimeText.text = gameTime.ToString();
+    }
+
+    public void ChangeStockScore(int change)
+    {
+        if (winCon)
+        {
+            int newStock = stockAmt + change;
+            if (newStock > 0 && newStock <= maxStocks)
+                SetStockAmount(newStock);
+        }
+        else
+        {
+            int newScore = scoreGoal + change;
+            if (newScore > 0 && newScore <= maxScore)
+                SetScoreGoal(newScore);
+        }
     }
 }

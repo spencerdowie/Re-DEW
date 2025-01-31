@@ -14,15 +14,22 @@ public class PlayerManager : MonoBehaviour
     [field: SerializeField]
     public Player[] players { get; private set; } = new Player[4];
     public UnityAction<Player> onPlayerJoin, onPlayerLeave;
+    public static PlayerManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (FindObjectsOfType<PlayerManager>().Length > 1)
-            Destroy(this.gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            inputManager = GetComponent<PlayerInputManager>();
+        }
 
-        DontDestroyOnLoad(this.gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        inputManager = GetComponent<PlayerInputManager>();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode LoadSceneMode)
@@ -39,16 +46,22 @@ public class PlayerManager : MonoBehaviour
         {
             inputManager.DisableJoining();
         }
+        else if (scene.buildIndex == playerData.MapSelect)
+        {
+            PauseMenu.Instance.EnablePause();
+        }
     }
 
-    public void LoadPause()
+    public Coroutine LoadPause()
     {
-        StartCoroutine(LoadPauseMenu());
+        return StartCoroutine(LoadPauseMenu());
     }
 
     private IEnumerator LoadPauseMenu()
     {
         yield return SceneManager.LoadSceneAsync(playerData.PauseMenu, LoadSceneMode.Additive);
+
+        PauseMenu.Instance.DisablePause();
 
         LobbyManager lobby = FindObjectOfType<LobbyManager>();
         foreach (Player player in players)
@@ -95,6 +108,7 @@ public class PlayerManager : MonoBehaviour
         int playerIndex = playerInput.playerIndex;
         Player player = playerInput.GetComponent<Player>();
         player.Setup(this, playerInput);
+        //playerInput.actions["Interact"].Disable();
         player.transform.SetParent(transform);
         players[playerIndex] = player;
         onPlayerJoin?.Invoke(player);
