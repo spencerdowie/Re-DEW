@@ -37,9 +37,10 @@ public class GameManager : MonoBehaviour
     private int[] scores = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
     private int mapID = -1;
-    private GameSetting gameSetting;
+    public GameSetting GameSetting { get; private set; }
     [SerializeField]
     private int countdownTime = 5;
+    private Dictionary<int, int> teams = new Dictionary<int, int>();
 
     private void Awake()
     {
@@ -56,13 +57,22 @@ public class GameManager : MonoBehaviour
 
     public void Setup(GameSetting gameSetting, int mapID)
     {
-        this.gameSetting = gameSetting;
+        this.GameSetting = gameSetting;
         this.mapID = mapID;
         foreach (Player player in PlayerManager.Instance.players)
         {
             if (player != null)
             {
-                AddPlayerController(player);
+                int teamID = player.PlayerColourIndex;
+                if (gameSetting.IsTeams)
+                {
+                    if (!teams.TryGetValue(player.PlayerColourIndex, out teamID))
+                    {
+                        teamID = teams.Count;
+                        teams.Add(player.PlayerColourIndex, teamID);
+                    }
+                }
+                AddPlayerController(player, teamID);
             }
         }
 
@@ -90,14 +100,14 @@ public class GameManager : MonoBehaviour
                 player.HoldPlayer(false);
             }
         }
-        gameUI.StartClock(gameSetting.GameTime * 60, () => StartCoroutine(EndGame()));
+        gameUI.StartClock(GameSetting.GameTime * 60, () => StartCoroutine(EndGame()));
     }
 
-    public void AddPlayerController(Player player)
+    public void AddPlayerController(Player player, int teamID)
     {
         PlayerController playerController =
             Instantiate(playerData.playerCharacterPrefab, transform).GetComponent<PlayerController>();
-        playerController.Setup(this, player);
+        playerController.Setup(this, player, teamID);
         players[playerController.PlayerIndex] = playerController;
     }
 
@@ -107,7 +117,7 @@ public class GameManager : MonoBehaviour
         scores[shootingPlayer]++;
         gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
         StartCoroutine(RespawnPlayer(playerHit));
-        if (scores[shootingPlayer] >= gameSetting.ScoreLimit)
+        if (scores[shootingPlayer] >= GameSetting.ScoreLimit)
         {
             StartCoroutine(EndGame());
         }

@@ -42,12 +42,14 @@ public class PlayerController : MonoBehaviour
             player.RemoveFireCallback(OnFire, OnDebugFire);
     }
 
-    public void Setup(GameManager gameManager, Player player)
+    public void Setup(GameManager gameManager, Player player, int teamID)
     {
         this.gameManager = gameManager;
         this.player = player;
         name = player.name + " Character";
-        hitLayer = LayerMask.NameToLayer("Player" + player.PlayerIndex);
+        hitLayer = LayerMask.NameToLayer("Team" + teamID);
+
+
         gameObject.layer = hitLayer;
         playerIndicator.material.color = PlayerColour;
         player.onFire.performed += OnFire;
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
         {
             Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
-            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, () => ammo++);
+            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, () => ammo++);
             ammo--;
         }
     }
@@ -138,7 +140,7 @@ public class PlayerController : MonoBehaviour
         {
             Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
             //laserTransform.SetParent(playerManager.transform);
-            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, PlayerColour, null);
+            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, null);
 
             Destroy(laserTransform.gameObject);
         }
@@ -204,7 +206,7 @@ public class PlayerController : MonoBehaviour
     public void HoldPlayer(bool holdPlayer = true)
     {
         this.holdPlayer = holdPlayer;
-        if(holdPlayer)
+        if (holdPlayer)
             player.onFire.Disable();
         else
             player.onFire.Enable();

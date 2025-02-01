@@ -16,11 +16,13 @@ public class Laser : MonoBehaviour
     private UnityAction returnAmmo;
     private TrailRenderer trail;
     public int PlayerIndex { get; private set; } = -1;
+    private int hitLayer = -1;
 
-    public void Setup(int playerIndex, Color playerColour, UnityAction returnAmmoAction)
+    public void Setup(int playerIndex, int playerLayer, Color playerColour, UnityAction returnAmmoAction)
     {
         returnAmmo = returnAmmoAction;
         PlayerIndex = playerIndex;
+        hitLayer = playerLayer;
         //Debug.Log("Laser Spawned by Player " + playerIndex);
 
         name = "Player " + playerIndex + " Laser";
@@ -82,7 +84,7 @@ public class Laser : MonoBehaviour
     {
         BoxCollider hitbox = Instantiate(hitboxPrefab, transform).GetComponent<BoxCollider>();
         hitbox.transform.position = laserPoint.position;
-        hitbox.gameObject.layer = LayerMask.NameToLayer("Player" + PlayerIndex);
+        hitbox.gameObject.layer = hitLayer;
         hitbox.transform.LookAt(destination);
         hitbox.name = "Player " + PlayerIndex + " Laser Hitbox";
         return hitbox;
