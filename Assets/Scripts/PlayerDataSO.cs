@@ -69,7 +69,7 @@ public class PlayerDataSO : ScriptableObject
     [field: SerializeField]
     public int MapSelect { get; private set; } = 4;
     [field: SerializeField]
-    public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
+    public int EndScene { get; private set; } = 5;
     [field: SerializeField]
-    public int EndScene { get; private set; } = 6;
+    public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
 }
