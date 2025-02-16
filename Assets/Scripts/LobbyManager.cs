@@ -34,8 +34,10 @@ public class LobbyManager : MonoBehaviour
     private GameObject readyBanner;
     private bool gameReady = false;
     private int minPlayers = 2;
-    private bool isTeams = false, winCon = true;
-    private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40;
+    private bool isTeams = false;
+    ///<summary>true = stock | false = score</summary>
+    private bool winCon = true;
+    private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
     private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
 
@@ -205,7 +207,9 @@ public class LobbyManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
-        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, winCon, stockAmt, scoreGoal, isTeams));
+        WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
+
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
 
         SceneManager.UnloadSceneAsync(playerData.Lobby);
     }
@@ -238,7 +242,7 @@ public class LobbyManager : MonoBehaviour
         isTeams = teamMode;
     }
 
-    //true = stock - false = score
+    ///<summary>true = stock | false = score</summary>
     public void ToggleWinCondition(bool winCon)
     {
         this.winCon = winCon;
@@ -256,7 +260,7 @@ public class LobbyManager : MonoBehaviour
         scoreText.text = scoreGoal.ToString();
     }
 
-    public void SetGameTime(int gameTime)
+    private void SetGameTime(int gameTime)
     {
         this.gameTime = gameTime;
         gameTimeText.text = gameTime.ToString();
@@ -276,5 +280,13 @@ public class LobbyManager : MonoBehaviour
             if (newScore > 0 && newScore <= maxScore)
                 SetScoreGoal(newScore);
         }
+    }
+
+    public void ChangeGameTime(int change)
+    {
+        int newTime = gameTime + change;
+        if (newTime > 0 && newTime <= maxTime)
+            SetGameTime(newTime);
+
     }
 }

@@ -11,36 +11,41 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
-    private Image[] scorePanels = new Image[4];
-    private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
+    private PlayerUI[] UIPanels = new PlayerUI[4];
     [SerializeField]
     private TMPro.TextMeshProUGUI clockText;
+
+    private void Awake()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            UIPanels[i].gameObject.SetActive(false);
+        }
+    }
 
     public void SetUICamera(Camera camera)
     {
         canvas.worldCamera = camera;
     }
 
-    public void SetupPlayers(PlayerController[] players)
+    public void SetupPlayers(PlayerController[] players, int startingValue)
     {
         for (int i = 0; i < 4; i++)
         {
-            if (players[i] == null)
+            if (players[i] != null)
             {
-                scorePanels[i].gameObject.SetActive(false);
-                continue;
+                UIPanels[i].SetPlayerColour(players[i].PlayerColour);
+                UIPanels[i].SetValue(startingValue);
+                UIPanels[i].SetAmmo(playerData.StartAmmo);
+                UIPanels[i].gameObject.SetActive(true);
+                players[i].updateAmmo += UIPanels[i].SetAmmo;
             }
-
-            //scorePanels[i].CrossFadeColor(players[i].PlayerColour, 0, false, false);
-            scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            scoreText[i].text = "0";
-            scorePanels[i].gameObject.SetActive(true);
         }
     }
 
-    public void SetScore(int playerIndex, int score)
+    public void SetValue(int playerIndex, int value)
     {
-        scoreText[playerIndex].text = score.ToString();
+        UIPanels[playerIndex].SetValue(value);
     }
 
     ///<summary>Time in seconds</summary>

@@ -5,8 +5,7 @@ using UnityEngine.Events;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField]
-    private PlayerDataSO playerData;
+    private const float LaserHeight = 0.2f;
     [SerializeField]
     private Transform laserPoint;
     [SerializeField]
@@ -17,6 +16,15 @@ public class Laser : MonoBehaviour
     private TrailRenderer trail;
     public int PlayerIndex { get; private set; } = -1;
     private int hitLayer = -1;
+
+    [field: SerializeField]
+    public float LaserSpeed { get; private set; } = 6f;
+    [field: SerializeField]
+    public float LaserMaxDistance { get; private set; } = 20f;
+    [field: SerializeField]
+    public int MaxSegments { get; private set; } = 3;
+    [field: SerializeField]
+    public float LaserLifetime { get; private set; } = 5f;
 
     public void Setup(int playerIndex, int playerLayer, Color playerColour, UnityAction returnAmmoAction)
     {
@@ -35,7 +43,7 @@ public class Laser : MonoBehaviour
         transform.SetParent(null);
 
         Vector3 position = transform.position;
-        position.y = playerData.LaserHeight;
+        position.y = LaserHeight;
         transform.position = position;
 
 
@@ -46,26 +54,26 @@ public class Laser : MonoBehaviour
     private Queue<Vector3> CreatePoints()
     {
         Queue<Vector3> points = new Queue<Vector3>();
-        float distanceLeft = playerData.LaserMaxDistance;
+        float distanceLeft = LaserMaxDistance;
         int numSegments = 0;
         Vector3 segmentOrigin = laserPoint.position, segmentDir = laserPoint.forward;
 
-        segmentOrigin.y = playerData.LaserHeight;
+        segmentOrigin.y = LaserHeight;
         segmentDir.y = 0;
 
         //Debug.Log("Laser Origin: " + segmentOrigin.ToString());
 
-        while (distanceLeft > 0 && numSegments < playerData.MaxSegments)
+        while (distanceLeft > 0 && numSegments < MaxSegments)
         {
             bool missed = !Physics.Raycast(segmentOrigin, segmentDir, out RaycastHit hit, 100, LayerMask.GetMask("Default"));
             if (missed)
             {
                 hit.point = segmentOrigin + (segmentDir * distanceLeft);
-                hit.distance = playerData.LaserMaxDistance;
+                hit.distance = LaserMaxDistance;
             }
 
             Vector3 point = hit.point;
-            point.y = playerData.LaserHeight;
+            point.y = LaserHeight;
 
             Vector3 normal = hit.normal;
             normal.y = 0;
@@ -102,7 +110,7 @@ public class Laser : MonoBehaviour
             if (PauseMenu.Instance.IsPaused)
                 continue;
 
-            float distance = playerData.LaserSpeed * Time.deltaTime;
+            float distance = LaserSpeed * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
             newPos.y = 0.2f;
             laserPoint.position = newPos;
@@ -122,7 +130,7 @@ public class Laser : MonoBehaviour
     private IEnumerator DespawnCountdown()
     {
         float despawnTimer = 0f;
-        while (despawnTimer < playerData.LaserLifetime)
+        while (despawnTimer < LaserLifetime)
         {
             if (!PauseMenu.Instance.IsPaused)
                 despawnTimer += Time.deltaTime;
