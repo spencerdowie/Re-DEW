@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
         gameObject.layer = hitLayer;
         playerIndicator.material.color = PlayerColour;
         playerIndicator.material.SetColor("_EmissionColor", PlayerColour);
+        GetComponentInChildren<Light>().color = PlayerColour;
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();
