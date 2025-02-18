@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -64,6 +65,12 @@ public class PauseMenu : MonoBehaviour
         rectTransform.anchorMin = Vector2.down;
         rectTransform.gameObject.SetActive(false);
 
+        SceneManager.sceneUnloaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene)
+    {
+        GetComponent<Canvas>().worldCamera = Camera.main;
     }
 
     public void EnablePause()
@@ -157,7 +164,7 @@ public class PauseMenu : MonoBehaviour
             }
         }
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
 
     public void ReturnToLobby()
@@ -171,7 +178,7 @@ public class PauseMenu : MonoBehaviour
             }
         }
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(playerData.Lobby);
+        SceneManager.LoadScene(playerData.Lobby);
     }
 
     public void QuitGame()

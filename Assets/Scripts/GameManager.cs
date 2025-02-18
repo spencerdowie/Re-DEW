@@ -4,18 +4,24 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum WinCon
+{
+    STOCK = 0,
+    SCORE
+}
+
 public struct GameSetting
 {
     public int GameTime { get; private set; }
-    public int MaxStocks { get; private set; }
+    public int StartStocks { get; private set; }
     public int ScoreLimit { get; private set; }
     public bool IsTeams { get; private set; }
-    public bool WinCon { get; private set; }
+    public WinCon WinCon { get; private set; }
 
-    public GameSetting(int gameTime, bool winCon, int maxStocks, int scoreLimit, bool isTeams)
+    public GameSetting(int gameTime, WinCon winCon, int maxStocks, int scoreLimit, bool isTeams)
     {
         GameTime = gameTime;
-        MaxStocks = maxStocks;
+        StartStocks = maxStocks;
         ScoreLimit = scoreLimit;
         IsTeams = isTeams;
         WinCon = winCon;
@@ -35,6 +41,8 @@ public class GameManager : MonoBehaviour
     private PlayerController[] players = new PlayerController[4];
     [SerializeField]
     private int[] scores = new int[] { 0, 0, 0, 0 };
+    [SerializeField]
+    private int[] stocks = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
     private int mapID = -1;
     public GameSetting GameSetting { get; private set; }
@@ -57,14 +65,14 @@ public class GameManager : MonoBehaviour
 
     public void Setup(GameSetting gameSetting, int mapID)
     {
-        this.GameSetting = gameSetting;
+        GameSetting = gameSetting;
         this.mapID = mapID;
         foreach (Player player in PlayerManager.Instance.players)
         {
             if (player != null)
             {
                 int teamID = player.PlayerColourIndex;
-                if (gameSetting.IsTeams)
+                if (GameSetting.IsTeams)
                 {
                     if (!teams.TryGetValue(player.PlayerColourIndex, out teamID))
                     {
@@ -72,6 +80,10 @@ public class GameManager : MonoBehaviour
                         teams.Add(player.PlayerColourIndex, teamID);
                     }
                 }
+
+                if (GameSetting.WinCon == WinCon.STOCK)
+                    stocks[player.PlayerIndex] = GameSetting.StartStocks;
+
                 AddPlayerController(player, teamID);
             }
         }
@@ -82,7 +94,8 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartGameCountdown()
     {
-        gameUI.SetupPlayers(players);
+        int startingValue = GameSetting.WinCon == WinCon.STOCK ? GameSetting.StartStocks : 0;
+        gameUI.SetupPlayers(players, startingValue);
         foreach (PlayerController player in players)
         {
             if (player != null)
@@ -114,13 +127,10 @@ public class GameManager : MonoBehaviour
     public void PlayerHit(int playerHit, int shootingPlayer)
     {
         StartCoroutine(players[playerHit].KillPlayer());
-        scores[shootingPlayer]++;
-        gameUI.SetScore(shootingPlayer, scores[shootingPlayer]);
+        UpdateScore(shootingPlayer, 1);
+        UpdateStock(playerHit, -1);
         StartCoroutine(RespawnPlayer(playerHit));
-        if (scores[shootingPlayer] >= GameSetting.ScoreLimit)
-        {
-            StartCoroutine(EndGame());
-        }
+        CheckWinCon();
     }
 
     public void PlayerFall(int playerIndex)
@@ -129,9 +139,24 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnPlayer(playerIndex));
         if (!players[playerIndex].isInvuln)
         {
-            scores[playerIndex]--;
-            gameUI.SetScore(playerIndex, scores[playerIndex]);
+            UpdateScore(playerIndex, -1);
+            UpdateStock(playerIndex, -1);
+            CheckWinCon();
         }
+    }
+
+    public void UpdateScore(int playerIndex, int scoreChange)
+    {
+        scores[playerIndex] += scoreChange;
+        if (GameSetting.WinCon == WinCon.SCORE)
+            gameUI.SetValue(playerIndex, scores[playerIndex]);
+    }
+
+    public void UpdateStock(int playerIndex, int stockChange)
+    {
+        stocks[playerIndex] += stockChange;
+        if (GameSetting.WinCon == WinCon.STOCK)
+            gameUI.SetValue(playerIndex, stocks[playerIndex]);
     }
 
     public IEnumerator RespawnPlayer(int playerIndex)
@@ -149,12 +174,45 @@ public class GameManager : MonoBehaviour
     private IEnumerator EndGame()
     {
         Debug.Log("Game Over");
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         PauseMenu.Instance.DisablePause();
         SceneManager.UnloadSceneAsync(playerData.GameUI);
         yield return SceneManager.LoadSceneAsync(playerData.EndScene, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
         gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
         SceneManager.UnloadSceneAsync(mapID);
+    }
+
+    private void CheckWinCon()
+    {
+        bool winConMet = false;
+        if (GameSetting.WinCon == WinCon.STOCK)
+        {
+            int playersAlive = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (stocks[i] > 0)
+                    playersAlive++;
+            }
+#if DEBUG
+            if (playersAlive < 1)
+                winConMet = true;
+#else
+            if (playersAlive < 2)
+                winConMet = true;
+#endif
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (scores[i] > GameSetting.ScoreLimit)
+                    winConMet = true;
+            }
+        }
+        if (winConMet)
+        {
+            StartCoroutine(EndGame());
+        }
     }
 }

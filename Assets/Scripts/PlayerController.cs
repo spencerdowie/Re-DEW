@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -22,9 +23,10 @@ public class PlayerController : MonoBehaviour
     public int PlayerColourIndex { get => player?.PlayerColourIndex ?? -1; }
     [SerializeField]
     private int ammo = 3;
+    public UnityAction<int> updateAmmo;
     public bool isInvuln { get; private set; }
     [SerializeField]
-    private SkinnedMeshRenderer[] materials;
+    private SkinnedMeshRenderer[] playerModels;
     private float rotationVelocity = 0f;
     private int hitLayer;
     private bool holdPlayer = false;
@@ -52,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
         gameObject.layer = hitLayer;
         playerIndicator.material.color = PlayerColour;
+        playerIndicator.material.SetColor("_EmissionColor", PlayerColour);
+        GetComponentInChildren<Light>().color = PlayerColour;
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();
@@ -127,10 +131,15 @@ public class PlayerController : MonoBehaviour
         if (ammo > 0 && !Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
             Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
-            //laserTransform.SetParent(playerManager.transform);
-            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, () => ammo++);
-            ammo--;
+            laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, () => UpdateAmmo(1));
+            UpdateAmmo(-1);
         }
+    }
+
+    private void UpdateAmmo(int change)
+    {
+        ammo += change;
+        updateAmmo?.Invoke(ammo);
     }
 
     public void OnDebugFire(InputAction.CallbackContext ctx)
@@ -139,7 +148,6 @@ public class PlayerController : MonoBehaviour
         if (!Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
             Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
-            //laserTransform.SetParent(playerManager.transform);
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, null);
 
             Destroy(laserTransform.gameObject);
@@ -164,7 +172,7 @@ public class PlayerController : MonoBehaviour
         while (timer < killTime)
         {
             timer += Time.deltaTime;
-            foreach (SkinnedMeshRenderer renderer in materials)
+            foreach (SkinnedMeshRenderer renderer in playerModels)
             {
                 renderer.material.SetFloat("_DissolveTime", timer);
             }
@@ -172,7 +180,7 @@ public class PlayerController : MonoBehaviour
         }
         //animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
-        foreach (SkinnedMeshRenderer renderer in materials)
+        foreach (SkinnedMeshRenderer renderer in playerModels)
         {
             renderer.material.SetFloat("_DissolveTime", 0);
         }
@@ -184,7 +192,7 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.layer = LayerMask.NameToLayer("Invuln");
         isInvuln = true;
-        foreach (SkinnedMeshRenderer renderer in materials)
+        foreach (SkinnedMeshRenderer renderer in playerModels)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
         }
@@ -195,7 +203,7 @@ public class PlayerController : MonoBehaviour
 
         gameObject.layer = hitLayer;
         isInvuln = false;
-        foreach (SkinnedMeshRenderer renderer in materials)
+        foreach (SkinnedMeshRenderer renderer in playerModels)
         {
             renderer.material.SetFloat("_IsInvuln", 0);
         }

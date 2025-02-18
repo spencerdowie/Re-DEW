@@ -55,7 +55,7 @@ public class GameOverUI : MonoBehaviour
         {
             //Debug.Log(scoreList[i].index + " - " + scoreList[i].score);
             scorePanels[scoreList[i].index].transform.parent.SetSiblingIndex(i);
-            if (scoreList[i].score == maxScore)
+            if (playerColourIndex[i] >= 0 && scoreList[i].score == maxScore)
             {
                 if (i > 0)
                     winnersNames += " ";

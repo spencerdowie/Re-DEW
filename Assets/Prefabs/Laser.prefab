@@ -105,7 +105,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4f28ea9aaf95c5e4ab12c720224af4a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,7 +130,7 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -179,7 +179,7 @@ TrailRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 4
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -233,11 +233,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575086edd92e3df43a204305de9b0968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  laserSpeed: 2
-  laserMaxDistance: 10
-  maxSegments: 3
-  laserLifetime: 5
   laserPoint: {fileID: 7408362863122818054}
   hitboxPrefab: {fileID: 8566446495744730023, guid: 48c890384db93cc4a9653b51750c53c0,
     type: 3}
+  <LaserSpeed>k__BackingField: 6
+  <LaserMaxDistance>k__BackingField: 20
+  <MaxSegments>k__BackingField: 3
+  <LaserLifetime>k__BackingField: 5
