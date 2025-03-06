@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
         }
 
         PauseMenu.Instance.EnablePause();
-
     }
 
     public IEnumerator StartGameCountdown()

@@ -15,14 +15,6 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI clockText;
 
-    private void Awake()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            UIPanels[i].gameObject.SetActive(false);
-        }
-    }
-
     public void SetUICamera(Camera camera)
     {
         canvas.worldCamera = camera;
@@ -32,12 +24,15 @@ public class GameUIManager : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            if (players[i] != null)
+            if (players[i] == null)
+            {
+                UIPanels[i].gameObject.SetActive(false);
+            }
+            else
             {
                 UIPanels[i].SetPlayerColour(players[i].PlayerColour);
                 UIPanels[i].SetValue(startingValue);
                 UIPanels[i].SetAmmo(playerData.StartAmmo);
-                UIPanels[i].gameObject.SetActive(true);
                 players[i].updateAmmo += UIPanels[i].SetAmmo;
             }
         }

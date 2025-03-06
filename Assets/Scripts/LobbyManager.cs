@@ -205,6 +205,7 @@ public class LobbyManager : MonoBehaviour
 
     private IEnumerator LoadGameScene(int sceneIndex)
     {
+        FindObjectOfType<AudioListener>().enabled = false;
         yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
         WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;

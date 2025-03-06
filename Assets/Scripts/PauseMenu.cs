@@ -64,13 +64,6 @@ public class PauseMenu : MonoBehaviour
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;
         rectTransform.gameObject.SetActive(false);
-
-        SceneManager.sceneUnloaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene)
-    {
-        GetComponent<Canvas>().worldCamera = Camera.main;
     }
 
     public void EnablePause()

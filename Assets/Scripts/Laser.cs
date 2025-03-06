@@ -37,8 +37,9 @@ public class Laser : MonoBehaviour
 
 
         trail = GetComponentInChildren<TrailRenderer>();
-        trail.startColor = playerColour;
-        trail.endColor = playerColour;
+        //trail.startColor = playerColour;
+        //trail.endColor = playerColour;
+        trail.material.color = playerColour;
 
         transform.SetParent(null);
 

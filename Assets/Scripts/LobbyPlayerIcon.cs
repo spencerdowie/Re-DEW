@@ -2,40 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LobbyStatus = LobbyManager.LobbyStatus;
 
 public class LobbyPlayerIcon : MonoBehaviour
 {
     [SerializeField]
     private Material bannerMat;
+    private Material defaultMat;
     [SerializeField]
     private Image background, banner;
     [SerializeField]
     private GameObject noPlayerPrompt, joinedPrompt, readyPrompt;
+    private LobbyStatus status = LobbyStatus.NoPlayer;
 
     private void Awake()
     {
-        Debug.Log(banner.material.name);
-        banner.material = Instantiate(bannerMat);
+        defaultMat = banner.material;
     }
 
     public void SetPlayerColour(Color playerColour)
     {
         playerColour.a = background.color.a;
         background.color = playerColour;
+        playerColour.a = banner.color.a;
 
-        if (banner.material.name != "Default UI Material")
-        {
-            playerColour.a = banner.color.a;
+        banner.color = playerColour;
+        banner.material.color = playerColour;
 
-            banner.color = playerColour;
-            banner.material.SetColor("_Color", playerColour);
-        }
     }
 
-    public void SetPlayerStatus(LobbyManager.LobbyStatus status)
+    public void SetPlayerStatus(LobbyStatus status)
     {
-        noPlayerPrompt.SetActive(status == LobbyManager.LobbyStatus.NoPlayer);
-        joinedPrompt.SetActive(status == LobbyManager.LobbyStatus.Joined);
-        readyPrompt.SetActive(status == LobbyManager.LobbyStatus.Ready);
+        noPlayerPrompt.SetActive(status == LobbyStatus.NoPlayer);
+        joinedPrompt.SetActive(status == LobbyStatus.Joined);
+        readyPrompt.SetActive(status == LobbyStatus.Ready);
+
+        if (this.status == LobbyStatus.NoPlayer)
+        {
+            banner.material = Instantiate(bannerMat);
+        }
+        else if (status == LobbyStatus.NoPlayer)
+        {
+            banner.material = Instantiate(defaultMat);
+        }
+
+        this.status = status;
     }
 }
