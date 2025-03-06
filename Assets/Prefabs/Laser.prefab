@@ -240,3 +240,4 @@ MonoBehaviour:
   <LaserMaxDistance>k__BackingField: 20
   <MaxSegments>k__BackingField: 3
   <LaserLifetime>k__BackingField: 5
+  <LaserLength>k__BackingField: -1

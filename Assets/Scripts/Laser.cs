@@ -25,6 +25,9 @@ public class Laser : MonoBehaviour
     public int MaxSegments { get; private set; } = 3;
     [field: SerializeField]
     public float LaserLifetime { get; private set; } = 5f;
+    [field: SerializeField]
+    public float LaserLength { get; private set; } = -1f;
+    public bool shortLaser = false;
 
     public void Setup(int playerIndex, int playerLayer, Color playerColour, UnityAction returnAmmoAction)
     {
@@ -47,9 +50,15 @@ public class Laser : MonoBehaviour
         position.y = LaserHeight;
         transform.position = position;
 
-
-        StartCoroutine(MoveLaser(CreatePoints()));
-        StartCoroutine(DespawnCountdown());
+        if (shortLaser)
+        {
+            StartCoroutine(MoveLaserShort(CreatePoints()));
+        }
+        else
+        {
+            StartCoroutine(MoveLaser(CreatePoints()));
+            StartCoroutine(DespawnCountdown());
+        }
     }
 
     private Queue<Vector3> CreatePoints()
@@ -99,6 +108,13 @@ public class Laser : MonoBehaviour
         return hitbox;
     }
 
+    private LaserSegment SpawnSegment(Vector3 destination)
+    {
+        LaserSegment segment = Instantiate(hitboxPrefab, transform).GetComponent<LaserSegment>();
+        segment.Setup(laserPoint.position, hitLayer, destination, PlayerIndex, LaserSpeed);
+        return segment;
+    }
+
     private IEnumerator MoveLaser(Queue<Vector3> points)
     {
         bool hasDest = true;
@@ -126,6 +142,38 @@ public class Laser : MonoBehaviour
                 currentHitbox = SpawnHitbox();
             }
         }
+    }
+
+    private IEnumerator MoveLaserShort(Queue<Vector3> points)
+    {
+        bool hasDest = true;
+        Vector3 destination = points.Dequeue();
+        LaserSegment currentSegment = SpawnSegment(destination);
+        while (hasDest)
+        {
+            yield return new WaitForFixedUpdate();
+
+            if (PauseMenu.Instance.IsPaused)
+                continue;
+
+            float distance = LaserSpeed * Time.deltaTime;
+            Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
+            newPos.y = 0.2f;
+            laserPoint.position = newPos;
+
+            currentSegment.UpdateSegment(distance);
+
+            float remainingDistance = Vector3.Distance(laserPoint.position, destination);
+            if (remainingDistance <= distance)
+            {
+                StartCoroutine(currentSegment.ShrinkSegment());
+                hasDest = points.TryDequeue(out destination);
+                currentSegment = SpawnSegment(destination);
+            }
+        }
+        returnAmmo?.Invoke();
+        yield return new WaitForFixedUpdate();
+        Destroy(gameObject);
     }
 
     private IEnumerator DespawnCountdown()
