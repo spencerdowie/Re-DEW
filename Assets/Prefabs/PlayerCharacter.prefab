@@ -383,6 +383,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  laserPrefab: {fileID: 6269768230208351256, guid: 919e1b7ab739ef345996188b2ab9be87,
+    type: 3}
   animator: {fileID: 6341245229889716534}
   laserSpawn: {fileID: 7336288443647335580}
   playerIndicator: {fileID: 5380626662340909674}

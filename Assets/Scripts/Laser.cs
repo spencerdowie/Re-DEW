@@ -28,6 +28,7 @@ public class Laser : MonoBehaviour
     [field: SerializeField]
     public float LaserLength { get; private set; } = -1f;
     public bool shortLaser = false;
+    private Color playerColour;
 
     public void Setup(int playerIndex, int playerLayer, Color playerColour, UnityAction returnAmmoAction)
     {
@@ -43,6 +44,8 @@ public class Laser : MonoBehaviour
         //trail.startColor = playerColour;
         //trail.endColor = playerColour;
         trail.material.color = playerColour;
+        trail.time = LaserLength / LaserSpeed;
+        this.playerColour = playerColour;
 
         transform.SetParent(null);
 
@@ -108,13 +111,6 @@ public class Laser : MonoBehaviour
         return hitbox;
     }
 
-    private LaserSegment SpawnSegment(Vector3 destination)
-    {
-        LaserSegment segment = Instantiate(hitboxPrefab, transform).GetComponent<LaserSegment>();
-        segment.Setup(laserPoint.position, hitLayer, destination, PlayerIndex, LaserSpeed);
-        return segment;
-    }
-
     private IEnumerator MoveLaser(Queue<Vector3> points)
     {
         bool hasDest = true;
@@ -142,6 +138,13 @@ public class Laser : MonoBehaviour
                 currentHitbox = SpawnHitbox();
             }
         }
+    }
+
+    private LaserSegment SpawnSegment(Vector3 destination)
+    {
+        LaserSegment segment = Instantiate(hitboxPrefab, transform).GetComponent<LaserSegment>();
+        segment.Setup(hitLayer, laserPoint.position, destination, PlayerIndex, LaserSpeed, LaserLength);
+        return segment;
     }
 
     private IEnumerator MoveLaserShort(Queue<Vector3> points)

@@ -27,7 +27,7 @@ MonoBehaviour:
   <RespawnTime>k__BackingField: 3
   <RespawnInvulnTime>k__BackingField: 2
   <StartAmmo>k__BackingField: 3
-  laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+  laserPrefab: {fileID: 6269768230208351256, guid: 919e1b7ab739ef345996188b2ab9be87,
     type: 3}
   GameTime: 5
   ScoreLimit: 10
