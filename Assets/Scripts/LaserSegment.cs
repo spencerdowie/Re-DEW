@@ -9,6 +9,10 @@ public class LaserSegment : MonoBehaviour
     private float length = -1f, speed = 0f;
     private Vector3 startPosition, destination;
     private float distanceTravelled = 0f;
+    [SerializeField]
+    private Transform laserMesh;
+    [SerializeField]
+    private LightningSystemMeshEnchant lightningSystem;
 
 
     private void Awake()
@@ -18,7 +22,7 @@ public class LaserSegment : MonoBehaviour
     }
 
     public void Setup(int hitLayer, Vector3 startPosition, Vector3 destination,
-        int playerIndex, float speed, float length)
+        int playerIndex, float speed, float length, Color colour)
     {
         this.startPosition = startPosition;
         this.destination = destination;
@@ -28,7 +32,7 @@ public class LaserSegment : MonoBehaviour
         transform.position = startPosition;
         transform.LookAt(destination);
         name = "Player " + playerIndex + " Laser Hitbox";
-        //lineRenderer.material.color = playerColour;
+        lightningSystem.SetColour(colour);
     }
 
     public void UpdateSegment(float distance)
@@ -39,6 +43,8 @@ public class LaserSegment : MonoBehaviour
             distanceTravelled += distance;
             hitbox.size += Vector3.forward * distance;
             hitbox.center += Vector3.back * (distance / 2f);
+            laserMesh.localScale += Vector3.up * distance / 2f;
+            laserMesh.localPosition += Vector3.back * (distance / 2f);
             //lineRenderer.SetPosition(1, transform.position - startPosition);
         }
     }
@@ -58,6 +64,8 @@ public class LaserSegment : MonoBehaviour
             {
                 hitbox.size -= Vector3.forward * distance;
                 hitbox.center += Vector3.forward * (distance / 2f);
+                laserMesh.localScale -= Vector3.up * distance / 2f;
+                laserMesh.localPosition += Vector3.forward * (distance / 2f);
                 //lineRenderer.SetPosition(1, tailPosition);
             }
             yield return null;

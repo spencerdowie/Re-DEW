@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
         gameUI.SetUICamera(gameCamera);
+        StartCoroutine(StartGameCountdown());
     }
 
     public void Setup(GameSetting gameSetting, int mapID)
@@ -87,7 +88,6 @@ public class GameManager : MonoBehaviour
                 AddPlayerController(player, teamID);
             }
         }
-        StartCoroutine(StartGameCountdown());
 
         PauseMenu.Instance.EnablePause();
     }

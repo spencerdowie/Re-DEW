@@ -143,7 +143,7 @@ public class Laser : MonoBehaviour
     private LaserSegment SpawnSegment(Vector3 destination)
     {
         LaserSegment segment = Instantiate(hitboxPrefab, transform).GetComponent<LaserSegment>();
-        segment.Setup(hitLayer, laserPoint.position, destination, PlayerIndex, LaserSpeed, LaserLength);
+        segment.Setup(hitLayer, laserPoint.position, destination, PlayerIndex, LaserSpeed, LaserLength, playerColour);
         return segment;
     }
 

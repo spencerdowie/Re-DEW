@@ -21,8 +21,23 @@ PrefabInstance:
         type: 3}
     - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
         type: 3}
+      propertyPath: <LaserSpeed>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
       propertyPath: <LaserLength>k__BackingField
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <MaxSegments>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <LaserMaxDistance>k__BackingField
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
         type: 3}
