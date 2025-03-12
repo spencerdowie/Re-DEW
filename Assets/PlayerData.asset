@@ -15,7 +15,7 @@ MonoBehaviour:
   playerProfiles: []
   playerColoursOptions:
   - {r: 2.2706032, g: 0.00000018721823, b: 0, a: 1}
-  - {r: 3.031433, g: 0, b: 2.7223458, a: 1}
+  - {r: 2.270603, g: 0, b: 2.0390904, a: 1}
   - {r: 0, g: 0, b: 1.6643163, a: 1}
   - {r: 1.7713081, g: 1.6762043, b: 0, a: 1}
   - {r: 0, g: 2.2349389, b: 0, a: 1}
@@ -27,9 +27,9 @@ MonoBehaviour:
   <RespawnTime>k__BackingField: 3
   <RespawnInvulnTime>k__BackingField: 2
   <StartAmmo>k__BackingField: 3
-  laserPrefab: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+  laserPrefab: {fileID: 6269768230208351256, guid: 919e1b7ab739ef345996188b2ab9be87,
     type: 3}
-  GameTime: 10
+  GameTime: 5
   ScoreLimit: 10
   mapSelectButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
     type: 3}
@@ -39,9 +39,9 @@ MonoBehaviour:
   <MapSelect>k__BackingField: 4
   <EndScene>k__BackingField: 5
   <Maps>k__BackingField:
-  - sceneID: 6
-    sprite: {fileID: 21300000, guid: f6a7288990f22d64097f89a45d336618, type: 3}
   - sceneID: 7
     sprite: {fileID: 21300000, guid: e72512aed86a0c948aa96fad65b9595c, type: 3}
+  - sceneID: 6
+    sprite: {fileID: 21300000, guid: f6a7288990f22d64097f89a45d336618, type: 3}
   - sceneID: 8
     sprite: {fileID: 21300000, guid: faaa706fe4b56cb4788dac4329ff2056, type: 3}

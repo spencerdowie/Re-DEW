@@ -51,6 +51,7 @@ public class MapSelect : MonoBehaviour
 
     private IEnumerator LoadGameScene(int mapID)
     {
+        FindObjectOfType<AudioListener>().enabled = false;
         yield return SceneManager.LoadSceneAsync(mapID, LoadSceneMode.Additive);
 
         GameManager gameManager = FindObjectOfType<GameManager>();

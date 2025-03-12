@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8184978116005129171
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: shortLaser
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: hitboxPrefab
+      value: 
+      objectReference: {fileID: 3235808034616725385, guid: b79c42696336a60449b54b03bab302d5,
+        type: 3}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <LaserSpeed>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <LaserLength>k__BackingField
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <MaxSegments>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8584619286812846992, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: <LaserMaxDistance>k__BackingField
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779937887117756363, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_Name
+      value: Short Laser
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624200936448450105, guid: 9d3e87d2bf982d64da83d8ab1413abb3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9d3e87d2bf982d64da83d8ab1413abb3, type: 3}

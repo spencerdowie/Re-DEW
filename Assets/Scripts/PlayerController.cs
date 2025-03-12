@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
+    [SerializeField]
+    private GameObject laserPrefab;
     private GameManager gameManager;
     private new Rigidbody rigidbody;
     [SerializeField]
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (ammo > 0 && !Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, () => UpdateAmmo(1));
             UpdateAmmo(-1);
         }
@@ -147,7 +149,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(name);
         if (!Physics.CheckSphere(laserSpawn.position, 0.05f, LayerMask.GetMask("Default")))
         {
-            Transform laserTransform = Instantiate(playerData.laserPrefab, laserSpawn).transform;
+            Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, null);
 
             Destroy(laserTransform.gameObject);

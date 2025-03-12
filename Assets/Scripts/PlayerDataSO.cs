@@ -41,9 +41,6 @@ public class PlayerDataSO : ScriptableObject
     [field: SerializeField]
     public int StartAmmo { get; private set; } = 3;
 
-    [Space, Header("Laser Settings")]
-    public GameObject laserPrefab;
-
     [Space, Header("Game Settings")]
     [SerializeField]
     public int GameTime = 300;

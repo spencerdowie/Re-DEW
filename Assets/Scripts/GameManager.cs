@@ -10,6 +10,7 @@ public enum WinCon
     SCORE
 }
 
+[System.Serializable]
 public struct GameSetting
 {
     public int GameTime { get; private set; }
@@ -89,7 +90,6 @@ public class GameManager : MonoBehaviour
         }
 
         PauseMenu.Instance.EnablePause();
-
     }
 
     public IEnumerator StartGameCountdown()

@@ -28,8 +28,8 @@ public class PlayerUI : MonoBehaviour
         ammoBars[3] = mats[4];
         ammoBars[0].SetVector("_Direction", Vector2.up);
         ammoBars[1].SetVector("_Direction", Vector2.right);
-        ammoBars[2].SetVector("_Direction", Vector2.left);
-        ammoBars[3].SetVector("_Direction", Vector2.down);
+        ammoBars[2].SetVector("_Direction", Vector2.down);
+        ammoBars[3].SetVector("_Direction", Vector2.left);
     }
 
     public void SetAmmo(int ammoCount)
