@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Laser : MonoBehaviour
 {
-    private const float LaserHeight = 0.2f;
+    private const float LaserHeight = 0.4f;
     [SerializeField]
     private Transform laserPoint;
     [SerializeField]
@@ -49,9 +49,9 @@ public class Laser : MonoBehaviour
 
         transform.SetParent(null);
 
-        Vector3 position = transform.position;
-        position.y = LaserHeight;
-        transform.position = position;
+        //Vector3 position = transform.position;
+        //position.y = LaserHeight;
+        //transform.position = position;
 
         if (shortLaser)
         {
@@ -125,7 +125,7 @@ public class Laser : MonoBehaviour
 
             float distance = LaserSpeed * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
-            newPos.y = 0.2f;
+            //newPos.y = LaserHeight;
             laserPoint.position = newPos;
 
             currentHitbox.size = currentHitbox.size + Vector3.forward * distance;
@@ -161,7 +161,7 @@ public class Laser : MonoBehaviour
 
             float distance = LaserSpeed * Time.deltaTime;
             Vector3 newPos = Vector3.MoveTowards(laserPoint.position, destination, distance);
-            newPos.y = 0.2f;
+            //newPos.y = LaserHeight;
             laserPoint.position = newPos;
 
             currentSegment.UpdateSegment(distance);

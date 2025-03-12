@@ -46,10 +46,6 @@ public class PlayerManager : MonoBehaviour
         {
             inputManager.DisableJoining();
         }
-        else if (scene.buildIndex == playerData.MapSelect)
-        {
-            PauseMenu.Instance.EnablePause();
-        }
     }
 
     public Coroutine LoadPause()

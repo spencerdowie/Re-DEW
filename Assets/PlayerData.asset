@@ -27,8 +27,6 @@ MonoBehaviour:
   <RespawnTime>k__BackingField: 3
   <RespawnInvulnTime>k__BackingField: 2
   <StartAmmo>k__BackingField: 3
-  laserPrefab: {fileID: 6269768230208351256, guid: 919e1b7ab739ef345996188b2ab9be87,
-    type: 3}
   GameTime: 5
   ScoreLimit: 10
   mapSelectButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
@@ -40,8 +38,6 @@ MonoBehaviour:
   <EndScene>k__BackingField: 5
   <Maps>k__BackingField:
   - sceneID: 7
-    sprite: {fileID: 21300000, guid: e72512aed86a0c948aa96fad65b9595c, type: 3}
-  - sceneID: 6
-    sprite: {fileID: 21300000, guid: f6a7288990f22d64097f89a45d336618, type: 3}
+    sprite: {fileID: 21300000, guid: 28dcd12522458d240a44666bd04a4c8b, type: 3}
   - sceneID: 8
-    sprite: {fileID: 21300000, guid: faaa706fe4b56cb4788dac4329ff2056, type: 3}
+    sprite: {fileID: 21300000, guid: b1612fc13b90df24bbc734ff069d1f59, type: 3}

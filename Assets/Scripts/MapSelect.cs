@@ -48,7 +48,6 @@ public class MapSelect : MonoBehaviour
         this.gameSetting = gameSetting;
     }
 
-
     private IEnumerator LoadGameScene(int mapID)
     {
         FindObjectOfType<AudioListener>().enabled = false;
@@ -58,5 +57,10 @@ public class MapSelect : MonoBehaviour
         gameManager.Setup(gameSetting, mapID);
 
         SceneManager.UnloadSceneAsync(playerData.MapSelect);
+    }
+
+    public void ReturnToLobby()
+    {
+        PauseMenu.Instance.ReturnToLobby();
     }
 }

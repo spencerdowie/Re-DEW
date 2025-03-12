@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2779937887117756363}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -241,3 +241,4 @@ MonoBehaviour:
   <MaxSegments>k__BackingField: 3
   <LaserLifetime>k__BackingField: 5
   <LaserLength>k__BackingField: -1
+  shortLaser: 0
