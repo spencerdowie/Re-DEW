@@ -106,9 +106,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 10
-  m_Range: 1.5
+  m_Color: {r: 2.2706032, g: 0.00000018721823, b: 0, a: 1}
+  m_Intensity: 0.5
+  m_Range: 2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
-  laserPrefab: {fileID: 6269768230208351256, guid: 919e1b7ab739ef345996188b2ab9be87,
+  laserPrefab: {fileID: 6564863229284888306, guid: bf3e92e0dfa4a574a8feca62194e64ac,
     type: 3}
   animator: {fileID: 6341245229889716534}
   laserSpawn: {fileID: 7336288443647335580}

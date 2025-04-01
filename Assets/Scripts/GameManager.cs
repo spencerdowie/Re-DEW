@@ -50,6 +50,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int countdownTime = 5;
     private Dictionary<int, int> teams = new Dictionary<int, int>();
+    [SerializeField]
+    private Cinemachine.CinemachineTargetGroup camTargetGroup;
+    [SerializeField]
+    private bool Testing = false;
 
     private void Awake()
     {
@@ -61,7 +65,8 @@ public class GameManager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
         gameUI.SetUICamera(gameCamera);
-        StartCoroutine(StartGameCountdown());
+        if (!Testing)
+            StartCoroutine(StartGameCountdown());
     }
 
     public void Setup(GameSetting gameSetting, int mapID)
@@ -103,6 +108,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(RespawnPlayer(player.PlayerIndex));
                 isPlayerArray[player.PlayerIndex] = true;
                 player.HoldPlayer();
+                camTargetGroup.AddMember(player.transform, 1, 2);
             }
         }
         yield return new WaitForSeconds(countdownTime);
@@ -195,7 +201,7 @@ public class GameManager : MonoBehaviour
                     playersAlive++;
             }
 #if DEBUG
-            if (playersAlive < 1)
+            if (players.Count(p => p != null) > 1 && playersAlive < 2)
                 winConMet = true;
 #else
             if (playersAlive < 2)

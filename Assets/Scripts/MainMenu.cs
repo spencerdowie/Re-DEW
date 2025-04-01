@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     private PlayerDataSO playerData;
     private void Start()
     {
+        SceneManager.LoadSceneAsync(9, LoadSceneMode.Additive);
 #if PLATFORM_WEBGL
         GameObject.Find("Quit").SetActive(false);
 #endif

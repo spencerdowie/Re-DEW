@@ -40,6 +40,10 @@ public class MapSelect : MonoBehaviour
 
     public void ConfirmMap()
     {
+        foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
+        {
+            mapButton.interactable = false;
+        }
         StartCoroutine(LoadGameScene(selectedMapID));
     }
 
