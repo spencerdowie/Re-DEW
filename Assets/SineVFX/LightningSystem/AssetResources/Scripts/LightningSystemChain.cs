@@ -6,7 +6,7 @@ using UnityEditor;
 #endif
 using UnityEngine.VFX;
 
-public class LightningSystemChain : MonoBehaviour
+public class LightningSystemChain : LightningSystemBase
 {
     public bool previewChainPointsInEditor = false;
     public bool vfxEnabled = true;
@@ -20,11 +20,11 @@ public class LightningSystemChain : MonoBehaviour
     public Transform autoScaleAnchor;
     public float autoScaleMultiply = 1f;
 
-    [Space(10)]    
+    [Space(10)]
     //public Camera myCamera;
     [Range(1, 3)]
     public int minNumberOfMainStrips = 1;
-    [Range(1,3)]
+    [Range(1, 3)]
     public int maxNumberOfMainStrips = 1;
 
     [Space(10)]
@@ -45,7 +45,7 @@ public class LightningSystemChain : MonoBehaviour
 
     private float timerCurrent = 0f;
     private float autoScaleValue = 1f;
-    private Color col = new Color(1f,1f,1f, 1f);
+    private Color col = new Color(1f, 1f, 1f, 1f);
 
     public int howManyTimesVFXWasTriggered = 0;
     public int howManyTimesVFXWasTriggeredPerTrigger = 0;
@@ -56,7 +56,7 @@ public class LightningSystemChain : MonoBehaviour
     {
         visualEffect = GetComponent<VisualEffect>();
         eventAttribute = visualEffect.CreateVFXEventAttribute();
-        chainPointPositionsTexture = new Texture2D(16, 16, TextureFormat.RGBAFloat,0,true);
+        chainPointPositionsTexture = new Texture2D(16, 16, TextureFormat.RGBAFloat, 0, true);
         chainPointPositionsTexture.filterMode = FilterMode.Point;
 
         visualEffect.SetTexture("ChainPositionsTextureHIDDEN", chainPointPositionsTexture);
@@ -74,8 +74,8 @@ public class LightningSystemChain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(vfxEnabled == true)
-            {
+        if (vfxEnabled == true)
+        {
             ProcessSpeedVariation();
             ProcessAutoScale();
             SpawnLightningEvent();
@@ -85,7 +85,7 @@ public class LightningSystemChain : MonoBehaviour
                 col.r = chainPoints[i].position.x;
                 col.g = chainPoints[i].position.y;
                 col.b = chainPoints[i].position.z;
-                chainPointPositionsTexture.SetPixel(i % 16,Mathf.FloorToInt((float)i / 16f), col);
+                chainPointPositionsTexture.SetPixel(i % 16, Mathf.FloorToInt((float)i / 16f), col);
             }
             chainPointPositionsTexture.Apply();
 
@@ -154,7 +154,7 @@ public class LightningSystemChain : MonoBehaviour
         timerCurrent += (Time.deltaTime * speed * speedVariation.Evaluate(speedVariationTime));
     }
 
-    
+
     private void OnDisable()
     {
         ResetVFXParameters();
@@ -199,7 +199,7 @@ public class LightningSystemChain : MonoBehaviour
     // Standard Mode is used when you need to scale the VFX separately in real-time
     void ProcessAutoScale()
     {
-        if(autoScaleEnabled == true)
+        if (autoScaleEnabled == true)
         {
             autoScaleValue = (autoScaleAnchor.lossyScale.x + autoScaleAnchor.lossyScale.y + autoScaleAnchor.lossyScale.z) / 3f * autoScaleMultiply;
         }
@@ -209,7 +209,7 @@ public class LightningSystemChain : MonoBehaviour
         }
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (Application.isPlaying == false && previewChainPointsInEditor == true)
@@ -219,7 +219,7 @@ public class LightningSystemChain : MonoBehaviour
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawSphere(tp.position, 0.125f);
             }
-        }            
+        }
     }
-    #endif
+#endif
 }

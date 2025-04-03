@@ -201,13 +201,13 @@ public class LobbyManager : MonoBehaviour
     private IEnumerator LoadMapSelect()
     {
         FindObjectOfType<AudioListener>().enabled = false;
-        yield return SceneManager.LoadSceneAsync(playerData.MapSelect, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
 
         WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
 
         FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
 
-        SceneManager.UnloadSceneAsync(playerData.Lobby);
+        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void NextColour(int playerIndex)

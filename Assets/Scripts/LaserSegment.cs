@@ -12,7 +12,7 @@ public class LaserSegment : MonoBehaviour
     [SerializeField]
     private Transform laserMesh;
     [SerializeField]
-    private LightningSystemMeshEnchant lightningSystem;
+    private LightningSystemBase lightningSystem;
 
 
     private void Awake()
