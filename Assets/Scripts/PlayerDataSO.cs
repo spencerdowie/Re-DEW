@@ -18,6 +18,17 @@ public struct MapPreview
     public Sprite sprite;
 }
 
+public enum Scenes
+{
+    MainMenu = 0,
+    PauseMenu = 1,
+    GameUI = 2,
+    Lobby = 3,
+    MapSelect = 4,
+    GameEndScreen = 5,
+    DebugMenu = 8
+}
+
 public class PlayerDataSO : ScriptableObject
 {
     [SerializeField]
@@ -41,24 +52,13 @@ public class PlayerDataSO : ScriptableObject
     [field: SerializeField]
     public int StartAmmo { get; private set; } = 3;
 
-    [Space, Header("Game Settings")]
+    [Space, Header("Debug Game Settings"), SerializeField]
+    public WinCon winCon;
     [SerializeField]
-    public int GameTime = 300;
+    public int gameTime = 5, startStocks = 5, scoreLimit = 10;
     [SerializeField]
-    public int ScoreLimit = 10;
+    public bool isTeams = false;
 
-    [Space, Header("Scenes")]
-    public GameObject mapSelectButtonPrefab;
-    [field: SerializeField]
-    public int PauseMenu { get; private set; } = 1;
-    [field: SerializeField]
-    public int GameUI { get; private set; } = 2;
-    [field: SerializeField]
-    public int Lobby { get; private set; } = 3;
-    [field: SerializeField]
-    public int MapSelect { get; private set; } = 4;
-    [field: SerializeField]
-    public int EndScene { get; private set; } = 5;
-    [field: SerializeField]
+    [field: SerializeField, Space, Header("Scenes")]
     public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
 }

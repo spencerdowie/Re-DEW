@@ -7,7 +7,7 @@ using UnityEditor;
 #endif
 using UnityEngine.VFX;
 
-public class LightningSystemMeshEnchant : MonoBehaviour
+public class LightningSystemMeshEnchant : LightningSystemBase
 {
     public enum lsmodes
     {
@@ -42,7 +42,6 @@ public class LightningSystemMeshEnchant : MonoBehaviour
     public int minNumberOfMainStrips = 1;
     [Range(1, 3)]
     public int maxNumberOfMainStrips = 1;
-    public Color color;
 
     [Space(10)]
     [Range(0f, 1f)]
@@ -303,11 +302,6 @@ public class LightningSystemMeshEnchant : MonoBehaviour
         {
             bonusBranchProbabilityResult = 0;
         }
-    }
-
-    public void SetColour(Color color)
-    {
-        this.color = color;
     }
 
 #if UNITY_EDITOR

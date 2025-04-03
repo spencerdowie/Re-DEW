@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3854073813336269529}
   - component: {fileID: 7083784493778474170}
   m_Layer: 0
-  m_Name: LaserSegment
+  m_Name: LaserSegmentEnchant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

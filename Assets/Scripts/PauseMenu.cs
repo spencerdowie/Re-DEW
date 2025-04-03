@@ -66,6 +66,19 @@ public class PauseMenu : MonoBehaviour
         rectTransform.gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (pauseActions[i] != null)
+            {
+                pauseActions[i].started -= TogglePause;
+                pauseActions[i] = null;
+            }
+        }
+        Time.timeScale = 1f;
+    }
+
     public void EnablePause()
     {
         foreach (InputAction pauseAction in pauseActions)
@@ -148,30 +161,12 @@ public class PauseMenu : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            if (pauseActions[i] != null)
-            {
-                pauseActions[i].started -= TogglePause;
-                pauseActions[i] = null;
-            }
-        }
-        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
 
     public void ReturnToLobby()
     {
-        for (int i = 0; i < 4; i++)
-        {
-            if (pauseActions[i] != null)
-            {
-                pauseActions[i].started -= TogglePause;
-                pauseActions[i] = null;
-            }
-        }
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(playerData.Lobby);
+        SceneManager.LoadScene((int)Scenes.Lobby);
     }
 
     public void QuitGame()

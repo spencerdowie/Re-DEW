@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadGameUI()
     {
-        yield return SceneManager.LoadSceneAsync(playerData.GameUI, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync((int)Scenes.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
         gameUI.SetUICamera(gameCamera);
         if (!Testing)
@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         int startingValue = GameSetting.WinCon == WinCon.STOCK ? GameSetting.StartStocks : 0;
         gameUI.SetupPlayers(players, startingValue);
+        int numPlayers = 0;
         foreach (PlayerController player in players)
         {
             if (player != null)
@@ -109,8 +110,17 @@ public class GameManager : MonoBehaviour
                 isPlayerArray[player.PlayerIndex] = true;
                 player.HoldPlayer();
                 camTargetGroup.AddMember(player.transform, 1, 2);
+                numPlayers++;
             }
         }
+
+#if UNITY_EDITOR
+        if (numPlayers < 2)
+        {
+            camTargetGroup.AddMember(spawnPositions[3], 1, 2);
+        }
+#endif
+
         yield return new WaitForSeconds(countdownTime);
         foreach (PlayerController player in players)
         {
@@ -182,8 +192,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over");
         //Time.timeScale = 0f;
         PauseMenu.Instance.DisablePause();
-        SceneManager.UnloadSceneAsync(playerData.GameUI);
-        yield return SceneManager.LoadSceneAsync(playerData.EndScene, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync((int)Scenes.GameUI);
+        yield return SceneManager.LoadSceneAsync((int)Scenes.GameEndScreen, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
         gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
         SceneManager.UnloadSceneAsync(mapID);
