@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     private PlayerDataSO playerData;
     private void Start()
     {
+        SceneManager.LoadSceneAsync((int)Scenes.DebugMenu, LoadSceneMode.Additive);
 #if PLATFORM_WEBGL
         GameObject.Find("Quit").SetActive(false);
 #endif
@@ -17,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene(playerData.Lobby);
+        SceneManager.LoadScene((int)Scenes.Lobby);
     }
 
     public void OpenItchio()

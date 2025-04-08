@@ -12,6 +12,8 @@ public class MapSelect : MonoBehaviour
     [SerializeField]
     private Transform mapButtonHolder;
     [SerializeField]
+    private GameObject mapButtonPrefab;
+    [SerializeField]
     private Image selectedMapImage;
     private int selectedMapID = 1;
     private GameSetting gameSetting;
@@ -21,7 +23,7 @@ public class MapSelect : MonoBehaviour
         int index = 0;
         foreach (MapPreview mapPreview in playerData.Maps)
         {
-            MapButton button = Instantiate(playerData.mapSelectButtonPrefab, mapButtonHolder)
+            MapButton button = Instantiate(mapButtonPrefab, mapButtonHolder)
                 .GetComponent<MapButton>();
             button.Setup(index);
             button.onSelect += SelectMap;
@@ -40,6 +42,10 @@ public class MapSelect : MonoBehaviour
 
     public void ConfirmMap()
     {
+        foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
+        {
+            mapButton.interactable = false;
+        }
         StartCoroutine(LoadGameScene(selectedMapID));
     }
 
@@ -47,7 +53,6 @@ public class MapSelect : MonoBehaviour
     {
         this.gameSetting = gameSetting;
     }
-
 
     private IEnumerator LoadGameScene(int mapID)
     {
@@ -57,6 +62,11 @@ public class MapSelect : MonoBehaviour
         GameManager gameManager = FindObjectOfType<GameManager>();
         gameManager.Setup(gameSetting, mapID);
 
-        SceneManager.UnloadSceneAsync(playerData.MapSelect);
+        SceneManager.UnloadSceneAsync((int)Scenes.MapSelect);
+    }
+
+    public void ReturnToLobby()
+    {
+        PauseMenu.Instance.ReturnToLobby();
     }
 }

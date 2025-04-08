@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode LoadSceneMode)
     {
-        if (scene.buildIndex == playerData.Lobby)
+        if (scene.buildIndex == (int)Scenes.Lobby)
         {
             if (!inputManager.joiningEnabled)
             {
@@ -46,10 +46,6 @@ public class PlayerManager : MonoBehaviour
         {
             inputManager.DisableJoining();
         }
-        else if (scene.buildIndex == playerData.MapSelect)
-        {
-            PauseMenu.Instance.EnablePause();
-        }
     }
 
     public Coroutine LoadPause()
@@ -59,7 +55,7 @@ public class PlayerManager : MonoBehaviour
 
     private IEnumerator LoadPauseMenu()
     {
-        yield return SceneManager.LoadSceneAsync(playerData.PauseMenu, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync((int)Scenes.PauseMenu, LoadSceneMode.Additive);
 
         PauseMenu.Instance.DisablePause();
 
@@ -68,7 +64,9 @@ public class PlayerManager : MonoBehaviour
         {
             if (player != null)
             {
-                lobby.OnPlayerJoin(player);
+                if (lobby != null)
+                    lobby.OnPlayerJoin(player);
+
                 PauseMenu.Instance.AddPlayerInput(player.PlayerInput);
             }
         }

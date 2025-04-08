@@ -149,7 +149,8 @@ public class LobbyManager : MonoBehaviour
     {
         if (gameReady)
         {
-            StartGame();
+            Debug.Log("Map Select");
+            StartCoroutine(LoadMapSelect());
         }
         else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
         {
@@ -197,22 +198,16 @@ public class LobbyManager : MonoBehaviour
         PauseMenu.Instance.ReturnToMenu();
     }
 
-    public void StartGame()
-    {
-        Debug.Log("Start Game");
-        StartCoroutine(LoadGameScene(playerData.MapSelect));
-    }
-
-    private IEnumerator LoadGameScene(int sceneIndex)
+    private IEnumerator LoadMapSelect()
     {
         FindObjectOfType<AudioListener>().enabled = false;
-        yield return SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
 
         WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
 
         FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
 
-        SceneManager.UnloadSceneAsync(playerData.Lobby);
+        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void NextColour(int playerIndex)
