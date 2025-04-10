@@ -19,7 +19,7 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1.6643163, a: 1}
   - {r: 1.7713081, g: 1.6762043, b: 0, a: 1}
   - {r: 0, g: 2.2349389, b: 0, a: 1}
-  playerCharacterPrefab: {fileID: 8587156342998301510, guid: 4690f8677ab93264d9e74c504d5ed1be,
+  playerCharacterPrefab: {fileID: 4507717551452474256, guid: a1666c04e776a754cad6b4fc5d98019a,
     type: 3}
   <MoveSpeed>k__BackingField: 6
   <SpeedChangeRate>k__BackingField: 10
@@ -32,8 +32,6 @@ MonoBehaviour:
   startStocks: 5
   scoreLimit: 10
   isTeams: 0
-  mapSelectButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
-    type: 3}
   <Maps>k__BackingField:
   - sceneID: 6
     sprite: {fileID: 21300000, guid: 28dcd12522458d240a44666bd04a4c8b, type: 3}
