@@ -40,6 +40,8 @@ public class LobbyManager : MonoBehaviour
     private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
     private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
+    [SerializeField]
+    private GameObject settingsMenu, settingsOpenBtn, settingsFirstBtn;
 
     private void Awake()
     {
@@ -284,5 +286,39 @@ public class LobbyManager : MonoBehaviour
         if (newTime > 0 && newTime <= maxTime)
             SetGameTime(newTime);
 
+    }
+
+    public void OpenSettingsMenu(bool open = true)
+    {
+        settingsMenu.SetActive(open);
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] == null)
+                continue;
+
+            if (open)
+            {
+                EventSystem.current.SetSelectedGameObject(settingsFirstBtn);
+                players[i].PlayerInput.actions["Join"].Disable();
+                players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
+                players[i].PlayerInput.actions["Cancel"].performed += CloseMenu;
+                players[i].PlayerInput.actions["RightBumper"].Disable();
+                players[i].PlayerInput.actions["LeftBumper"].Disable();
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(settingsOpenBtn);
+                players[i].PlayerInput.actions["Join"].Enable();
+                players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
+                players[i].PlayerInput.actions["Cancel"].performed -= CloseMenu;
+                players[i].PlayerInput.actions["RightBumper"].Enable();
+                players[i].PlayerInput.actions["LeftBumper"].Enable();
+            }
+        }
+    }
+
+    private void CloseMenu(InputAction.CallbackContext ctx)
+    {
+        OpenSettingsMenu(false);
     }
 }
