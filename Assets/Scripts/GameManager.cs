@@ -231,4 +231,14 @@ public class GameManager : MonoBehaviour
             StartCoroutine(EndGame());
         }
     }
+
+    public void EndGameDebug()
+    {
+        StartCoroutine(EndGame());
+    }
+
+    public void SetClockTimeDebug(int time)
+    {
+
+    }
 }

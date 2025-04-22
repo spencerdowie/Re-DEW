@@ -14,6 +14,10 @@ public class DebugMenu : MonoBehaviour
     [SerializeField]
     private GameObject firstSelected;
 
+    [SerializeField]
+    private GameObject gameplayCommands;
+    private GameManager gameManager;
+
     private GameSetting storedGameSetting;
     //private bool hasStoredGS = false;
 
@@ -32,6 +36,7 @@ public class DebugMenu : MonoBehaviour
 
         debugMenu = transform.GetChild(0).gameObject;
         debugMenu.SetActive(false);
+        //gameplayCommands.SetActive(false);
         InputSystem.actions["Debug"].started += ToggleDebug;
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -151,6 +156,10 @@ public class DebugMenu : MonoBehaviour
             default:
                 break;
         }
+
+        if (scene.buildIndex != (int)Scenes.GameUI)
+            ShowGameplayCommands(mapIDs.Contains(scene.buildIndex));
+
         if (debugMenu.activeSelf)
         {
             CloseDebug();
@@ -163,5 +172,31 @@ public class DebugMenu : MonoBehaviour
         //{
 
         //}
+    }
+
+    public void ShowGameplayCommands(bool show)
+    {
+        gameplayCommands.SetActive(show);
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+    public void SetClockTime(int time)
+    {
+
+    }
+
+    public void EndGame()
+    {
+        gameManager.EndGameDebug();
+    }
+
+    public void SetStockScore(int stockScore)
+    {
+
+    }
+
+    public void ResetPlayerPositions()
+    {
+
     }
 }

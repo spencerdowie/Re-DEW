@@ -241,7 +241,12 @@ public class LobbyManager : MonoBehaviour
     }
 
     ///<summary>true = stock | false = score</summary>
-    public void ToggleWinCondition(bool winCon)
+    public void ToggleWinCondition()
+    {
+        winCon = !winCon;
+    }
+
+    public void SetWinCondition(bool winCon)
     {
         this.winCon = winCon;
     }
