@@ -122,8 +122,8 @@ public class PlayerController : MonoBehaviour
         Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
         rigidbody.velocity = (moveDirection * speed) + gravVel;
         rigidbody.angularVelocity = Vector3.zero;
-        animator.SetFloat("X", moveDirection.x);
-        animator.SetFloat("Y", moveDirection.z);
+        animator.SetFloat("X", rigidbody.velocity.x/5f);
+        animator.SetFloat("Y", rigidbody.velocity.z/5f);
         //animator.SetFloat("MoveSpeed", speed);
         if (gravVel.y < -1)
             animator.SetBool("Fall", true);

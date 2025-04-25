@@ -239,6 +239,6 @@ public class GameManager : MonoBehaviour
 
     public void SetClockTimeDebug(int time)
     {
-
+        gameUI.DebugSetTime(time);
     }
 }
