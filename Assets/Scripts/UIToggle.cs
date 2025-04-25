@@ -8,10 +8,11 @@ public class UIToggle : MonoBehaviour
 {
     [SerializeField]
     private GameObject trueShow, falseShow;
+    private Toggle toggle;
 
     private void OnEnable()
     {
-        Toggle toggle = GetComponent<Toggle>();
+        toggle = GetComponent<Toggle>();
         toggle.onValueChanged.AddListener(OnToggleChanged);
         OnToggleChanged(toggle.isOn);
     }
@@ -25,5 +26,10 @@ public class UIToggle : MonoBehaviour
     {
         trueShow.SetActive(value);
         falseShow.SetActive(!value);
+    }
+
+    public void Toggle()
+    {
+        toggle.isOn = !toggle.isOn;
     }
 }

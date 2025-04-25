@@ -182,7 +182,7 @@ public class DebugMenu : MonoBehaviour
 
     public void SetClockTime(int time)
     {
-
+        gameManager.SetClockTimeDebug(time);
     }
 
     public void EndGame()

@@ -39,9 +39,14 @@ public class LobbyManager : MonoBehaviour
     private bool winCon = true;
     private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
-    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
+    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText,
+        overviewStockText, overviewScoreText, overviewTimeText;
+    [SerializeField]
+    Toggle overviewTeamToggle;
     [SerializeField]
     private GameObject settingsMenu, settingsOpenBtn, settingsFirstBtn;
+    [SerializeField]
+    private float SelectDelay = 0.1f;
 
     private void Awake()
     {
@@ -238,12 +243,13 @@ public class LobbyManager : MonoBehaviour
     public void ToggleTeamMode(bool teamMode)
     {
         isTeams = teamMode;
+        overviewTeamToggle.isOn = isTeams;
     }
 
     ///<summary>true = stock | false = score</summary>
     public void ToggleWinCondition()
     {
-        winCon = !winCon;
+        SetWinCondition(!winCon);
     }
 
     public void SetWinCondition(bool winCon)
@@ -255,18 +261,21 @@ public class LobbyManager : MonoBehaviour
     {
         this.stockAmt = stockAmt;
         stockText.text = stockAmt.ToString();
+        overviewStockText.text = stockAmt.ToString();
     }
 
     private void SetScoreGoal(int scoreGoal)
     {
         this.scoreGoal = scoreGoal;
         scoreText.text = scoreGoal.ToString();
+        overviewScoreText.text = scoreGoal.ToString();
     }
 
     private void SetGameTime(int gameTime)
     {
         this.gameTime = gameTime;
         gameTimeText.text = gameTime.ToString();
+        overviewTimeText.text = gameTime.ToString();
     }
 
     public void ChangeStockScore(int change)
@@ -325,5 +334,16 @@ public class LobbyManager : MonoBehaviour
     private void CloseMenu(InputAction.CallbackContext ctx)
     {
         OpenSettingsMenu(false);
+    }
+
+    public void SelectNext(GameObject gameObject)
+    {
+        StartCoroutine(SelectNextDelay(gameObject));
+    }
+
+    private IEnumerator SelectNextDelay(GameObject gameObject)
+    {
+        yield return new WaitForSeconds(SelectDelay);
+        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 }

@@ -14,6 +14,7 @@ public class GameUIManager : MonoBehaviour
     private PlayerUI[] UIPanels = new PlayerUI[4];
     [SerializeField]
     private TMPro.TextMeshProUGUI clockText;
+    private int timer = 0;
 
     public void SetUICamera(Camera camera)
     {
@@ -51,7 +52,7 @@ public class GameUIManager : MonoBehaviour
 
     public IEnumerator RunClock(int clockTime, UnityAction onClockEnd = null)
     {
-        int timer = clockTime;
+        timer = clockTime;
         while (timer > 0)
         {
             int minutes = timer / 60;
@@ -61,5 +62,11 @@ public class GameUIManager : MonoBehaviour
             timer--;
         }
         onClockEnd?.Invoke();
+    }
+
+    //<summary>Time in minutes</sumary>
+    public void DebugSetTime(int time)
+    {
+        timer = time * 60;
     }
 }
