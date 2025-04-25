@@ -105,10 +105,11 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
+        Vector3 aimDirection = moveDirection;
 
         if (player.inputMove != Vector2.zero || player.inputAim != Vector2.zero)
         {
-            Vector3 aimDirection = player.inputAim != Vector2.zero ?
+            aimDirection = player.inputAim != Vector2.zero ?
                 new Vector3(player.inputAim.x, 0f, player.inputAim.y).normalized : moveDirection;
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y,
@@ -119,11 +120,14 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
+        moveDirection *= speed;
+        Vector3 relativeMoveDir = transform.worldToLocalMatrix * moveDirection;
+
+        animator.SetFloat("X", relativeMoveDir.x / playerData.MoveSpeed);
+        animator.SetFloat("Y", relativeMoveDir.z / playerData.MoveSpeed);
         Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
-        rigidbody.velocity = (moveDirection * speed) + gravVel;
+        rigidbody.velocity = moveDirection + gravVel;
         rigidbody.angularVelocity = Vector3.zero;
-        animator.SetFloat("X", rigidbody.velocity.x/5f);
-        animator.SetFloat("Y", rigidbody.velocity.z/5f);
         //animator.SetFloat("MoveSpeed", speed);
         if (gravVel.y < -1)
             animator.SetBool("Fall", true);
