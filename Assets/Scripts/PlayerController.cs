@@ -105,11 +105,10 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
-        Vector3 aimDirection = moveDirection;
 
         if (player.inputMove != Vector2.zero || player.inputAim != Vector2.zero)
         {
-            aimDirection = player.inputAim != Vector2.zero ?
+            Vector3 aimDirection = player.inputAim != Vector2.zero ?
                 new Vector3(player.inputAim.x, 0f, player.inputAim.y).normalized : moveDirection;
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y,

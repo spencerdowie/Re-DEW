@@ -27,8 +27,6 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer };
-    [SerializeField]
-    private Transform[] spawnPositions;
     private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
     [SerializeField]
     private GameObject readyBanner;
@@ -134,7 +132,7 @@ public class LobbyManager : MonoBehaviour
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
         players[player.PlayerIndex] = player;
 
-        spawnPositions[player.PlayerIndex].gameObject.SetActive(true);
+        playerIcons[player.PlayerIndex].ShowPlayerModel(true);
 
         SelectUI();
     }
@@ -180,7 +178,7 @@ public class LobbyManager : MonoBehaviour
             playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
             playerIcons[playerIndex].SetPlayerColour(Color.grey);
-            spawnPositions[playerIndex].gameObject.SetActive(false);
+            playerIcons[playerIndex].ShowPlayerModel(false);
             playerManager.RemovePlayer(playerIndex);
         }
     }
@@ -198,23 +196,6 @@ public class LobbyManager : MonoBehaviour
             readyBanner.SetActive(false);
             gameReady = false;
         }
-    }
-
-    public void ReturnToMainMenu()
-    {
-        PauseMenu.Instance.ReturnToMenu();
-    }
-
-    private IEnumerator LoadMapSelect()
-    {
-        FindObjectOfType<AudioListener>().enabled = false;
-        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
-
-        WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
-
-        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
-
-        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void NextColour(int playerIndex)
@@ -240,6 +221,20 @@ public class LobbyManager : MonoBehaviour
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
     }
 
+    public void ChangePlayerModel(int playerIndex, int direction)
+    {
+        if (PauseMenu.Instance.IsPaused)
+            return;
+
+        Player player = players[playerIndex];
+        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
+            % playerData.characterPrefabs.Length;
+
+        player.SetPlayerModel(modelIndex);
+        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+    }
+
+    #region Game Settings
     public void ToggleTeamMode(bool teamMode)
     {
         isTeams = teamMode;
@@ -300,6 +295,24 @@ public class LobbyManager : MonoBehaviour
         if (newTime > 0 && newTime <= maxTime)
             SetGameTime(newTime);
 
+    }
+    #endregion
+
+    public void ReturnToMainMenu()
+    {
+        PauseMenu.Instance.ReturnToMenu();
+    }
+
+    private IEnumerator LoadMapSelect()
+    {
+        FindObjectOfType<AudioListener>().enabled = false;
+        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
+
+        WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
+
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
+
+        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void OpenSettingsMenu(bool open = true)

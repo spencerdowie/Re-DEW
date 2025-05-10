@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     //private PlayerController playerController;
     public int PlayerIndex { get; private set; } = 0;
     public int PlayerColourIndex { get; private set; } = 0;
+    public int PlayerModelIndex { get; private set; } = 0;
     public Color PlayerColour { get => playerData.playerColoursOptions[PlayerColourIndex]; }
     public PlayerInput PlayerInput { get => playerInput; }
     public Vector2 inputMove { get => playerInput.actions["Move"].ReadValue<Vector2>(); }
@@ -33,6 +34,11 @@ public class Player : MonoBehaviour
     public void SetPlayerColour(int colourIndex)
     {
         PlayerColourIndex = colourIndex;
+    }
+
+    public void SetPlayerModel(int modelIndex)
+    {
+        PlayerModelIndex = modelIndex;
     }
 
     public void RemoveFireCallback(Action<InputAction.CallbackContext> callback, Action<InputAction.CallbackContext> debugCallback = null)

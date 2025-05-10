@@ -14,6 +14,8 @@ public class LobbyPlayerIcon : MonoBehaviour
     [SerializeField]
     private GameObject noPlayerPrompt, joinedPrompt, readyPrompt;
     private LobbyStatus status = LobbyStatus.NoPlayer;
+    [SerializeField]
+    private Transform playerModelHolder;
 
     private void Awake()
     {
@@ -47,5 +49,17 @@ public class LobbyPlayerIcon : MonoBehaviour
         }
 
         this.status = status;
+    }
+
+    public void SetPlayerModel(GameObject newPlayerModel)
+    {
+        Destroy(playerModelHolder.GetChild(0).gameObject);
+
+        Instantiate(newPlayerModel, playerModelHolder);
+    }
+
+    public void ShowPlayerModel(bool show = true)
+    {
+        playerModelHolder.gameObject.SetActive(show);
     }
 }
