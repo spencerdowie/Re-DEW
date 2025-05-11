@@ -27,7 +27,8 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer };
-    private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
+    private Action<InputAction.CallbackContext>[] 
+        readyActions, unreadyActions, rightBumpActions, leftBumpActions, nextColourAction, nextModelAction;
     [SerializeField]
     private GameObject readyBanner;
     private bool gameReady = false;
@@ -75,6 +76,18 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>PrevColour(2),
             (ctx)=>PrevColour(3)
         };
+        nextColourAction = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>NextColour(0),
+            (ctx)=>NextColour(1),
+            (ctx)=>NextColour(2),
+            (ctx)=>NextColour(3)
+        };
+        nextModelAction = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>NextModel(0),
+            (ctx)=>NextModel(1),
+            (ctx)=>NextModel(2),
+            (ctx)=>NextModel(3)
+        };
 
 #if UNITY_EDITOR
         minPlayers = 1;
@@ -95,6 +108,8 @@ public class LobbyManager : MonoBehaviour
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
             players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
             players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
+            players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
+            players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
             //Destroy(players[i].GetComponent<PlayerController>().gameObject);
         }
     }
@@ -130,6 +145,8 @@ public class LobbyManager : MonoBehaviour
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
+        player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
+        player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
         players[player.PlayerIndex] = player;
 
         playerIcons[player.PlayerIndex].ShowPlayerModel(true);
@@ -219,6 +236,16 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
+    }
+   
+    public void NextModel(int playerIndex)
+    {
+        ChangePlayerModel(playerIndex, 1);
+    }
+
+    public void PrevModel(int playerIndex)
+    {
+        ChangePlayerModel(playerIndex, -1);
     }
 
     public void ChangePlayerModel(int playerIndex, int direction)
