@@ -37,9 +37,11 @@ public class PlayerDataSO : ScriptableObject
     [SerializeField, ColorUsage(true, true)]
     public Color[] playerColoursOptions;
 
-    [Space, Header("Player Settings")]
     public GameObject playerCharacterPrefab;
-    [field: SerializeField]
+    public GameObject[] characterPrefabs;
+
+
+    [field: SerializeField, Header("Player Settings"), Space]
     public float MoveSpeed { get; private set; } = 2f;
     [field: SerializeField]
     public float SpeedChangeRate { get; private set; } = 10f;

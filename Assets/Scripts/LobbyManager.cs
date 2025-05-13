@@ -27,9 +27,8 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer };
-    [SerializeField]
-    private Transform[] spawnPositions;
-    private Action<InputAction.CallbackContext>[] readyActions, unreadyActions, rightBumpActions, leftBumpActions;
+    private Action<InputAction.CallbackContext>[] 
+        readyActions, unreadyActions, rightBumpActions, leftBumpActions, nextColourAction, nextModelAction;
     [SerializeField]
     private GameObject readyBanner;
     private bool gameReady = false;
@@ -77,6 +76,18 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>PrevColour(2),
             (ctx)=>PrevColour(3)
         };
+        nextColourAction = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>NextColour(0),
+            (ctx)=>NextColour(1),
+            (ctx)=>NextColour(2),
+            (ctx)=>NextColour(3)
+        };
+        nextModelAction = new Action<InputAction.CallbackContext>[] {
+            (ctx)=>NextModel(0),
+            (ctx)=>NextModel(1),
+            (ctx)=>NextModel(2),
+            (ctx)=>NextModel(3)
+        };
 
 #if UNITY_EDITOR
         minPlayers = 1;
@@ -97,6 +108,8 @@ public class LobbyManager : MonoBehaviour
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
             players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
             players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
+            players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
+            players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
             //Destroy(players[i].GetComponent<PlayerController>().gameObject);
         }
     }
@@ -132,9 +145,11 @@ public class LobbyManager : MonoBehaviour
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
+        player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
+        player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
         players[player.PlayerIndex] = player;
 
-        spawnPositions[player.PlayerIndex].gameObject.SetActive(true);
+        playerIcons[player.PlayerIndex].ShowPlayerModel(true);
 
         SelectUI();
     }
@@ -180,7 +195,7 @@ public class LobbyManager : MonoBehaviour
             playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
             playerIcons[playerIndex].SetPlayerColour(Color.grey);
-            spawnPositions[playerIndex].gameObject.SetActive(false);
+            playerIcons[playerIndex].ShowPlayerModel(false);
             playerManager.RemovePlayer(playerIndex);
         }
     }
@@ -198,23 +213,6 @@ public class LobbyManager : MonoBehaviour
             readyBanner.SetActive(false);
             gameReady = false;
         }
-    }
-
-    public void ReturnToMainMenu()
-    {
-        PauseMenu.Instance.ReturnToMenu();
-    }
-
-    private IEnumerator LoadMapSelect()
-    {
-        FindObjectOfType<AudioListener>().enabled = false;
-        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
-
-        WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
-
-        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
-
-        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void NextColour(int playerIndex)
@@ -239,7 +237,31 @@ public class LobbyManager : MonoBehaviour
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
     }
+   
+    public void NextModel(int playerIndex)
+    {
+        ChangePlayerModel(playerIndex, 1);
+    }
 
+    public void PrevModel(int playerIndex)
+    {
+        ChangePlayerModel(playerIndex, -1);
+    }
+
+    public void ChangePlayerModel(int playerIndex, int direction)
+    {
+        if (PauseMenu.Instance.IsPaused)
+            return;
+
+        Player player = players[playerIndex];
+        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
+            % playerData.characterPrefabs.Length;
+
+        player.SetPlayerModel(modelIndex);
+        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+    }
+
+    #region Game Settings
     public void ToggleTeamMode(bool teamMode)
     {
         isTeams = teamMode;
@@ -300,6 +322,24 @@ public class LobbyManager : MonoBehaviour
         if (newTime > 0 && newTime <= maxTime)
             SetGameTime(newTime);
 
+    }
+    #endregion
+
+    public void ReturnToMainMenu()
+    {
+        PauseMenu.Instance.ReturnToMenu();
+    }
+
+    private IEnumerator LoadMapSelect()
+    {
+        FindObjectOfType<AudioListener>().enabled = false;
+        yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
+
+        WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
+
+        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
+
+        SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
     public void OpenSettingsMenu(bool open = true)

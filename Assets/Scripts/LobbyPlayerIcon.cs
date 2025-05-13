@@ -8,16 +8,19 @@ public class LobbyPlayerIcon : MonoBehaviour
 {
     [SerializeField]
     private Material bannerMat;
-    private Material defaultMat;
     [SerializeField]
     private Image background, banner;
     [SerializeField]
     private GameObject noPlayerPrompt, joinedPrompt, readyPrompt;
     private LobbyStatus status = LobbyStatus.NoPlayer;
+    [SerializeField]
+    private Transform playerModelHolder;
+    [SerializeField]
+    private GameObject modelPicker;
 
     private void Awake()
     {
-        defaultMat = banner.material;
+        banner.material = Instantiate(bannerMat);
     }
 
     public void SetPlayerColour(Color playerColour)
@@ -37,15 +40,21 @@ public class LobbyPlayerIcon : MonoBehaviour
         joinedPrompt.SetActive(status == LobbyStatus.Joined);
         readyPrompt.SetActive(status == LobbyStatus.Ready);
 
-        if (this.status == LobbyStatus.NoPlayer)
-        {
-            banner.material = Instantiate(bannerMat);
-        }
-        else if (status == LobbyStatus.NoPlayer)
-        {
-            banner.material = Instantiate(defaultMat);
-        }
+        banner.enabled = status != LobbyStatus.NoPlayer;
+        //modelPicker.SetActive(status == LobbyStatus.Joined);
 
         this.status = status;
+    }
+
+    public void SetPlayerModel(GameObject newPlayerModel)
+    {
+        Destroy(playerModelHolder.GetChild(0).gameObject);
+
+        Instantiate(newPlayerModel, playerModelHolder);
+    }
+
+    public void ShowPlayerModel(bool show = true)
+    {
+        playerModelHolder.gameObject.SetActive(show);
     }
 }

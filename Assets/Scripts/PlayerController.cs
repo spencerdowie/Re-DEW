@@ -28,7 +28,9 @@ public class PlayerController : MonoBehaviour
     public UnityAction<int> updateAmmo;
     public bool isInvuln { get; private set; }
     [SerializeField]
-    private SkinnedMeshRenderer[] playerModels;
+    private GameObject playerModel;
+    [SerializeField]
+    private SkinnedMeshRenderer[] subModels;
     private float rotationVelocity = 0f;
     private int hitLayer;
     private bool holdPlayer = false;
@@ -58,6 +60,12 @@ public class PlayerController : MonoBehaviour
         playerIndicator.material.color = PlayerColour;
         playerIndicator.material.SetColor("_EmissionColor", PlayerColour);
         GetComponentInChildren<Light>().color = PlayerColour;
+
+        //playerModel = Instantiate(playerData.characterPrefabs[1], transform);
+        playerModel = Instantiate(playerData.characterPrefabs[player.PlayerModelIndex], transform);
+        subModels = playerModel.GetComponentsInChildren<SkinnedMeshRenderer>();
+        animator = playerModel.GetComponent<Animator>();
+
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();
@@ -105,11 +113,10 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 moveDirection = new Vector3(player.inputMove.x, 0f, player.inputMove.y).normalized;
-        Vector3 aimDirection = moveDirection;
 
         if (player.inputMove != Vector2.zero || player.inputAim != Vector2.zero)
         {
-            aimDirection = player.inputAim != Vector2.zero ?
+            Vector3 aimDirection = player.inputAim != Vector2.zero ?
                 new Vector3(player.inputAim.x, 0f, player.inputAim.y).normalized : moveDirection;
 
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y,
@@ -180,7 +187,7 @@ public class PlayerController : MonoBehaviour
         while (timer < killTime)
         {
             timer += Time.deltaTime;
-            foreach (SkinnedMeshRenderer renderer in playerModels)
+            foreach (SkinnedMeshRenderer renderer in subModels)
             {
                 renderer.material.SetFloat("_DissolveTime", timer);
             }
@@ -188,7 +195,7 @@ public class PlayerController : MonoBehaviour
         }
         //animator.SetBool("Die", false);
         transform.position = Vector3.down * 6f;
-        foreach (SkinnedMeshRenderer renderer in playerModels)
+        foreach (SkinnedMeshRenderer renderer in subModels)
         {
             renderer.material.SetFloat("_DissolveTime", 0);
         }
@@ -200,7 +207,7 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.layer = LayerMask.NameToLayer("Invuln");
         isInvuln = true;
-        foreach (SkinnedMeshRenderer renderer in playerModels)
+        foreach (SkinnedMeshRenderer renderer in subModels)
         {
             renderer.material.SetFloat("_IsInvuln", 1);
         }
@@ -211,7 +218,7 @@ public class PlayerController : MonoBehaviour
 
         gameObject.layer = hitLayer;
         isInvuln = false;
-        foreach (SkinnedMeshRenderer renderer in playerModels)
+        foreach (SkinnedMeshRenderer renderer in subModels)
         {
             renderer.material.SetFloat("_IsInvuln", 0);
         }
