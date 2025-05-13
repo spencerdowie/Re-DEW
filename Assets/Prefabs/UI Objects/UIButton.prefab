@@ -94,7 +94,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 61.5
+  m_fontSize: 57.75
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -321,11 +321,11 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 9a1f7f30cbd9acb41bf94ab25fad0421,
+    m_HighlightedSprite: {fileID: 21300000, guid: 468f96e467c93e5489aa235517d055fb,
       type: 3}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 9a1f7f30cbd9acb41bf94ab25fad0421, type: 3}
-    m_DisabledSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 21300000, guid: 468f96e467c93e5489aa235517d055fb, type: 3}
+    m_SelectedSprite: {fileID: 21300000, guid: 468f96e467c93e5489aa235517d055fb, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 468f96e467c93e5489aa235517d055fb, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
