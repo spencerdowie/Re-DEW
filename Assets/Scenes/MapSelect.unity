@@ -340,57 +340,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
         type: 3}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_Navigation.m_Mode
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_Navigation.m_SelectOnUp
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_SpriteState.m_PressedSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d588cbfd6adc7624cb616a23182066d6,
-        type: 3}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_SpriteState.m_DisabledSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 34135257fbc969a4296555bb65b6bce2,
-        type: 3}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_SpriteState.m_HighlightedSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b2e62b2475f569f4c8af4b3d3f09bfa4,
-        type: 3}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1906408672}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -400,11 +352,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MapSelect, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8774994385525083614, guid: e8e0be64b2f07a248a74c802a06bbe12,
         type: 3}
