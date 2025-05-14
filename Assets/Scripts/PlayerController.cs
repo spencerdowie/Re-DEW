@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public int PlayerIndex { get => player?.PlayerIndex ?? -1; }
     public Color PlayerColour { get => player?.PlayerColour ?? Color.black; }
     public int PlayerColourIndex { get => player?.PlayerColourIndex ?? -1; }
+    public int PlayerModelIndex { get => player?.PlayerModelIndex ?? -1; }
     [SerializeField]
     private int ammo = 3;
     public UnityAction<int> updateAmmo;

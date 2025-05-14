@@ -16,11 +16,6 @@ public class GameUIManager : MonoBehaviour
     private TMPro.TextMeshProUGUI clockText;
     private int timer = 0;
 
-    public void SetUICamera(Camera camera)
-    {
-        canvas.worldCamera = camera;
-    }
-
     public void SetupPlayers(PlayerController[] players, int startingValue)
     {
         for (int i = 0; i < 4; i++)

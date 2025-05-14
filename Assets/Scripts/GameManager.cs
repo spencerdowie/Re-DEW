@@ -65,9 +65,12 @@ public class GameManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync((int)Scenes.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
-        gameUI.SetUICamera(gameCamera);
         if (!Testing)
             StartCoroutine(StartGameCountdown());
+        else
+        {
+            SceneManager.LoadSceneAsync((int)Scenes.DebugMenu, LoadSceneMode.Additive);
+        }
     }
 
     public void Setup(GameSetting gameSetting, int mapID)
@@ -196,7 +199,9 @@ public class GameManager : MonoBehaviour
         SceneManager.UnloadSceneAsync((int)Scenes.GameUI);
         yield return SceneManager.LoadSceneAsync((int)Scenes.GameEndScreen, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
-        gameOverUI.Setup(scores, players.Select(p => p?.PlayerColourIndex ?? -1).ToArray());
+        gameOverUI.Setup(scores,
+            players.Select(p => p?.PlayerColourIndex ?? -1).ToArray(),
+            players.Select(p => p?.PlayerModelIndex ?? -1).ToArray());
         SceneManager.UnloadSceneAsync(mapID);
     }
 

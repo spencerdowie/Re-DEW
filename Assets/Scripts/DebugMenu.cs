@@ -46,6 +46,7 @@ public class DebugMenu : MonoBehaviour
             mapIDs.Add(map.sceneID);
         }
         LoadDebugGameSettings();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     private IEnumerator UnloadDebugScene()

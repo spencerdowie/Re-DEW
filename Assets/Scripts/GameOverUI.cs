@@ -22,11 +22,13 @@ public class GameOverUI : MonoBehaviour
     private PlayerDataSO playerData;
     [SerializeField]
     private Image[] scorePanels = new Image[4];
+    [SerializeField]
+    private Transform[] playerModels = new Transform[4];
     private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
     [SerializeField]
     private TMPro.TextMeshProUGUI winnerText;
 
-    public void Setup(int[] scores, int[] playerColourIndex)
+    public void Setup(int[] scores, int[] playerColourIndex, int[] playerModelIndex)
     {
         List<Score> scoreList = new List<Score>();
         for (int i = 0; i < 4; i++)
@@ -44,6 +46,8 @@ public class GameOverUI : MonoBehaviour
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scorePanels[i].CrossFadeColor(playerColour, 0, false, false);
             scoreText[i].text = scores[i].ToString();
+
+            Instantiate(playerData.characterPrefabs[playerModelIndex[i]], playerModels[i]);
         }
 
 
