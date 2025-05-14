@@ -15,10 +15,10 @@ EditorBuildSettings:
     path: Assets/Scenes/GameUI.unity
     guid: 8025e79438289874a97eef0345a1cf63
   - enabled: 1
-    path: Assets/Scenes/Smash Lobby.unity
+    path: Assets/Scenes/Lobby.unity
     guid: 8211556b95f9a474a8400bd241dcbe8c
   - enabled: 0
-    path: Assets/Scenes/Old Scenes/Lobby.unity
+    path: Assets/Scenes/Old Scenes/OLDLobby.unity
     guid: c27a5f3757955a44bb3041fb3a5fdc74
   - enabled: 1
     path: Assets/Scenes/MapSelect.unity
@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/GameEndScreen.unity
     guid: 2507172b8de9f5745bca480f910cad10
   - enabled: 0
-    path: Assets/Scenes/Gameplay.unity
+    path: Assets/Scenes/Old Scenes/OLDGameplay.unity
     guid: 84a50afc51879b64486bb0f1ccab1be4
   - enabled: 1
     path: Assets/Scenes/BlockArena.unity

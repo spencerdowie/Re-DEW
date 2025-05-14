@@ -21,6 +21,7 @@ public class LobbyPlayerIcon : MonoBehaviour
     private void Awake()
     {
         banner.material = Instantiate(bannerMat);
+        banner.enabled = false;
     }
 
     public void SetPlayerColour(Color playerColour)

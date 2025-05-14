@@ -88,9 +88,10 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.SetActive(true);
         transform.position = spawnPos;
+        rigidbody.velocity = Vector3.zero;
+        HoldPlayer(false);
         //rigidbody.enabled = true; //Otherwise it resets postion to origin
         StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
-        rigidbody.velocity = Vector3.zero;
     }
 
     private void FixedUpdate()
@@ -182,8 +183,10 @@ public class PlayerController : MonoBehaviour
     {
         float killTime = 1f;
         float timer = 0f;
+        HoldPlayer();
+        gameObject.layer = LayerMask.NameToLayer("Invuln");
         //animator.SetBool("Die", true);
-        animator.SetBool("Fall", false);
+        //animator.SetBool("Fall", false);
         while (timer < killTime)
         {
             timer += Time.deltaTime;
@@ -229,6 +232,7 @@ public class PlayerController : MonoBehaviour
     public void HoldPlayer(bool holdPlayer = true)
     {
         this.holdPlayer = holdPlayer;
+        rigidbody.velocity = Vector3.zero;
         if (holdPlayer)
             player.onFire.Disable();
         else

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Laser : MonoBehaviour
 {
-    private const float LaserHeight = 0.4f;
+    private float LaserHeight = 0.4f;
     [SerializeField]
     private Transform laserPoint;
     [SerializeField]
@@ -25,6 +25,7 @@ public class Laser : MonoBehaviour
     public float LaserLifetime { get; private set; } = 5f;
     [field: SerializeField, Tooltip("Length of the laser trail, -1 for full trail")]
     public float LaserLength { get; private set; } = -1f;
+    [SerializeField]
     private Color playerColour;
 
     public void Setup(int playerIndex, int playerLayer, Color playerColour, UnityAction returnAmmoAction)
@@ -32,6 +33,7 @@ public class Laser : MonoBehaviour
         returnAmmo = returnAmmoAction;
         PlayerIndex = playerIndex;
         hitLayer = playerLayer;
+        LaserHeight = transform.position.y;
         //Debug.Log("Laser Spawned by Player " + playerIndex);
 
         name = "Player " + playerIndex + " Laser";

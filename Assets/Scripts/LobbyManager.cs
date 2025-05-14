@@ -27,7 +27,7 @@ public class LobbyManager : MonoBehaviour
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer,
         LobbyStatus.NoPlayer };
-    private Action<InputAction.CallbackContext>[] 
+    private Action<InputAction.CallbackContext>[]
         readyActions, unreadyActions, rightBumpActions, leftBumpActions, nextColourAction, nextModelAction;
     [SerializeField]
     private GameObject readyBanner;
@@ -46,6 +46,8 @@ public class LobbyManager : MonoBehaviour
     private GameObject settingsMenu, settingsOpenBtn, settingsFirstBtn;
     [SerializeField]
     private float SelectDelay = 0.1f;
+    [SerializeField]
+    private Selectable selectedSetting = null;
 
     private void Awake()
     {
@@ -141,6 +143,7 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
         icon.SetPlayerColour(player.PlayerColour);
+        icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex]);
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
@@ -237,7 +240,7 @@ public class LobbyManager : MonoBehaviour
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
     }
-   
+
     public void NextModel(int playerIndex)
     {
         ChangePlayerModel(playerIndex, 1);
@@ -371,9 +374,20 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    public void SelectSetting(Selectable selected)
+    {
+        selectedSetting = selected;
+    }
+
     private void CloseMenu(InputAction.CallbackContext ctx)
     {
-        OpenSettingsMenu(false);
+        if (selectedSetting)
+        {
+            selectedSetting.Select();
+            selectedSetting = null;
+        }
+        else
+            OpenSettingsMenu(false);
     }
 
     public void SelectNext(GameObject gameObject)

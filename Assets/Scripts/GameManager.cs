@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     private int[] stocks = new int[] { 0, 0, 0, 0 };
     private bool[] isPlayerArray { get => players.Select(p => p?.PlayerIndex > -1).ToArray(); }
     private int mapID = -1;
+    [SerializeField]
     public GameSetting GameSetting { get; private set; }
     [SerializeField]
     private int countdownTime = 5;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class LightningSystemBase : MonoBehaviour
 {
+    [SerializeField]
     protected Color color;
     public void SetColour(Color color)
     {

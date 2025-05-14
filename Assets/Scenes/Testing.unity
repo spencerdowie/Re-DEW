@@ -695,6 +695,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1220209871}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1127317855 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+    type: 3}
+  m_PrefabInstance: {fileID: 1523709277}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1220209871
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -787,6 +793,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LaserSegment
+      objectReference: {fileID: 0}
+    - target: {fileID: 8387655218772060406, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1581,6 +1592,94 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1750125985355865389, guid: 9ab36eaea89da544380f1fa0f4b84a7e, type: 3}
+--- !u!1001 &1523709277
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1562256675}
+    m_Modifications:
+    - target: {fileID: 3615895283334916505, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3854073813336269529, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4546781097266183522, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8387655218772060406, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_Name
+      value: LaserSegmentEnchant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8387655218772060406, guid: 004f54ce3322a274b885a538886cc369,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 004f54ce3322a274b885a538886cc369, type: 3}
 --- !u!1 &1527143363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8376710554539161743, guid: bf3e92e0dfa4a574a8feca62194e64ac,
@@ -1977,9 +2076,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Line Shot
       objectReference: {fileID: 0}
+    - target: {fileID: 6564863229284888306, guid: bf3e92e0dfa4a574a8feca62194e64ac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453828973851114825, guid: bf3e92e0dfa4a574a8feca62194e64ac,
+        type: 3}
+      propertyPath: playerColour.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453828973851114825, guid: bf3e92e0dfa4a574a8feca62194e64ac,
+        type: 3}
+      propertyPath: playerColour.g
+      value: 0.000000082453084
+      objectReference: {fileID: 0}
+    - target: {fileID: 8453828973851114825, guid: bf3e92e0dfa4a574a8feca62194e64ac,
+        type: 3}
+      propertyPath: playerColour.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3711646006369892096, guid: bf3e92e0dfa4a574a8feca62194e64ac,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1127317855}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8376710554539161743, guid: bf3e92e0dfa4a574a8feca62194e64ac,
         type: 3}
@@ -2078,7 +2201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2123162193
 Transform:
   m_ObjectHideFlags: 0
@@ -2222,6 +2345,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LaserSegmentChain
+      objectReference: {fileID: 0}
+    - target: {fileID: 6799490890345644360, guid: 7a3466721f5b11849b02c50a507f8814,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
