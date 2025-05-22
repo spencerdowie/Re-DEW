@@ -48,6 +48,7 @@ public class LobbyManager : MonoBehaviour
     private float SelectDelay = 0.1f;
     [SerializeField]
     private Selectable selectedSetting = null;
+    private bool[] colourChosen;
 
     private void Awake()
     {
@@ -90,6 +91,13 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>NextModel(2),
             (ctx)=>NextModel(3)
         };
+
+        colourChosen = new bool[playerData.playerColoursOptions.Length];
+        for (int i = 0; i < colourChosen.Length; i++)
+        {
+            colourChosen[i] = false;
+        }
+
 
 #if UNITY_EDITOR
         minPlayers = 1;
@@ -139,20 +147,22 @@ public class LobbyManager : MonoBehaviour
 
     public void OnPlayerJoin(Player player)
     {
+        players[player.PlayerIndex] = player;
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
+
+        ChangeColour(player.PlayerIndex, 1);
+
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
-        icon.SetPlayerColour(player.PlayerColour);
         icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex]);
+        icon.ShowPlayerModel(true);
+
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
         player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
         player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
-        players[player.PlayerIndex] = player;
-
-        playerIcons[player.PlayerIndex].ShowPlayerModel(true);
 
         SelectUI();
     }
@@ -234,9 +244,28 @@ public class LobbyManager : MonoBehaviour
             return;
 
         Player player = players[playerIndex];
-        int colourIndex = (player.PlayerColourIndex + playerData.playerColoursOptions.Length + direction)
-            % playerData.playerColoursOptions.Length;
+        int colourIndex = player.PlayerColourIndex;
+        if (colourIndex > -1)
+            colourChosen[colourIndex] = false;
 
+        if (!isTeams)
+        {
+            int i = 0;
+            do
+            {
+                colourIndex = (colourIndex + direction) % playerData.playerColoursOptions.Length;
+                i++;
+            }
+            while (colourChosen[colourIndex] && i <= 5);
+            if (i > 5)
+                Debug.LogError("ColourIndex out of bounds");
+        }
+        else
+        {
+            colourIndex = (colourIndex + direction) % playerData.playerColoursOptions.Length;
+        }
+
+        colourChosen[colourIndex] = true;
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
     }

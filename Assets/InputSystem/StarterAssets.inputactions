@@ -179,6 +179,17 @@
                 },
                 {
                     "name": "",
+                    "id": "f3d66d4b-7266-4d45-94af-3fe563a33584",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "78a9ebb6-411d-4170-82c6-d9e18d065c93",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
@@ -300,10 +311,10 @@
                 },
                 {
                     "name": "",
-                    "id": "4a4562a1-982b-4499-a9d2-91aefc3e293f",
-                    "path": "<Gamepad>/dpad",
+                    "id": "76e5d542-631a-41b3-903f-26aebbebaec8",
+                    "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": ";Gamepad",
                     "action": "MenuControl",
                     "isComposite": false,
@@ -311,8 +322,8 @@
                 },
                 {
                     "name": "",
-                    "id": "76e5d542-631a-41b3-903f-26aebbebaec8",
-                    "path": "<Gamepad>/leftStick",
+                    "id": "1352f050-01ad-4c19-811c-0df7d36b85d3",
+                    "path": "<Gamepad>/dpad",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",

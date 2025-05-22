@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244320193279861941}
-  m_LocalRotation: {x: 0.091918506, y: 0.89451224, z: -0.21617393, w: 0.3803522}
+  m_LocalRotation: {x: 0.19182695, y: 0.8054232, z: -0.3577557, w: 0.43186423}
   m_LocalPosition: {x: -5.82, y: 2.4534316, z: 8.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9192213206222488887}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 27.172, y: 133.929, z: 0}
+  m_LocalEulerAnglesHint: {x: 47.9, y: 123.6, z: 0}
 --- !u!108 &964872912592534896
 Light:
   m_ObjectHideFlags: 0
@@ -42,10 +42,10 @@ Light:
   m_GameObject: {fileID: 244320193279861941}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 7.9
+  m_Color: {r: 0.6603774, g: 0.64480245, b: 0.64480245, a: 1}
+  m_Intensity: 0.1
   m_Range: 21.634327
   m_SpotAngle: 125.50148
   m_InnerSpotAngle: 97.975655
@@ -79,10 +79,10 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4087
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -4740,7 +4740,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.6839622, g: 0.6884451, b: 1, a: 1}
+  m_Color: {r: 0.34919012, g: 0.35431138, b: 0.5566038, a: 1}
   m_Intensity: 15
   m_Range: 23.27863
   m_SpotAngle: 125.50148
@@ -4775,10 +4775,10 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4087
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -7041,7 +7041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8188838736920769572}
   m_LocalRotation: {x: 0.25118974, y: 0.3954337, z: -0.11336639, w: 0.87617576}
-  m_LocalPosition: {x: -6.05, y: 2.4534316, z: -6.44}
+  m_LocalPosition: {x: -4.49, y: 2.4534316, z: -9.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7059,7 +7059,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.7830189, g: 0.5510218, b: 0.53555536, a: 1}
+  m_Color: {r: 0.5, g: 0.3387616, b: 0.3278302, a: 1}
   m_Intensity: 15
   m_Range: 18.703371
   m_SpotAngle: 125.50148
@@ -7094,10 +7094,10 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4087
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0

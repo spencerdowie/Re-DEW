@@ -16,17 +16,17 @@ MonoBehaviour:
   playerColoursOptions:
   - {r: 2.2706032, g: 0.00000018721823, b: 0, a: 1}
   - {r: 2.270603, g: 0, b: 2.0390904, a: 1}
-  - {r: 0, g: 0, b: 1.6643163, a: 1}
+  - {r: 0, g: 0.6811017, b: 1.6643163, a: 1}
   - {r: 1.7713081, g: 1.6762043, b: 0, a: 1}
   - {r: 0, g: 2.2349389, b: 0, a: 1}
-  playerCharacterPrefab: {fileID: 4507717551452474256, guid: a1666c04e776a754cad6b4fc5d98019a,
+  playerCharacterPrefab: {fileID: 4183734965851439249, guid: a1666c04e776a754cad6b4fc5d98019a,
     type: 3}
   characterPrefabs:
-  - {fileID: 8894011762595179899, guid: 78fa0ef66ba8a094f8b4ffc46dd91a8f, type: 3}
-  - {fileID: 587958941402644785, guid: c11ad3b45ec1be64688fa96580fe6ef3, type: 3}
-  - {fileID: 2558460924005912782, guid: 76d55c3ee4e5b0a47bd0a4a2af051b5e, type: 3}
-  - {fileID: 4591839474717165220, guid: fa684903b74df5e4cab280e0edbab3e5, type: 3}
-  - {fileID: 3950231428975641913, guid: 0615406c36045c2498f30fb1f8b2f752, type: 3}
+  - {fileID: 2304131940102422749, guid: 78fa0ef66ba8a094f8b4ffc46dd91a8f, type: 3}
+  - {fileID: 2040346654154612884, guid: c11ad3b45ec1be64688fa96580fe6ef3, type: 3}
+  - {fileID: 3605550129660029814, guid: 76d55c3ee4e5b0a47bd0a4a2af051b5e, type: 3}
+  - {fileID: 4046679976602565866, guid: fa684903b74df5e4cab280e0edbab3e5, type: 3}
+  - {fileID: 7715614705085784622, guid: 0615406c36045c2498f30fb1f8b2f752, type: 3}
   <MoveSpeed>k__BackingField: 6
   <SpeedChangeRate>k__BackingField: 10
   <RotationSmoothTime>k__BackingField: 0.12

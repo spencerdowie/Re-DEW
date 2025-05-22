@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         {
             if (player != null)
             {
-                int teamID = player.PlayerColourIndex;
+                int teamID = player.PlayerIndex;
                 if (GameSetting.IsTeams)
                 {
                     if (!teams.TryGetValue(player.PlayerColourIndex, out teamID))
@@ -172,6 +172,13 @@ public class GameManager : MonoBehaviour
             gameUI.SetValue(playerIndex, scores[playerIndex]);
     }
 
+    public void SetScore(int playerIndex, int newScore)
+    {
+        scores[playerIndex] = newScore;
+        if (GameSetting.WinCon == WinCon.SCORE)
+            gameUI.SetValue(playerIndex, scores[playerIndex]);
+    }
+
     public void UpdateStock(int playerIndex, int stockChange)
     {
         stocks[playerIndex] += stockChange;
@@ -188,7 +195,24 @@ public class GameManager : MonoBehaviour
 
             yield return null;
         }
-        players[playerIndex].SpawnPlayer(spawnPositions[playerIndex].position);
+
+        if (GameSetting.WinCon == WinCon.STOCK)
+        {
+            if (stocks[playerIndex] > 0)
+            {
+                players[playerIndex].SpawnPlayer(spawnPositions[playerIndex].position);
+            }
+            else
+            {
+                int playersAlive = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (players[i] != null && stocks[i] > 0)
+                        playersAlive++;
+                }
+                scores[playerIndex] = playersAlive;
+            }
+        }
     }
 
     private IEnumerator EndGame()
@@ -210,14 +234,22 @@ public class GameManager : MonoBehaviour
         bool winConMet = false;
         if (GameSetting.WinCon == WinCon.STOCK)
         {
+            int numPlayers = players.Count(p => p != null);
             int playersAlive = 0;
+            playersAlive = stocks.Count(s => s > 0);
+
+            Debug.Log(playersAlive);
+            playersAlive = 0;
+
             for (int i = 0; i < 4; i++)
             {
                 if (stocks[i] > 0)
                     playersAlive++;
             }
+
+            Debug.Log(playersAlive);
 #if DEBUG
-            if (players.Count(p => p != null) > 1 && playersAlive < 2)
+            if (numPlayers > 1 && playersAlive < 2)
                 winConMet = true;
 #else
             if (playersAlive < 2)
