@@ -42,4 +42,4 @@ MonoBehaviour:
   - sceneID: 6
     sprite: {fileID: 21300000, guid: a8ede489771e0674d88e40c1636cfd1a, type: 3}
   - sceneID: 7
-    sprite: {fileID: 21300000, guid: 799a706ea5d003e4cb0468eca2d0b411, type: 3}
+    sprite: {fileID: 21300000, guid: 13244ca41a0c6d44eb1d455b2c07c5e3, type: 3}
