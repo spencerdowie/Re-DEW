@@ -62,6 +62,7 @@ public class PlayerDataSO : ScriptableObject
     public int gameTime = 5, startStocks = 5, scoreLimit = 10;
     [SerializeField]
     public bool isTeams = false;
+    
 
     [field: SerializeField, Space, Header("Scenes")]
     public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
