@@ -36,17 +36,19 @@ public class LobbyManager : MonoBehaviour
     private bool isTeams = false;
     ///<summary>true = stock | false = score</summary>
     private bool winCon = true;
-    private int gameTime = 5, stockAmt = 5, scoreGoal = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
+    private int gameTime = 5, startStocks = 5, scoreLimit = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
-    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText,
-        overviewStockText, overviewScoreText, overviewTimeText;
+    private TMPro.TextMeshProUGUI overviewStockText, overviewScoreText, overviewTimeText;
     [SerializeField]
-    Toggle overviewTeamToggle;
+    private GameObject overviewFFA, overviewTeam, overviewStock, overviewScore;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
+    [SerializeField]
+    private Toggle winConToggle, winConAmtToggle, teamToggle;
     [SerializeField]
     private GameObject settingsMenu, settingsOpenBtn, settingsFirstBtn;
     [SerializeField]
     private float SelectDelay = 0.1f;
-    [SerializeField]
     private Selectable selectedSetting = null;
     private bool[] colourChosen;
 
@@ -98,6 +100,7 @@ public class LobbyManager : MonoBehaviour
             colourChosen[i] = false;
         }
 
+        LoadGameSettings();
 
 #if UNITY_EDITOR
         minPlayers = 1;
@@ -127,8 +130,8 @@ public class LobbyManager : MonoBehaviour
     private void Start()
     {
         SetGameTime(gameTime);
-        SetStockAmount(stockAmt);
-        SetScoreGoal(scoreGoal);
+        SetStartStock(startStocks);
+        SetScoreLimit(scoreLimit);
     }
 
     private void SelectUI()
@@ -150,7 +153,7 @@ public class LobbyManager : MonoBehaviour
         players[player.PlayerIndex] = player;
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
 
-        ChangeColour(player.PlayerIndex, 1);
+        SetPlayerColour(player.PlayerIndex, player.PlayerColourIndex);
 
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
@@ -265,6 +268,16 @@ public class LobbyManager : MonoBehaviour
             colourIndex = (colourIndex + direction) % playerData.playerColoursOptions.Length;
         }
 
+        SetPlayerColour(playerIndex, colourIndex);
+    }
+
+    public void SetPlayerColour(int playerIndex, int colourIndex)
+    {
+        if (colourIndex < 0 || colourIndex >= playerData.playerColoursOptions.Length)
+            return;
+
+        Player player = players[playerIndex];
+
         colourChosen[colourIndex] = true;
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
@@ -294,10 +307,27 @@ public class LobbyManager : MonoBehaviour
     }
 
     #region Game Settings
+    private void LoadGameSettings()
+    {
+        GameSetting lastGameSetting = playerData.LastGameSettings;
+        SetGameTime(lastGameSetting.GameTime);
+        SetWinCondition(lastGameSetting.WinConBool);
+        SetStartStock(lastGameSetting.StartStocks);
+        SetScoreLimit(lastGameSetting.ScoreLimit);
+        ToggleTeamMode(lastGameSetting.IsTeams);
+    }
+
+    private void ApplySettings()
+    {
+        throw new NotImplementedException();
+    }
+
     public void ToggleTeamMode(bool teamMode)
     {
         isTeams = teamMode;
-        overviewTeamToggle.isOn = isTeams;
+        teamToggle.isOn = teamMode;
+        overviewFFA.SetActive(!teamMode);
+        overviewTeam.SetActive(teamMode);
     }
 
     ///<summary>true = stock | false = score</summary>
@@ -309,18 +339,22 @@ public class LobbyManager : MonoBehaviour
     public void SetWinCondition(bool winCon)
     {
         this.winCon = winCon;
+        winConToggle.isOn = winCon;
+        winConAmtToggle.isOn = winCon;
+        overviewStock.SetActive(winCon);
+        overviewScore.SetActive(!winCon);
     }
 
-    private void SetStockAmount(int stockAmt)
+    private void SetStartStock(int stockAmt)
     {
-        this.stockAmt = stockAmt;
+        this.startStocks = stockAmt;
         stockText.text = stockAmt.ToString();
         overviewStockText.text = stockAmt.ToString();
     }
 
-    private void SetScoreGoal(int scoreGoal)
+    private void SetScoreLimit(int scoreGoal)
     {
-        this.scoreGoal = scoreGoal;
+        this.scoreLimit = scoreGoal;
         scoreText.text = scoreGoal.ToString();
         overviewScoreText.text = scoreGoal.ToString();
     }
@@ -336,15 +370,15 @@ public class LobbyManager : MonoBehaviour
     {
         if (winCon)
         {
-            int newStock = stockAmt + change;
+            int newStock = startStocks + change;
             if (newStock > 0 && newStock <= maxStocks)
-                SetStockAmount(newStock);
+                SetStartStock(newStock);
         }
         else
         {
-            int newScore = scoreGoal + change;
+            int newScore = scoreLimit + change;
             if (newScore > 0 && newScore <= maxScore)
-                SetScoreGoal(newScore);
+                SetScoreLimit(newScore);
         }
     }
 
@@ -368,8 +402,9 @@ public class LobbyManager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
 
         WinCon gameWinCon = winCon ? WinCon.STOCK : WinCon.SCORE;
-
-        FindObjectOfType<MapSelect>().SetGameSetting(new GameSetting(gameTime, gameWinCon, stockAmt, scoreGoal, isTeams));
+        GameSetting setting = new GameSetting(gameTime, gameWinCon, startStocks, scoreLimit, isTeams);
+        playerData.LastGameSettings = setting;
+        FindObjectOfType<MapSelect>().Setup(players, setting);
 
         SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }

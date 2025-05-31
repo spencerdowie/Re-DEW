@@ -8,9 +8,20 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
+    [SerializeField]
+    private GameObject StartButton;
+
     private void Start()
     {
         SceneManager.LoadSceneAsync((int)Scenes.DebugMenu, LoadSceneMode.Additive);
+        EventSystem.current.SetSelectedGameObject(StartButton);
+
+        if (!playerData.LastGameSettings.IsInitialized)
+        {
+            playerData.LastGameSettings = playerData.DefaultGameSettings();
+        }
+        Debug.Log(playerData.LastGameSettings.ToString());
+
 #if PLATFORM_WEBGL
         GameObject.Find("Quit").SetActive(false);
 #endif

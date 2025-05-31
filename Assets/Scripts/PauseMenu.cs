@@ -60,6 +60,7 @@ public class PauseMenu : MonoBehaviour
             Instance = this;
         }
 
+        eventSystem = EventSystem.current;
         rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;

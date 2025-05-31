@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
         this.playerInput = playerInput;
         PlayerIndex = playerInput.playerIndex;
         name = "Player " + PlayerIndex;
-        PlayerColourIndex = -1;
+        PlayerColourIndex = PlayerIndex;
         onFire = playerInput.actions["Fire"];
         onDebugFire = playerInput.actions["DebugFire"];
     }

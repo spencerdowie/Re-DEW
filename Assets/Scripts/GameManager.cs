@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+///<summary>stock = 0, score = 1</summary>
 public enum WinCon
 {
     STOCK = 0,
@@ -18,14 +19,25 @@ public struct GameSetting
     public int ScoreLimit { get; private set; }
     public bool IsTeams { get; private set; }
     public WinCon WinCon { get; private set; }
+    ///<summary>true = stock | false = score</summary>
+    public bool WinConBool { get => WinCon == WinCon.STOCK; }
+    public bool IsInitialized { get; private set; }
 
-    public GameSetting(int gameTime, WinCon winCon, int maxStocks, int scoreLimit, bool isTeams)
+    public GameSetting(int gameTime, WinCon winCon, int startStocks, int scoreLimit, bool isTeams)
     {
         GameTime = gameTime;
-        StartStocks = maxStocks;
+        WinCon = winCon;
+        StartStocks = startStocks;
         ScoreLimit = scoreLimit;
         IsTeams = isTeams;
-        WinCon = winCon;
+        IsInitialized = true;
+    }
+
+    public override string ToString()
+    {
+        return $"GameTime: {GameTime} | WinCon {WinCon} | " +
+            $"StartStocks: {StartStocks} | ScoreLimit: {ScoreLimit} | " +
+            $"IsTeams: {IsTeams} ---- IsInit: {IsInitialized}";
     }
 }
 
@@ -110,7 +122,7 @@ public class GameManager : MonoBehaviour
         {
             if (player != null)
             {
-                StartCoroutine(RespawnPlayer(player.PlayerIndex));
+                player.SpawnPlayer(spawnPositions[player.PlayerIndex].position);
                 isPlayerArray[player.PlayerIndex] = true;
                 player.HoldPlayer();
                 camTargetGroup.AddMember(player.transform, 1, 2);
@@ -200,7 +212,7 @@ public class GameManager : MonoBehaviour
         {
             if (stocks[playerIndex] > 0)
             {
-                players[playerIndex].SpawnPlayer(spawnPositions[playerIndex].position);
+                players[playerIndex].SpawnPlayer(FindFarthestSpawnPosition());
             }
             else
             {
@@ -213,6 +225,38 @@ public class GameManager : MonoBehaviour
                 scores[playerIndex] = playersAlive;
             }
         }
+        else
+        {
+            players[playerIndex].SpawnPlayer(FindFarthestSpawnPosition());
+        }
+    }
+
+    public Vector3 FindFarthestSpawnPosition()
+    {
+        float farthestPlayerPoint = float.MinValue;
+        int spawnPointIndex = -1;
+        for (int i = 0; i < spawnPositions.Length; i++)
+        {
+            float closetPlayerDistance = float.MaxValue;
+            Vector3 spawnPos = spawnPositions[i].position;
+            for (int j = 0; j < 4; j++)
+            {
+                if (players[j] == null || !players[j].gameObject.activeInHierarchy)
+                    continue;
+                Vector3 playerPos = players[j].transform.position;
+                float distance = Vector3.Distance(spawnPos, playerPos);
+                if (distance < closetPlayerDistance)
+                {
+                    closetPlayerDistance = distance;
+                }
+            }
+            if (closetPlayerDistance > farthestPlayerPoint)
+            {
+                farthestPlayerPoint = closetPlayerDistance;
+                spawnPointIndex = i;
+            }
+        }
+        return spawnPositions[spawnPointIndex].position;
     }
 
     private IEnumerator EndGame()
@@ -223,9 +267,12 @@ public class GameManager : MonoBehaviour
         SceneManager.UnloadSceneAsync((int)Scenes.GameUI);
         yield return SceneManager.LoadSceneAsync((int)Scenes.GameEndScreen, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
+
         gameOverUI.Setup(scores,
             players.Select(p => p?.PlayerColourIndex ?? -1).ToArray(),
-            players.Select(p => p?.PlayerModelIndex ?? -1).ToArray());
+            players.Select(p => p?.PlayerModelIndex ?? -1).ToArray(),
+            GameSetting.WinCon);
+
         SceneManager.UnloadSceneAsync(mapID);
     }
 

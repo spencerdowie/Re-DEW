@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,8 +16,11 @@ public class MapSelect : MonoBehaviour
     private GameObject mapButtonPrefab;
     [SerializeField]
     private Image selectedMapImage;
-    private int selectedMapID = 1;
+    [SerializeField]
+    private GameObject readyBanner;
+    private int selectedMapIndex = 1;
     private GameSetting gameSetting;
+    private bool mapConfirmed = false;
 
     private void Awake()
     {
@@ -33,11 +37,19 @@ public class MapSelect : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(mapButtonHolder.GetChild(0).gameObject);
     }
 
-    public void SelectMap(int mapID)
+    private void OnDestroy()
     {
-        MapPreview preview = playerData.Maps[mapID];
-        selectedMapID = preview.sceneID;
-        selectedMapImage.sprite = preview.sprite;
+        foreach(Player player in FindObjectsOfType<Player>())
+        {
+            player.PlayerInput.actions["Join"].performed -= StartGame;
+            player.PlayerInput.actions["Cancel"].performed -= CancelMap;
+        }
+    }
+
+    public void SelectMap(int mapIndex)
+    {
+        selectedMapIndex = mapIndex;
+        selectedMapImage.sprite = playerData.Maps[mapIndex].sprite;
     }
 
     public void ConfirmMap()
@@ -46,12 +58,40 @@ public class MapSelect : MonoBehaviour
         {
             mapButton.interactable = false;
         }
-        StartCoroutine(LoadGameScene(selectedMapID));
+        readyBanner.SetActive(true);
+        mapConfirmed = true;
     }
 
-    public void SetGameSetting(GameSetting gameSetting)
+    public void CancelMap(InputAction.CallbackContext ctx)
+    {
+        foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
+        {
+            mapButton.interactable = true;
+        }
+        EventSystem.current.SetSelectedGameObject(mapButtonHolder.GetChild(selectedMapIndex).gameObject);
+        readyBanner.SetActive(false);
+        mapConfirmed = false;
+    }
+
+    public void StartGame(InputAction.CallbackContext ctx)
+    {
+        if (mapConfirmed)
+        {
+            StartCoroutine(LoadGameScene(playerData.Maps[selectedMapIndex].sceneID));
+        }
+    }
+
+    public void Setup(Player[] players, GameSetting gameSetting)
     {
         this.gameSetting = gameSetting;
+        foreach (Player player in players)
+        {
+            if (player == null)
+                continue;
+
+            player.PlayerInput.actions["Join"].performed += StartGame;
+            player.PlayerInput.actions["Cancel"].performed += CancelMap;
+        }
     }
 
     private IEnumerator LoadGameScene(int mapID)

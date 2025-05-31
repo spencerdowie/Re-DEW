@@ -54,13 +54,23 @@ public class PlayerDataSO : ScriptableObject
     [field: SerializeField]
     public int StartAmmo { get; private set; } = 3;
 
-    [Space, Header("Debug Game Settings"), SerializeField]
+    [Space, Header("Default Game Settings"), SerializeField]
     public WinCon winCon;
     [SerializeField]
     public int gameTime = 5, startStocks = 5, scoreLimit = 10;
     [SerializeField]
     public bool isTeams = false;
+    public GameSetting LastGameSettings;
+    public string[] GameSummary { get; private set; } =
+        { "Be the Last Warrior Standing!",
+        "Be the most Lethal Warrior in the Arena!" };
+
 
     [field: SerializeField, Space, Header("Scenes")]
     public MapPreview[] Maps { get; private set; } = new MapPreview[] { };
+
+    public GameSetting DefaultGameSettings()
+    {
+        return new GameSetting(gameTime, winCon, startStocks, scoreLimit, isTeams);
+    }
 }

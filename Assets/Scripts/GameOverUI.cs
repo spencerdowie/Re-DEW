@@ -5,9 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 
 public class GameOverUI : MonoBehaviour
 {
+    readonly private string[] place = { "1st", "2nd", "3rd", "4th" };
     private struct Score
     {
         public int index, score;
@@ -28,7 +31,7 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI winnerText;
 
-    public void Setup(int[] scores, int[] playerColourIndex, int[] playerModelIndex)
+    public void Setup(int[] scores, int[] playerColourIndex, int[] playerModelIndex, WinCon winCon)
     {
         List<Score> scoreList = new List<Score>();
         for (int i = 0; i < 4; i++)
@@ -45,12 +48,13 @@ public class GameOverUI : MonoBehaviour
 
             scoreText[i] = scorePanels[i].GetComponentInChildren<TMPro.TextMeshProUGUI>();
             scorePanels[i].CrossFadeColor(playerColour, 0, false, false);
-            scoreText[i].text = scores[i].ToString();
+            if (winCon == WinCon.SCORE)
+                scoreText[i].text = scores[i].ToString();
+            else
+                scoreText[i].text = place[i];
 
-            Instantiate(playerData.characterPrefabs[playerModelIndex[i]], playerModels[i]);
+                Instantiate(playerData.characterPrefabs[playerModelIndex[i]], playerModels[i]);
         }
-
-
 
         scoreList.Sort((scoreA, scoreB) => scoreB.score.CompareTo(scoreA.score));
         int maxScore = scoreList[0].score;
@@ -69,15 +73,17 @@ public class GameOverUI : MonoBehaviour
         winnerText.text = winnersNames;
 
         FindObjectOfType<EventSystem>().SetSelectedGameObject(GameObject.Find("LobbyBtn"));
+
+        SceneManager.UnloadSceneAsync((int)Scenes.PauseMenu);
     }
 
     public void ReturnToLobby()
     {
-        PauseMenu.Instance.ReturnToLobby();
+        SceneManager.LoadScene((int)Scenes.Lobby);
     }
 
     public void ReturnToMenu()
     {
-        PauseMenu.Instance.ReturnToMenu();
+        SceneManager.LoadScene(0);
     }
 }
