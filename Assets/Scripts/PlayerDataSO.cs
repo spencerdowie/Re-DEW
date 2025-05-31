@@ -16,6 +16,8 @@ public struct MapPreview
 {
     public int sceneID;
     public Sprite sprite;
+    public string MapName;
+    public string MapDescription;
 }
 
 public enum Scenes
