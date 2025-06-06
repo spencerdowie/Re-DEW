@@ -54,8 +54,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ColorMask: 15
+    - _Distortion: 0.42
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _distortion: 0.42
     m_Colors:
     - _Color: {r: 0.2514124, g: 0, b: 2.367875, a: 1}
