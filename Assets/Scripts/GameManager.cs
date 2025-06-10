@@ -73,10 +73,29 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadGameUI());
     }
 
-    public IEnumerator LoadGameUI()
+    private IEnumerator LoadGameUI()
     {
         yield return SceneManager.LoadSceneAsync((int)Scenes.GameUI, LoadSceneMode.Additive);
         gameUI = FindObjectOfType<GameUIManager>();
+    }
+
+    private IEnumerator LoadPauseMenu()
+    {
+        yield return SceneManager.LoadSceneAsync((int)Scenes.PauseMenu, LoadSceneMode.Additive);
+
+        foreach (PlayerController playerControlller in players)
+        {
+            Player player = playerControlller?.Player;
+            if (player != null)
+            {
+                PauseMenu.Instance.AddPlayerInput(player.PlayerInput);
+                player.eventSystem.firstSelectedGameObject = PauseMenu.Instance.ResumeBtn;
+                PauseMenu.Instance.AddPauseListeners(playerControlller.Pause, playerControlller.Resume);
+            }
+        }
+
+        PauseMenu.Instance.EnablePause();
+
         if (!Testing)
             StartCoroutine(StartGameCountdown());
         else
@@ -109,8 +128,7 @@ public class GameManager : MonoBehaviour
                 AddPlayerController(player, teamID);
             }
         }
-
-        PauseMenu.Instance.EnablePause();
+        StartCoroutine(LoadPauseMenu());
     }
 
     public IEnumerator StartGameCountdown()

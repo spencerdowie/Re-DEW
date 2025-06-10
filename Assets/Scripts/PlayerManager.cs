@@ -110,7 +110,7 @@ public class PlayerManager : MonoBehaviour
         player.transform.SetParent(transform);
         players[playerIndex] = player;
         onPlayerJoin?.Invoke(player);
-        PauseMenu.Instance.AddPlayerInput(playerInput);
+        //PauseMenu.Instance.AddPlayerInput(playerInput);
 
         Debug.Log(playerInput.name + " joined");
     }

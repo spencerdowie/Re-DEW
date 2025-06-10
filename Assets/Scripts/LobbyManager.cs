@@ -51,6 +51,7 @@ public class LobbyManager : MonoBehaviour
     private float SelectDelay = 0.1f;
     private Selectable selectedSetting = null;
     private bool[] colourChosen;
+    private bool unsavedSettings = false;
 
     private void Awake()
     {
@@ -105,7 +106,6 @@ public class LobbyManager : MonoBehaviour
 #if UNITY_EDITOR
         minPlayers = 1;
 #endif
-        playerManager.LoadPause();
     }
 
     private void OnDestroy()
@@ -134,11 +134,12 @@ public class LobbyManager : MonoBehaviour
         SetScoreLimit(scoreLimit);
     }
 
-    private void SelectUI()
+    private void SelectUI(Player player)
     {
-        if (!EventSystem.current.alreadySelecting)
+        
+        if (!player.eventSystem.alreadySelecting)
         {
-            EventSystem.current.SetSelectedGameObject(playerIcons[0].gameObject);
+            player.eventSystem.SetSelectedGameObject(playerIcons[0].gameObject);
         }
     }
 
@@ -167,7 +168,8 @@ public class LobbyManager : MonoBehaviour
         player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
         player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
 
-        SelectUI();
+        if (player.PlayerIndex == 0)
+            SelectUI(player);
     }
 
     private void OnPlayerLeave(Player player)
@@ -319,6 +321,18 @@ public class LobbyManager : MonoBehaviour
 
     private void ApplySettings()
     {
+        isTeams = teamToggle.isOn;
+        overviewFFA.SetActive(!isTeams);
+        overviewTeam.SetActive(isTeams);
+        winCon = winConToggle.isOn;
+        overviewStock.SetActive(winCon);
+        overviewScore.SetActive(!winCon);
+        startStocks = startStocks;
+        overviewStockText.text = startStocks.ToString();
+        scoreLimit = scoreLimit;
+        overviewScoreText.text = scoreLimit.ToString();
+        gameTime = gameTime;
+        overviewTimeText.text = gameTime.ToString();
         throw new NotImplementedException();
     }
 
@@ -345,18 +359,18 @@ public class LobbyManager : MonoBehaviour
         overviewScore.SetActive(!winCon);
     }
 
-    private void SetStartStock(int stockAmt)
+    private void SetStartStock(int startStocks)
     {
-        this.startStocks = stockAmt;
-        stockText.text = stockAmt.ToString();
-        overviewStockText.text = stockAmt.ToString();
+        this.startStocks = startStocks;
+        stockText.text = startStocks.ToString();
+        overviewStockText.text = startStocks.ToString();
     }
 
-    private void SetScoreLimit(int scoreGoal)
+    private void SetScoreLimit(int scoreLimit)
     {
-        this.scoreLimit = scoreGoal;
-        scoreText.text = scoreGoal.ToString();
-        overviewScoreText.text = scoreGoal.ToString();
+        this.scoreLimit = scoreLimit;
+        scoreText.text = scoreLimit.ToString();
+        overviewScoreText.text = scoreLimit.ToString();
     }
 
     private void SetGameTime(int gameTime)

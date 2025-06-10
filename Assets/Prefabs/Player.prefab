@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1563377848348468962}
   - component: {fileID: 643293944294910014}
   - component: {fileID: 2138569712321835891}
+  - component: {fileID: 8503726234253284936}
+  - component: {fileID: 1848598565549395088}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -48,7 +50,7 @@ MonoBehaviour:
   m_Actions: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
   m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
+  m_UIInputModule: {fileID: 1848598565549395088}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -79,6 +81,46 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b1c78d39-a99f-4fb8-aed3-628956228af3
     m_ActionName: Player/Cancel[/XInputControllerWindows1/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4359de6a-a691-44eb-9be8-ce1eb759e47d
+    m_ActionName: Player/Pause[/XInputControllerWindows/start,/XInputControllerWindows1/start,/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e48a9d35-0399-421e-991f-b328f6918f1a
+    m_ActionName: Player/DebugFire[/XInputControllerWindows/leftTrigger,/XInputControllerWindows1/leftTrigger,/DualShock4GamepadHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 831f86b9-7897-4ba0-a42b-b3893d041ed0
+    m_ActionName: Player/LeftBumper[/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder,/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: edece06f-054a-4b4b-8aec-34225bf61cf3
+    m_ActionName: Player/RightBumper[/XInputControllerWindows/rightShoulder,/XInputControllerWindows1/rightShoulder,/DualShock4GamepadHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aee26c27-9f5d-47e9-8e6b-3d9bc18261c2
+    m_ActionName: Player/Join[/XInputControllerWindows/start,/XInputControllerWindows1/start,/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a736e529-f454-4476-a97e-194cdf8b5702
+    m_ActionName: Player/Debug[/XInputControllerWindows/select,/XInputControllerWindows1/select,/DualShock4GamepadHID/select,/XInputControllerWindows/leftShoulder,/XInputControllerWindows1/leftShoulder,/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e911bbff-2df8-4520-99a9-945f6a2b7fbb
+    m_ActionName: Player/FaceNorth[/XInputControllerWindows/buttonNorth,/XInputControllerWindows1/buttonNorth,/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6d96ec89-997e-41fc-9c3d-521f2bbc19ac
+    m_ActionName: Player/FaceWest[/XInputControllerWindows/buttonWest,/XInputControllerWindows1/buttonWest,/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d66f61f0-dbf1-4c83-9d21-f2015f76965e
+    m_ActionName: Player/MenuControl[/XInputControllerWindows/leftStick,/XInputControllerWindows1/leftStick,/DualShock4GamepadHID/leftStick,/XInputControllerWindows/dpad,/XInputControllerWindows1/dpad,/DualShock4GamepadHID/dpad]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ff2ef8a9-4df7-47ff-974f-9e8dd6bc771a
+    m_ActionName: UI/Click[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Player
@@ -97,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  eventSystem: {fileID: 8503726234253284936}
   onFire:
     m_Name: On Fire
     m_Type: 0
@@ -115,3 +158,55 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+--- !u!114 &8503726234253284936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5814247304081078790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+  m_PlayerRoot: {fileID: 0}
+--- !u!114 &1848598565549395088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5814247304081078790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: 9039941979000710233, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
+  m_SubmitAction: {fileID: -1916377846673030204, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
+  m_CancelAction: {fileID: 5307094526794531536, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
+  m_LeftClickAction: {fileID: 6280507570753044498, guid: 4419d82f33d36e848b3ed5af4c8da37e,
+    type: 3}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 0
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6

@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     private int ammo = 3;
     public UnityAction<int> updateAmmo;
     public bool isInvuln { get; private set; }
+    public Player Player { get => player; }
+
     [SerializeField]
     private GameObject playerModel;
     [SerializeField]
@@ -71,16 +73,14 @@ public class PlayerController : MonoBehaviour
         player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();
         gameObject.SetActive(false);
-
-        PauseMenu.Instance.AddPauseListeners(Pause, Resume);
     }
 
-    private void Pause()
+    public void Pause()
     {
         player.onFire.Disable();
     }
 
-    private void Resume()
+    public void Resume()
     {
         player.onFire.Enable();
     }

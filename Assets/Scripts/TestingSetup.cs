@@ -16,7 +16,7 @@ public class TestingSetup : MonoBehaviour
         playerManager = FindObjectOfType<PlayerManager>();
         playerManager.onPlayerJoin += OnPlayerJoin;
         playerManager.onPlayerLeave += OnPlayerLeave;
-        playerManager.LoadPause();
+        //playerManager.LoadPause();
     }
 
     public void OnPlayerJoin(Player player)

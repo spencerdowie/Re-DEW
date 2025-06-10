@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
-    //private PlayerManager playerManager;
     private PlayerInput playerInput;
-    //private PlayerController playerController;
+    public EventSystem eventSystem;
     public int PlayerIndex { get; private set; } = 0;
     public int PlayerColourIndex { get; private set; } = 0;
     public int PlayerModelIndex { get; private set; } = 0;
@@ -52,4 +52,6 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+
 }

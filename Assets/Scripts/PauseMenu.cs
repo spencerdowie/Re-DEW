@@ -49,6 +49,8 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    public GameObject ResumeBtn { get => resumeBtn; }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -78,6 +80,8 @@ public class PauseMenu : MonoBehaviour
             }
         }
         Time.timeScale = 1f;
+        PauseGame.RemoveAllListeners();
+        ResumeGame.RemoveAllListeners();
     }
 
     public void EnablePause()
