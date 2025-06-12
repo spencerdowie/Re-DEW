@@ -69,6 +69,8 @@ public class PlayerController : MonoBehaviour
         subModels = playerModel.GetComponentsInChildren<SkinnedMeshRenderer>();
         animator = playerModel.GetComponent<Animator>();
 
+        laserPrefab = playerData.weaponsOptions[player.PlayerWeaponIndex].LaserPrefab;
+
         player.onFire.performed += OnFire;
         player.onDebugFire.performed += OnDebugFire;
         player.onFire.Disable();

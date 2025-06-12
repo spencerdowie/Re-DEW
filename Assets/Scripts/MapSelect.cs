@@ -11,6 +11,8 @@ public class MapSelect : MonoBehaviour
     [SerializeField]
     private PlayerDataSO playerData;
     [SerializeField]
+    private TMPro.TextMeshProUGUI mapName, mapDescription;
+    [SerializeField]
     private Transform mapButtonHolder;
     [SerializeField]
     private GameObject mapButtonPrefab;
@@ -49,7 +51,10 @@ public class MapSelect : MonoBehaviour
     public void SelectMap(int mapIndex)
     {
         selectedMapIndex = mapIndex;
-        selectedMapImage.sprite = playerData.Maps[mapIndex].sprite;
+        MapPreview map = playerData.Maps[mapIndex];
+        selectedMapImage.sprite = map.sprite;
+        mapName.text = map.MapName;
+        mapDescription.text = map.MapDescription;
     }
 
     public void ConfirmMap()

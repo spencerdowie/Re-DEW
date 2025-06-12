@@ -11,17 +11,18 @@ public class LobbyPlayerIcon : MonoBehaviour
     [SerializeField]
     private Image background, banner;
     [SerializeField]
+    private GameObject portraitBox;
+    [SerializeField]
     private GameObject noPlayerPrompt, joinedPrompt, readyPrompt;
-    private LobbyStatus status = LobbyStatus.NoPlayer;
     [SerializeField]
     private Transform playerModelHolder;
     [SerializeField]
-    private GameObject modelPicker;
+    private TMPro.TextMeshProUGUI weaponNameText;
 
     private void Awake()
     {
         banner.material = Instantiate(bannerMat);
-        banner.enabled = false;
+        SetPlayerStatus(LobbyStatus.NoPlayer);
     }
 
     public void SetPlayerColour(Color playerColour)
@@ -42,9 +43,18 @@ public class LobbyPlayerIcon : MonoBehaviour
         readyPrompt.SetActive(status == LobbyStatus.Ready);
 
         banner.enabled = status != LobbyStatus.NoPlayer;
-        //modelPicker.SetActive(status == LobbyStatus.Joined);
 
-        this.status = status;
+        if (status == LobbyStatus.NoPlayer)
+        {
+            SetPlayerColour(Color.grey);
+            playerModelHolder.gameObject.SetActive(false);
+            portraitBox.SetActive(false);
+        }
+        else if (status > LobbyStatus.NoPlayer)
+        {
+            playerModelHolder.gameObject.SetActive(true);
+            portraitBox.SetActive(true);
+        }
     }
 
     public void SetPlayerModel(GameObject newPlayerModel)
@@ -54,8 +64,8 @@ public class LobbyPlayerIcon : MonoBehaviour
         Instantiate(newPlayerModel, playerModelHolder);
     }
 
-    public void ShowPlayerModel(bool show = true)
+    public void SetPlayerWeapon(string weaponName)
     {
-        playerModelHolder.gameObject.SetActive(show);
+        weaponNameText.text = weaponName;
     }
 }

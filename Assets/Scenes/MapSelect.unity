@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 135034117}
   - component: {fileID: 135034116}
   m_Layer: 5
-  m_Name: Map Title
+  m_Name: MapName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 952840878}
   - component: {fileID: 952840877}
   m_Layer: 5
-  m_Name: Map description
+  m_Name: MapDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1504,6 +1504,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  mapName: {fileID: 1178019715}
+  mapDescription: {fileID: 957280124}
   mapButtonHolder: {fileID: 1900742805}
   mapButtonPrefab: {fileID: 1773576318902019210, guid: e67568fb48f06e849a02e8edde3c4003,
     type: 3}

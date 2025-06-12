@@ -38,7 +38,7 @@ public class LobbyManager : MonoBehaviour
     private bool winCon = true;
     private int gameTime = 5, startStocks = 5, scoreLimit = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
-    private TMPro.TextMeshProUGUI overviewStockText, overviewScoreText, overviewTimeText;
+    private TMPro.TextMeshProUGUI overviewStockText, overviewScoreText, overviewTimeText, gamemodeDescription;
     [SerializeField]
     private GameObject overviewFFA, overviewTeam, overviewStock, overviewScore;
     [SerializeField]
@@ -51,7 +51,7 @@ public class LobbyManager : MonoBehaviour
     private float SelectDelay = 0.1f;
     private Selectable selectedSetting = null;
     private bool[] colourChosen;
-    private bool unsavedSettings = false;
+    //private bool unsavedSettings = false;
 
     private void Awake()
     {
@@ -94,6 +94,12 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>NextModel(2),
             (ctx)=>NextModel(3)
         };
+        //nextModelAction = new Action<InputAction.CallbackContext>[] {
+        //    (ctx)=>NextModel(0),
+        //    (ctx)=>NextModel(1),
+        //    (ctx)=>NextModel(2),
+        //    (ctx)=>NextModel(3)
+        //};
 
         colourChosen = new bool[playerData.playerColoursOptions.Length];
         for (int i = 0; i < colourChosen.Length; i++)
@@ -119,11 +125,11 @@ public class LobbyManager : MonoBehaviour
 
             players[i].PlayerInput.actions["Join"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
-            players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
-            players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
-            players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
-            players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
-            //Destroy(players[i].GetComponent<PlayerController>().gameObject);
+            //players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
+            //players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
+            //players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
+            //players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
+            players[i].RemoveLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
         }
     }
 
@@ -136,7 +142,7 @@ public class LobbyManager : MonoBehaviour
 
     private void SelectUI(Player player)
     {
-        
+
         if (!player.eventSystem.alreadySelecting)
         {
             player.eventSystem.SetSelectedGameObject(playerIcons[0].gameObject);
@@ -159,14 +165,15 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetPlayerStatus(LobbyStatus.Joined);
         icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex]);
-        icon.ShowPlayerModel(true);
+        icon.SetPlayerWeapon(playerData.weaponsOptions[player.PlayerWeaponIndex].WeaponName);
 
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
-        player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
-        player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
-        player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
-        player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
+        //player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
+        //player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
+        //player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
+        //player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
+        player.AddLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
 
         if (player.PlayerIndex == 0)
             SelectUI(player);
@@ -174,10 +181,7 @@ public class LobbyManager : MonoBehaviour
 
     private void OnPlayerLeave(Player player)
     {
-        playerStatuses[player.PlayerIndex] = LobbyStatus.NoPlayer;
-        LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
-        icon.SetPlayerStatus(LobbyStatus.NoPlayer);
-        icon.SetPlayerColour(Color.grey);
+        RemovePlayer(player.PlayerIndex);
 
         if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
         {
@@ -210,12 +214,16 @@ public class LobbyManager : MonoBehaviour
         }
         else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
         {
-            playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
-            playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
-            playerIcons[playerIndex].SetPlayerColour(Color.grey);
-            playerIcons[playerIndex].ShowPlayerModel(false);
+            RemovePlayer(playerIndex);
             playerManager.RemovePlayer(playerIndex);
         }
+    }
+
+    public void RemovePlayer(int playerIndex)
+    {
+        playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+        playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
+        players[playerIndex].RemoveLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
     }
 
     private void ReadyCheck()
@@ -235,19 +243,16 @@ public class LobbyManager : MonoBehaviour
 
     public void NextColour(int playerIndex)
     {
-        ChangeColour(playerIndex, 1);
+        ChangePlayerColour(playerIndex, 1);
     }
 
     public void PrevColour(int playerIndex)
     {
-        ChangeColour(playerIndex, -1);
+        ChangePlayerColour(playerIndex, -1);
     }
 
-    public void ChangeColour(int playerIndex, int direction)
+    public void ChangePlayerColour(int playerIndex, int direction)
     {
-        if (PauseMenu.Instance.IsPaused)
-            return;
-
         Player player = players[playerIndex];
         int colourIndex = player.PlayerColourIndex;
         if (colourIndex > -1)
@@ -258,7 +263,8 @@ public class LobbyManager : MonoBehaviour
             int i = 0;
             do
             {
-                colourIndex = (colourIndex + direction) % playerData.playerColoursOptions.Length;
+                colourIndex = (colourIndex + playerData.playerColoursOptions.Length + direction)
+                    % playerData.playerColoursOptions.Length;
                 i++;
             }
             while (colourChosen[colourIndex] && i <= 5);
@@ -267,7 +273,8 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
-            colourIndex = (colourIndex + direction) % playerData.playerColoursOptions.Length;
+            colourIndex = (colourIndex + playerData.playerColoursOptions.Length + direction)
+                % playerData.playerColoursOptions.Length;
         }
 
         SetPlayerColour(playerIndex, colourIndex);
@@ -297,15 +304,22 @@ public class LobbyManager : MonoBehaviour
 
     public void ChangePlayerModel(int playerIndex, int direction)
     {
-        if (PauseMenu.Instance.IsPaused)
-            return;
-
         Player player = players[playerIndex];
         int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
             % playerData.characterPrefabs.Length;
 
         player.SetPlayerModel(modelIndex);
         playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+    }
+
+    public void ChangePlayerWeapon(int playerIndex, int direction)
+    {
+        Player player = players[playerIndex];
+        int weaponIndex = (player.PlayerWeaponIndex + playerData.weaponsOptions.Length + direction)
+            % playerData.weaponsOptions.Length;
+
+        player.SetPlayerWeapon(weaponIndex);
+        playerIcons[playerIndex].SetPlayerWeapon(playerData.weaponsOptions[weaponIndex].WeaponName);
     }
 
     #region Game Settings
@@ -321,18 +335,18 @@ public class LobbyManager : MonoBehaviour
 
     private void ApplySettings()
     {
-        isTeams = teamToggle.isOn;
-        overviewFFA.SetActive(!isTeams);
-        overviewTeam.SetActive(isTeams);
-        winCon = winConToggle.isOn;
-        overviewStock.SetActive(winCon);
-        overviewScore.SetActive(!winCon);
-        startStocks = startStocks;
-        overviewStockText.text = startStocks.ToString();
-        scoreLimit = scoreLimit;
-        overviewScoreText.text = scoreLimit.ToString();
-        gameTime = gameTime;
-        overviewTimeText.text = gameTime.ToString();
+        //isTeams = teamToggle.isOn;
+        //overviewFFA.SetActive(!isTeams);
+        //overviewTeam.SetActive(isTeams);
+        //winCon = winConToggle.isOn;
+        //overviewStock.SetActive(winCon);
+        //overviewScore.SetActive(!winCon);
+        //startStocks = startStocks;
+        //overviewStockText.text = startStocks.ToString();
+        //scoreLimit = scoreLimit;
+        //overviewScoreText.text = scoreLimit.ToString();
+        //gameTime = gameTime;
+        //overviewTimeText.text = gameTime.ToString();
         throw new NotImplementedException();
     }
 
@@ -355,6 +369,7 @@ public class LobbyManager : MonoBehaviour
         this.winCon = winCon;
         winConToggle.isOn = winCon;
         winConAmtToggle.isOn = winCon;
+        gamemodeDescription.text = playerData.GameModeDescription[winCon ? 1 : 0];
         overviewStock.SetActive(winCon);
         overviewScore.SetActive(!winCon);
     }
@@ -437,8 +452,7 @@ public class LobbyManager : MonoBehaviour
                 players[i].PlayerInput.actions["Join"].Disable();
                 players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
                 players[i].PlayerInput.actions["Cancel"].performed += CloseMenu;
-                players[i].PlayerInput.actions["RightBumper"].Disable();
-                players[i].PlayerInput.actions["LeftBumper"].Disable();
+                players[i].DisableLobbyBindings();
             }
             else
             {
@@ -446,8 +460,7 @@ public class LobbyManager : MonoBehaviour
                 players[i].PlayerInput.actions["Join"].Enable();
                 players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
                 players[i].PlayerInput.actions["Cancel"].performed -= CloseMenu;
-                players[i].PlayerInput.actions["RightBumper"].Enable();
-                players[i].PlayerInput.actions["LeftBumper"].Enable();
+                players[i].EnableLobbyBindings();
             }
         }
     }

@@ -20,6 +20,13 @@ public struct MapPreview
     public string MapDescription;
 }
 
+[Serializable]
+public struct WeaponData
+{
+    public string WeaponName;
+    public GameObject LaserPrefab;
+}
+
 public enum Scenes
 {
     MainMenu = 0,
@@ -41,6 +48,7 @@ public class PlayerDataSO : ScriptableObject
 
     public GameObject playerCharacterPrefab;
     public GameObject[] characterPrefabs;
+    public WeaponData[] weaponsOptions;
 
 
     [field: SerializeField, Header("Player Settings"), Space]
@@ -63,9 +71,9 @@ public class PlayerDataSO : ScriptableObject
     [SerializeField]
     public bool isTeams = false;
     public GameSetting LastGameSettings;
-    public string[] GameSummary { get; private set; } =
-        { "Be the Last Warrior Standing!",
-        "Be the most Lethal Warrior in the Arena!" };
+    public string[] GameModeDescription { get; private set; } =
+        { "Be the most Lethal Warrior in the Arena!",
+          "Be the Last Warrior Standing!"};
 
 
     [field: SerializeField, Space, Header("Scenes")]

@@ -105,7 +105,7 @@ public class PlayerManager : MonoBehaviour
 
         int playerIndex = playerInput.playerIndex;
         Player player = playerInput.GetComponent<Player>();
-        player.Setup(this, playerInput);
+        player.Setup(playerInput);
         //playerInput.actions["Interact"].Disable();
         player.transform.SetParent(transform);
         players[playerIndex] = player;
