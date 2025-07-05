@@ -12340,21 +12340,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 6909411662169463363, guid: e8b0d4b25f2074a47ac5bec3ebee26cd,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909411662169463363, guid: e8b0d4b25f2074a47ac5bec3ebee26cd,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 480
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909411662169463363, guid: e8b0d4b25f2074a47ac5bec3ebee26cd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 160
-      objectReference: {fileID: 0}
     - target: {fileID: 6961268242115766387, guid: e8b0d4b25f2074a47ac5bec3ebee26cd,
         type: 3}
       propertyPath: m_Layer
