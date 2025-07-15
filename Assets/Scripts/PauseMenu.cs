@@ -24,6 +24,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private GameObject resumeBtn;
     private InputAction[] pauseActions = new InputAction[4];
+    [SerializeField]
+    private GameObject xboxControls, psControls;
 
     public static PauseMenu Instance { get; private set; }
 
@@ -62,7 +64,6 @@ public class PauseMenu : MonoBehaviour
             Instance = this;
         }
 
-        eventSystem = EventSystem.current;
         rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;
@@ -129,10 +130,23 @@ public class PauseMenu : MonoBehaviour
         ResumeGame.RemoveListener(resume);
     }
 
-    private void Pause()
+    public void Pause(Player player)
     {
         if (isPaused)
             return;
+
+        if (player.ControllerType == ControllerType.Xbox)
+        {
+            xboxControls.SetActive(true);
+            psControls.SetActive(false);
+        }
+        else
+        {
+            xboxControls.SetActive(false);
+            psControls.SetActive(true);
+        }
+
+        eventSystem = player.EventSystem;
 
         Debug.Log("Pause Game.");
         IsPaused = true;
@@ -220,7 +234,7 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
-            Pause();
+            Pause(PlayerManager.Instance.GetPlayerFromDevice(ctx.control.device));
         }
     }
 

@@ -18,11 +18,27 @@ public class LobbyPlayerIcon : MonoBehaviour
     private Transform playerModelHolder;
     [SerializeField]
     private TMPro.TextMeshProUGUI weaponNameText;
+    [SerializeField]
+    private GameObject xboxIcons, psIcons;
 
     private void Awake()
     {
         banner.material = Instantiate(bannerMat);
         SetPlayerStatus(LobbyStatus.NoPlayer);
+    }
+
+    public void SetControllerType(ControllerType controllerType)
+    {
+        if (controllerType == ControllerType.Xbox)
+        {
+            xboxIcons.SetActive(true);
+            psIcons.SetActive(false);
+        }
+        else
+        {
+            xboxIcons.SetActive(false);
+            psIcons.SetActive(true);
+        }
     }
 
     public void SetPlayerColour(Color playerColour)

@@ -6,12 +6,17 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+public enum ControllerType
+{
+    Xbox,
+    PS
+}
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
     private PlayerInput playerInput;
-    public EventSystem eventSystem;
+    public EventSystem EventSystem { get; private set; }
     public int PlayerIndex { get; private set; } = 0;
     public int PlayerColourIndex { get; private set; } = 0;
     public int PlayerModelIndex { get; private set; } = 0;
@@ -22,6 +27,7 @@ public class Player : MonoBehaviour
     public Vector2 inputAim { get => playerInput.actions["Aim"].ReadValue<Vector2>(); }
     public InputAction onFire, onDebugFire;
     public UnityAction<int, int> LobbyColourAction, LobbyModelAction, LobbyWeaponAction;
+    public ControllerType ControllerType { get; private set; }
 
     public void Setup(PlayerInput playerInput)
     {
@@ -31,6 +37,8 @@ public class Player : MonoBehaviour
         PlayerColourIndex = PlayerIndex;
         onFire = playerInput.actions["Fire"];
         onDebugFire = playerInput.actions["DebugFire"];
+        this.EventSystem = GetComponent<EventSystem>();
+        ControllerType = playerInput.devices[0].path.Contains("DualShock") ? ControllerType.PS : ControllerType.Xbox;
     }
 
     public void SetPlayerColour(int colourIndex)

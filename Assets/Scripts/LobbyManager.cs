@@ -143,9 +143,9 @@ public class LobbyManager : MonoBehaviour
     private void SelectUI(Player player)
     {
 
-        if (!player.eventSystem.alreadySelecting)
+        if (!player.EventSystem.alreadySelecting)
         {
-            player.eventSystem.SetSelectedGameObject(playerIcons[0].gameObject);
+            player.EventSystem.SetSelectedGameObject(playerIcons[0].gameObject);
         }
     }
 
@@ -163,6 +163,7 @@ public class LobbyManager : MonoBehaviour
         SetPlayerColour(player.PlayerIndex, player.PlayerColourIndex);
 
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
+        icon.SetControllerType(player.ControllerType);
         icon.SetPlayerStatus(LobbyStatus.Joined);
         icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex]);
         icon.SetPlayerWeapon(playerData.weaponsOptions[player.PlayerWeaponIndex].WeaponName);

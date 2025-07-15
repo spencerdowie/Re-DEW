@@ -102,6 +102,7 @@ public class PlayerManager : MonoBehaviour
         //}
 
         playerInput.deviceLostEvent.AddListener(OnDeviceLost);
+        playerInput.deviceRegainedEvent.AddListener(OnDeviceRegained);
 
         int playerIndex = playerInput.playerIndex;
         Player player = playerInput.GetComponent<Player>();
@@ -119,10 +120,15 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log(playerInput.name + " disconnected");
 
-        //int playerIndex = playerInput.playerIndex;
-        //onPlayerLeave?.Invoke(players[playerIndex]);
-        //Destroy(players[playerIndex].gameObject);
-        //players[playerIndex] = null;
+        if (PauseMenu.Instance != null)
+        {
+            PauseMenu.Instance.Pause(players[playerInput.playerIndex]);
+        }
+    }
+
+    public void OnDeviceRegained(PlayerInput playerInput)
+    {
+        Debug.Log(playerInput.name + " reconnected");
     }
 
     public void RemoveAllPlayers()
@@ -146,5 +152,10 @@ public class PlayerManager : MonoBehaviour
             players[playerIndex] = null;
         }
 
+    }
+
+    public Player GetPlayerFromDevice(InputDevice device)
+    {
+        return players[PlayerInput.FindFirstPairedToDevice(device).playerIndex];
     }
 }
