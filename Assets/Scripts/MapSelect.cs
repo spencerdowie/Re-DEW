@@ -10,6 +10,7 @@ public class MapSelect : MonoBehaviour
 {
     [SerializeField]
     private PlayerDataSO playerData;
+    private PlayerManager playerManager;
     [SerializeField]
     private TMPro.TextMeshProUGUI mapName, mapDescription;
     [SerializeField]
@@ -26,6 +27,7 @@ public class MapSelect : MonoBehaviour
 
     private void Awake()
     {
+        playerManager = FindObjectOfType<PlayerManager>();
         int index = 0;
         foreach (MapPreview mapPreview in playerData.Maps)
         {
@@ -41,10 +43,13 @@ public class MapSelect : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach(Player player in FindObjectsOfType<Player>())
+        foreach (Player player in playerManager.players)
         {
-            player.PlayerInput.actions["Join"].performed -= StartGame;
-            player.PlayerInput.actions["Cancel"].performed -= CancelMap;
+            if (player != null)
+            {
+                player.PlayerInput.actions["Join"].performed -= StartGame;
+                player.PlayerInput.actions["Cancel"].performed -= CancelMap;
+            }
         }
     }
 
@@ -112,6 +117,6 @@ public class MapSelect : MonoBehaviour
 
     public void ReturnToLobby()
     {
-        PauseMenu.Instance.ReturnToLobby();
+        SceneManager.LoadScene((int)Scenes.Lobby);
     }
 }

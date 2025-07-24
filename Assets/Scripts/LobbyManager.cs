@@ -58,6 +58,7 @@ public class LobbyManager : MonoBehaviour
         playerManager = FindObjectOfType<PlayerManager>();
         playerManager.onPlayerJoin += OnPlayerJoin;
         playerManager.onPlayerLeave += OnPlayerLeave;
+        playerManager.SetJoining(true);
         readyActions = new Action<InputAction.CallbackContext>[] {
             (ctx)=>OnReady(0),
             (ctx)=>OnReady(1),
@@ -138,6 +139,12 @@ public class LobbyManager : MonoBehaviour
         SetGameTime(gameTime);
         SetStartStock(startStocks);
         SetScoreLimit(scoreLimit);
+
+        foreach (Player player in playerManager.players)
+        {
+            if (player != null)
+                OnPlayerJoin(player);
+        }
     }
 
     private void SelectUI(Player player)
@@ -423,11 +430,13 @@ public class LobbyManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        PauseMenu.Instance.ReturnToMenu();
+        playerManager.SetJoining(false);
+        SceneManager.LoadScene(0);
     }
 
     private IEnumerator LoadMapSelect()
     {
+        playerManager.SetJoining(false);
         FindObjectOfType<AudioListener>().enabled = false;
         yield return SceneManager.LoadSceneAsync((int)Scenes.MapSelect, LoadSceneMode.Additive);
 

@@ -146,7 +146,14 @@ public class PauseMenu : MonoBehaviour
             psControls.SetActive(true);
         }
 
+        //foreach (EventSystem eventSys in FindObjectsOfType<EventSystem>())
+        //{
+        //    Debug.Log(eventSys.name);
+        //    eventSys.enabled = false;
+        //}
+
         eventSystem = player.EventSystem;
+        //eventSystem.enabled = true;
 
         Debug.Log("Pause Game.");
         IsPaused = true;
@@ -243,7 +250,7 @@ public class PauseMenu : MonoBehaviour
 #if !UNITY_EDITOR
         if (!focus && !IsDisabled)
         {
-            Pause();
+            Pause(PlayerManager.Instance.players[0]);
         }
 #endif
     }

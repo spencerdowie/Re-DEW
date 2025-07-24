@@ -26,23 +26,18 @@ public class PlayerManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded;
             inputManager = GetComponent<PlayerInputManager>();
         }
 
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode LoadSceneMode)
+    public void SetJoining(bool canJoin)
     {
-        if (scene.buildIndex == (int)Scenes.Lobby)
+        if (canJoin)
         {
-            if (!inputManager.joiningEnabled)
-            {
-                inputManager.EnableJoining();
-                RemoveAllPlayers();
-            }
+            inputManager.EnableJoining();
         }
-        else if (scene.buildIndex == 0)
+        else
         {
             inputManager.DisableJoining();
         }
@@ -143,6 +138,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+
     public void RemovePlayer(int playerIndex)
     {
         if (players[playerIndex] != null)
