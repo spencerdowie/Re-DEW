@@ -26,6 +26,8 @@ public class PauseMenu : MonoBehaviour
     private InputAction[] pauseActions = new InputAction[4];
     [SerializeField]
     private GameObject xboxControls, psControls;
+    [SerializeField]
+    private TMPro.TextMeshProUGUI playerNameText;
 
     public static PauseMenu Instance { get; private set; }
 
@@ -68,6 +70,9 @@ public class PauseMenu : MonoBehaviour
         rectTransform.anchorMax = Vector2.right;
         rectTransform.anchorMin = Vector2.down;
         rectTransform.gameObject.SetActive(false);
+
+        PlayerManager.Instance.onPlayerDisconnect += PlayerDisconnected;
+        PlayerManager.Instance.onPlayerReconnect += PlayerReconnected;
     }
 
     private void OnDestroy()
@@ -83,6 +88,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         PauseGame.RemoveAllListeners();
         ResumeGame.RemoveAllListeners();
+
+        PlayerManager.Instance.onPlayerDisconnect -= PlayerDisconnected;
+        PlayerManager.Instance.onPlayerReconnect -= PlayerReconnected;
     }
 
     public void EnablePause()
@@ -146,14 +154,16 @@ public class PauseMenu : MonoBehaviour
             psControls.SetActive(true);
         }
 
-        //foreach (EventSystem eventSys in FindObjectsOfType<EventSystem>())
-        //{
-        //    Debug.Log(eventSys.name);
-        //    eventSys.enabled = false;
-        //}
+        foreach (EventSystem eventSys in FindObjectsOfType<EventSystem>())
+        {
+            Debug.Log(eventSys.name);
+            eventSys.enabled = false;
+        }
 
         eventSystem = player.EventSystem;
-        //eventSystem.enabled = true;
+        eventSystem.enabled = true;
+
+        playerNameText.text = player.name;
 
         Debug.Log("Pause Game.");
         IsPaused = true;
@@ -253,5 +263,15 @@ public class PauseMenu : MonoBehaviour
             Pause(PlayerManager.Instance.players[0]);
         }
 #endif
+    }
+
+    private void PlayerDisconnected(Player player)
+    {
+        Pause(player);
+    }
+
+    private void PlayerReconnected(Player player)
+    {
+
     }
 }
