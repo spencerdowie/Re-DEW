@@ -38,7 +38,7 @@ MonoBehaviour:
   <SpeedChangeRate>k__BackingField: 10
   <RotationSmoothTime>k__BackingField: 0.12
   <RespawnTime>k__BackingField: 3
-  <RespawnInvulnTime>k__BackingField: 2
+  <RespawnInvulnTime>k__BackingField: 2.5
   <StartAmmo>k__BackingField: 3
   winCon: 0
   gameTime: 5

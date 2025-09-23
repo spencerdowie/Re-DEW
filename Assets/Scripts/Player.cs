@@ -33,8 +33,9 @@ public class Player : MonoBehaviour
     {
         this.playerInput = playerInput;
         PlayerIndex = playerInput.playerIndex;
-        name = "Player " + PlayerIndex;
+        name = "Player " + (PlayerIndex + 1);
         PlayerColourIndex = PlayerIndex;
+        PlayerModelIndex = PlayerIndex;
         onFire = playerInput.actions["Fire"];
         onDebugFire = playerInput.actions["DebugFire"];
         this.EventSystem = GetComponent<EventSystem>();

@@ -31,4 +31,10 @@ public class TestingSetup : MonoBehaviour
     {
 
     }
+
+    private void OnDestroy()
+    {
+        playerManager.onPlayerJoin -= OnPlayerJoin;
+        playerManager.onPlayerLeave -= OnPlayerLeave;
+    }
 }

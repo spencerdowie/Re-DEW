@@ -34,12 +34,20 @@ public class MainMenu : MonoBehaviour
 
     public void OpenItchio()
     {
+        Debug.Log("Open Itchio");
         Application.OpenURL("https://augex.itch.io/");
     }
 
     public void OpenBluesky()
     {
+        Debug.Log("Open Bsky");
         Application.OpenURL("https://augex.bsky.social");
+    }
+
+    public void OpenSteam()
+    {
+        Debug.Log("Open Steam");
+        Application.OpenURL("https://store.steampowered.com/app/3727560/Delta_Epsilon_Warriors");
     }
 
     public void QuitGame()

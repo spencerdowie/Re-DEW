@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerInputManager inputManager;
     [field: SerializeField]
     public Player[] players { get; private set; } = new Player[4];
-    public UnityAction<Player> onPlayerJoin, onPlayerLeave;
+    public UnityAction<Player> onPlayerJoin, onPlayerLeave, onPlayerDisconnect, onPlayerReconnect;
     public static PlayerManager Instance { get; private set; }
 
     private void Awake()
@@ -115,6 +115,9 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log(playerInput.name + " disconnected");
 
+        Player player = playerInput.GetComponent<Player>();
+        onPlayerDisconnect?.Invoke(player);
+
         if (PauseMenu.Instance != null)
         {
             PauseMenu.Instance.Pause(players[playerInput.playerIndex]);
@@ -124,6 +127,9 @@ public class PlayerManager : MonoBehaviour
     public void OnDeviceRegained(PlayerInput playerInput)
     {
         Debug.Log(playerInput.name + " reconnected");
+
+        Player player = playerInput.GetComponent<Player>();
+        onPlayerReconnect?.Invoke(player);
     }
 
     public void RemoveAllPlayers()

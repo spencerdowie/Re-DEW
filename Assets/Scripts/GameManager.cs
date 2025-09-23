@@ -83,18 +83,20 @@ public class GameManager : MonoBehaviour
     {
         yield return SceneManager.LoadSceneAsync((int)Scenes.PauseMenu, LoadSceneMode.Additive);
 
+        PauseMenu pauseMenu = PauseMenu.Instance;
+
         foreach (PlayerController playerControlller in players)
         {
             Player player = playerControlller?.Player;
             if (player != null)
             {
-                PauseMenu.Instance.AddPlayerInput(player.PlayerInput);
-                player.EventSystem.firstSelectedGameObject = PauseMenu.Instance.ResumeBtn;
-                PauseMenu.Instance.AddPauseListeners(playerControlller.Pause, playerControlller.Resume);
+                pauseMenu.AddPlayerInput(player.PlayerInput);
+                player.EventSystem.firstSelectedGameObject = pauseMenu.ResumeBtn;
+                pauseMenu.AddPauseListeners(playerControlller.Pause, playerControlller.Resume);
             }
         }
 
-        PauseMenu.Instance.EnablePause();
+        pauseMenu.EnablePause();
 
         if (!Testing)
             StartCoroutine(StartGameCountdown());
