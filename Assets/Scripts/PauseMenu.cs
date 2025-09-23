@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     private GameObject xboxControls, psControls;
     [SerializeField]
     private TMPro.TextMeshProUGUI playerNameText;
+    private Player pausePlayer = null;
 
     public static PauseMenu Instance { get; private set; }
 
@@ -143,7 +144,8 @@ public class PauseMenu : MonoBehaviour
         if (isPaused)
             return;
 
-        if (player.ControllerType == ControllerType.Xbox)
+        pausePlayer = player;
+        if (pausePlayer.ControllerType == ControllerType.Xbox)
         {
             xboxControls.SetActive(true);
             psControls.SetActive(false);
@@ -160,10 +162,10 @@ public class PauseMenu : MonoBehaviour
             eventSys.enabled = false;
         }
 
-        eventSystem = player.EventSystem;
+        eventSystem = pausePlayer.EventSystem;
         eventSystem.enabled = true;
 
-        playerNameText.text = player.name;
+        playerNameText.text = pausePlayer.name;
 
         Debug.Log("Pause Game.");
         IsPaused = true;
@@ -273,5 +275,11 @@ public class PauseMenu : MonoBehaviour
     private void PlayerReconnected(Player player)
     {
 
+    }
+
+    public void OpenOptionsMenu()
+    {
+        Debug.Log(EventSystem.current.gameObject);
+        FindObjectOfType<OptionsManager>(true).OpenOptions(resumeBtn, pausePlayer);
     }
 }
