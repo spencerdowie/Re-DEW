@@ -14,9 +14,7 @@ public class MapSelect : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI mapName, mapDescription;
     [SerializeField]
-    private Transform mapButtonHolder;
-    [SerializeField]
-    private GameObject mapButtonPrefab;
+    private Transform mapButtonHolder, mapInfoHolder;
     [SerializeField]
     private Image selectedMapImage;
     [SerializeField]
@@ -29,10 +27,8 @@ public class MapSelect : MonoBehaviour
     {
         playerManager = FindObjectOfType<PlayerManager>();
         int index = 0;
-        foreach (MapPreview mapPreview in playerData.Maps)
+        foreach (MapButton button in mapButtonHolder.GetComponentsInChildren<MapButton>())
         {
-            MapButton button = Instantiate(mapButtonPrefab, mapButtonHolder)
-                .GetComponent<MapButton>();
             button.Setup(index);
             button.onSelect += SelectMap;
             button.GetComponent<Button>().onClick.AddListener(ConfirmMap);
@@ -55,11 +51,13 @@ public class MapSelect : MonoBehaviour
 
     public void SelectMap(int mapIndex)
     {
-        selectedMapIndex = mapIndex;
+        mapInfoHolder.GetChild(selectedMapIndex).gameObject.SetActive(false);
+        mapInfoHolder.GetChild(mapIndex).gameObject.SetActive(true);
+
         MapPreview map = playerData.Maps[mapIndex];
         selectedMapImage.sprite = map.sprite;
-        mapName.text = map.MapName;
-        mapDescription.text = map.MapDescription;
+
+        selectedMapIndex = mapIndex;
     }
 
     public void ConfirmMap()
