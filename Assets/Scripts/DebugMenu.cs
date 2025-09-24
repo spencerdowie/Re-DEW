@@ -158,7 +158,7 @@ public class DebugMenu : MonoBehaviour
                 break;
         }
 
-        if (scene.buildIndex != (int)Scenes.GameUI)
+        if (scene.buildIndex != (int)Scenes.GameUI && scene.buildIndex != (int)Scenes.PauseMenu)
             ShowGameplayCommands(mapIDs.Contains(scene.buildIndex));
 
         if (debugMenu.activeSelf)
