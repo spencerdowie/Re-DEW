@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class OptionsManager : MonoBehaviour
@@ -21,23 +23,27 @@ public class OptionsManager : MonoBehaviour
     [SerializeField]
     private float SelectDelay = 0.1f;
     [SerializeField]
-    private int startVolume = 16;
+    private int masterVolume = 16, BGMVolume = 16, SFXVolume = 16;
+    [SerializeField]
+    private bool bloomValue = true;
     [SerializeField]
     private AudioMixer BGMMixer, SFXMixer;
+    [SerializeField]
+    private VolumeProfile volume;
 
     private GameObject returnSelection;
     private Player controllingPlayer;
 
     private void LoadOptionValues()
     {
-        masterSlider.SetValueWithoutNotify(startVolume);
-        SetMasterVolume(startVolume);
-        BGMSlider.SetValueWithoutNotify(startVolume);
-        SetBGMVolume(startVolume);
-        SFXSlider.SetValueWithoutNotify(startVolume);
-        SetSFXVolume(startVolume);
-        bloomToggle.SetIsOnWithoutNotify(true);
-        SetBloom(true);
+        masterSlider.SetValueWithoutNotify(masterVolume);
+        SetMasterVolume(masterVolume);
+        BGMSlider.SetValueWithoutNotify(BGMVolume);
+        SetBGMVolume(BGMVolume);
+        SFXSlider.SetValueWithoutNotify(SFXVolume);
+        SetSFXVolume(SFXVolume);
+        bloomToggle.SetIsOnWithoutNotify(bloomValue);
+        SetBloom(bloomValue);
     }
 
     public void OpenOptions(GameObject returnSelection, Player controllingPlayer)
@@ -72,27 +78,34 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
-    public void SetBloom(bool bloom)
+    public void SetBloom(bool bloomEnabled)
     {
-
+        if (volume.TryGet(out Bloom bloomVolume))
+        {
+            bloomVolume.active = bloomEnabled;
+            bloomValue = bloomEnabled;
+        }
     }
 
     public void SetMasterVolume(float newVolume)
     {
         AudioListener.volume = Mathf.Clamp01(newVolume / 20);
         masterValue.text = (newVolume * 5).ToString();
+        masterVolume = (int)newVolume;
     }
 
     public void SetBGMVolume(float newVolume)
     {
         BGMMixer.SetFloat("volume", Mathf.Clamp((newVolume * 5) - 80f, -80f, 20f));
         BGMValue.text = (newVolume * 5).ToString();
+        BGMVolume = (int)newVolume;
     }
 
     public void SetSFXVolume(float newVolume)
     {
         SFXMixer.SetFloat("volume", Mathf.Clamp((newVolume * 5) - 80f, -80f, 20f));
         SFXValue.text = (newVolume * 5).ToString();
+        SFXVolume = (int)newVolume;
     }
 
 
