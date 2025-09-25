@@ -342,6 +342,16 @@ public class GameManager : MonoBehaviour
         StartCoroutine(EndGame());
     }
 
+    ///<summary>Debug Only</summary>
+    public void ChangeScoreStock(int playerIndex, int change)
+    {
+        if (playerIndex < 0 || playerIndex >= 4)
+            return;
+
+        UpdateScore(playerIndex, change);
+        UpdateStock(playerIndex, change);
+    }
+
     public void SetClockTimeDebug(int time)
     {
         gameUI.DebugSetTime(time);

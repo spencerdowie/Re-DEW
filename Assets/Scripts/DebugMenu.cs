@@ -20,6 +20,7 @@ public class DebugMenu : MonoBehaviour
 
     private GameSetting storedGameSetting;
     //private bool hasStoredGS = false;
+    private int debugPlayerIndex = -1;
 
     private List<int> mapIDs = new List<int>();
 
@@ -64,17 +65,19 @@ public class DebugMenu : MonoBehaviour
 
     private void ToggleDebug(InputAction.CallbackContext ctx)
     {
-        ToggleDebug();
+        ToggleDebug(PlayerInput.FindFirstPairedToDevice(ctx.control.device).playerIndex);
     }
 
-    private void ToggleDebug()
+    private void ToggleDebug(int playerIndex)
     {
         if (debugMenu.activeSelf)
         {
+            debugPlayerIndex = -1;
             CloseDebug();
         }
         else
         {
+            debugPlayerIndex = playerIndex;
             lastSelected = EventSystem.current?.currentSelectedGameObject;
             debugMenu.SetActive(true);
             EventSystem.current.SetSelectedGameObject(firstSelected);
@@ -96,38 +99,6 @@ public class DebugMenu : MonoBehaviour
     public void ToggleSceneChanges()
     {
 
-    }
-
-    public void LoadMainMenu()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-    public void LoadLobby()
-    {
-        SceneManager.LoadScene((int)Scenes.Lobby);
-    }
-
-    public void LoadMapSelect()
-    {
-        UnloadNonPauseScenes();
-
-        SceneManager.LoadScene((int)Scenes.MapSelect, LoadSceneMode.Additive);
-    }
-
-    public void LoadMap(int map)
-    {
-        StartCoroutine(LoadMapScene(mapIDs[map]));
-    }
-
-    private IEnumerator LoadMapScene(int mapID)
-    {
-        UnloadNonPauseScenes();
-
-        yield return SceneManager.LoadSceneAsync(mapID, LoadSceneMode.Additive);
-
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.Setup(storedGameSetting, mapID);
     }
 
     public void UnloadNonPauseScenes()
@@ -181,6 +152,39 @@ public class DebugMenu : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
+    #region Debug Options
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadLobby()
+    {
+        SceneManager.LoadScene((int)Scenes.Lobby);
+    }
+
+    public void LoadMapSelect()
+    {
+        UnloadNonPauseScenes();
+
+        SceneManager.LoadScene((int)Scenes.MapSelect, LoadSceneMode.Additive);
+    }
+
+    public void LoadMap(int map)
+    {
+        StartCoroutine(LoadMapScene(mapIDs[map]));
+    }
+
+    private IEnumerator LoadMapScene(int mapID)
+    {
+        UnloadNonPauseScenes();
+
+        yield return SceneManager.LoadSceneAsync(mapID, LoadSceneMode.Additive);
+
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        gameManager.Setup(storedGameSetting, mapID);
+    }
+
     public void SetClockTime(int time)
     {
         gameManager.SetClockTimeDebug(time);
@@ -191,13 +195,14 @@ public class DebugMenu : MonoBehaviour
         gameManager.EndGameDebug();
     }
 
-    public void SetStockScore(int stockScore)
+    public void ChangeStockScore(int stockScoreChange)
     {
-
+        gameManager.ChangeScoreStock(debugPlayerIndex, stockScoreChange);
     }
 
     public void ResetPlayerPositions()
     {
 
     }
+    #endregion
 }
