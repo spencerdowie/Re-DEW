@@ -458,6 +458,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P1 Banner
       objectReference: {fileID: 0}
+    - target: {fileID: 8400846866516258771, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1021011131968280063, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d, type: 3}
@@ -470,36 +475,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 238735128}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &238735130 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 884999668002355776, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
-    type: 3}
-  m_PrefabInstance: {fileID: 238735128}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &238735131 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8078016773885678782, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
-    type: 3}
-  m_PrefabInstance: {fileID: 238735128}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &238735132 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1417507622373810856, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
-    type: 3}
-  m_PrefabInstance: {fileID: 238735128}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &238735133 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7979514999227998560, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
@@ -528,7 +503,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &609669986
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1432,18 +1407,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d, type: 3}
---- !u!114 &1088415558 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 884999668002355776, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1088415557}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1088415559 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1217187548095477459, guid: 4a09ec7db73e3cf4f9995a6ae31abb9d,
@@ -1791,21 +1754,6 @@ MonoBehaviour:
   - {fileID: 645618204}
   - {fileID: 2053003322}
   - {fileID: 1088415560}
-  scorePanels:
-  - {fileID: 238735132}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playerModels:
-  - {fileID: 238735131}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  scoreText:
-  - {fileID: 238735130}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 1088415558}
   winnerText: {fileID: 1802242963}
   LobbyBtn: {fileID: 0}
 --- !u!1 &1379759049

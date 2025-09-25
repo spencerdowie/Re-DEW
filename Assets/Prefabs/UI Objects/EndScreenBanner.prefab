@@ -239,10 +239,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18942ba9ded416944b1d098c976a554c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireMat: {fileID: 2100000, guid: ae087d3df8cf45c4ca8ee49bbf1b2747, type: 2}
   scorePanel: {fileID: 1417507622373810856}
   modelHolder: {fileID: 8078016773885678782}
   nameText: {fileID: 5724143741817632400}
   scoreText: {fileID: 884999668002355776}
+  fireBackground: {fileID: 7645037602184106186}
 --- !u!114 &5724143741817632400 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1456941739453110148, guid: a2474e9e47c7dac4f9d6077df1fa3e29,
@@ -261,3 +263,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6577549781065425172}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7645037602184106186 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3553489212704190942, guid: a2474e9e47c7dac4f9d6077df1fa3e29,
+    type: 3}
+  m_PrefabInstance: {fileID: 6577549781065425172}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -185,6 +185,8 @@ public class LobbyManager : MonoBehaviour
 
         if (player.PlayerIndex == 0)
             SelectUI(player);
+        else
+            ReadyCheck();
     }
 
     private void OnPlayerLeave(Player player)

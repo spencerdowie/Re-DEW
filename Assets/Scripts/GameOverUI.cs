@@ -26,12 +26,6 @@ public class GameOverUI : MonoBehaviour
     [SerializeField]
     private EndGameBanner[] banners = new EndGameBanner[4];
     [SerializeField]
-    private Image[] scorePanels = new Image[4];
-    [SerializeField]
-    private Transform[] playerModels = new Transform[4];
-    [SerializeField]
-    private TMPro.TextMeshProUGUI[] scoreText = new TMPro.TextMeshProUGUI[4];
-    [SerializeField]
     private TMPro.TextMeshProUGUI winnerText;
     [SerializeField]
     private GameObject LobbyBtn;
@@ -72,6 +66,10 @@ public class GameOverUI : MonoBehaviour
                 if (i > 0)
                     winnersNames += " ";
                 winnersNames += "Player " + (scoreList[i].index + 1);
+            }
+            else
+            {
+                banners[scoreList[i].index].DisableFire();
             }
         }
         winnerText.text = winnersNames;
