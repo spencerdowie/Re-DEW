@@ -33,25 +33,16 @@ public class LobbyManager : MonoBehaviour
     private GameObject readyBanner;
     private bool gameReady = false;
     private int minPlayers = 2;
-    private bool isTeams = false;
+    public bool isTeams = false;
     ///<summary>true = stock | false = score</summary>
-    private bool winCon = true;
-    private int gameTime = 5, startStocks = 5, scoreLimit = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
+    public bool winCon = true;
+    public int gameTime = 5, startStocks = 5, scoreLimit = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
-    private TMPro.TextMeshProUGUI overviewStockText, overviewScoreText, overviewTimeText, gamemodeDescription;
-    [SerializeField]
-    private GameObject overviewFFA, overviewTeam, overviewStock, overviewScore;
-    [SerializeField]
-    private TMPro.TextMeshProUGUI gameTimeText, stockText, scoreText;
-    [SerializeField]
-    private Toggle winConToggle, winConAmtToggle, teamToggle;
-    [SerializeField]
-    private GameObject settingsMenu, settingsOpenBtn, settingsFirstBtn;
-    [SerializeField]
-    private float SelectDelay = 0.1f;
-    private Selectable selectedSetting = null;
+    private GameObject  settingsOpenBtn, settingsFirstBtn;
     private bool[] colourChosen;
     //private bool unsavedSettings = false;
+    [SerializeField]
+    private GameSettingsMenu gameSettingsMenu;
 
     private void Awake()
     {
@@ -95,12 +86,6 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>NextModel(2),
             (ctx)=>NextModel(3)
         };
-        //nextModelAction = new Action<InputAction.CallbackContext>[] {
-        //    (ctx)=>NextModel(0),
-        //    (ctx)=>NextModel(1),
-        //    (ctx)=>NextModel(2),
-        //    (ctx)=>NextModel(3)
-        //};
 
         colourChosen = new bool[playerData.playerColoursOptions.Length];
         for (int i = 0; i < colourChosen.Length; i++)
@@ -108,7 +93,7 @@ public class LobbyManager : MonoBehaviour
             colourChosen[i] = false;
         }
 
-        LoadGameSettings();
+        gameSettingsMenu.LoadGameSettings(this, playerData.LastGameSettings, playerData.GameModeDescription);
 
 #if UNITY_EDITOR
         minPlayers = 1;
@@ -136,10 +121,6 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
-        SetGameTime(gameTime);
-        SetStartStock(startStocks);
-        SetScoreLimit(scoreLimit);
-
         foreach (Player player in playerManager.players)
         {
             if (player != null)
@@ -332,104 +313,6 @@ public class LobbyManager : MonoBehaviour
         playerIcons[playerIndex].SetPlayerWeapon(playerData.weaponsOptions[weaponIndex].WeaponName);
     }
 
-    #region Game Settings
-    private void LoadGameSettings()
-    {
-        GameSetting lastGameSetting = playerData.LastGameSettings;
-        SetGameTime(lastGameSetting.GameTime);
-        SetWinCondition(lastGameSetting.WinConBool);
-        SetStartStock(lastGameSetting.StartStocks);
-        SetScoreLimit(lastGameSetting.ScoreLimit);
-        ToggleTeamMode(lastGameSetting.IsTeams);
-    }
-
-    private void ApplySettings()
-    {
-        //isTeams = teamToggle.isOn;
-        //overviewFFA.SetActive(!isTeams);
-        //overviewTeam.SetActive(isTeams);
-        //winCon = winConToggle.isOn;
-        //overviewStock.SetActive(winCon);
-        //overviewScore.SetActive(!winCon);
-        //startStocks = startStocks;
-        //overviewStockText.text = startStocks.ToString();
-        //scoreLimit = scoreLimit;
-        //overviewScoreText.text = scoreLimit.ToString();
-        //gameTime = gameTime;
-        //overviewTimeText.text = gameTime.ToString();
-        throw new NotImplementedException();
-    }
-
-    public void ToggleTeamMode(bool teamMode)
-    {
-        isTeams = teamMode;
-        teamToggle.isOn = teamMode;
-        overviewFFA.SetActive(!teamMode);
-        overviewTeam.SetActive(teamMode);
-    }
-
-    ///<summary>true = stock | false = score</summary>
-    public void ToggleWinCondition()
-    {
-        SetWinCondition(!winCon);
-    }
-
-    public void SetWinCondition(bool winCon)
-    {
-        this.winCon = winCon;
-        winConToggle.isOn = winCon;
-        winConAmtToggle.isOn = winCon;
-        gamemodeDescription.text = playerData.GameModeDescription[winCon ? 1 : 0];
-        overviewStock.SetActive(winCon);
-        overviewScore.SetActive(!winCon);
-    }
-
-    private void SetStartStock(int startStocks)
-    {
-        this.startStocks = startStocks;
-        stockText.text = startStocks.ToString();
-        overviewStockText.text = startStocks.ToString();
-    }
-
-    private void SetScoreLimit(int scoreLimit)
-    {
-        this.scoreLimit = scoreLimit;
-        scoreText.text = scoreLimit.ToString();
-        overviewScoreText.text = scoreLimit.ToString();
-    }
-
-    private void SetGameTime(int gameTime)
-    {
-        this.gameTime = gameTime;
-        gameTimeText.text = gameTime.ToString();
-        overviewTimeText.text = gameTime.ToString();
-    }
-
-    public void ChangeStockScore(int change)
-    {
-        if (winCon)
-        {
-            int newStock = startStocks + change;
-            if (newStock > 0 && newStock <= maxStocks)
-                SetStartStock(newStock);
-        }
-        else
-        {
-            int newScore = scoreLimit + change;
-            if (newScore > 0 && newScore <= maxScore)
-                SetScoreLimit(newScore);
-        }
-    }
-
-    public void ChangeGameTime(int change)
-    {
-        int newTime = gameTime + change;
-        if (newTime > 0 && newTime <= maxTime)
-            SetGameTime(newTime);
-
-    }
-    #endregion
-
     public void ReturnToMainMenu()
     {
         playerManager.SetJoining(false);
@@ -452,7 +335,7 @@ public class LobbyManager : MonoBehaviour
 
     public void OpenSettingsMenu(bool open = true)
     {
-        settingsMenu.SetActive(open);
+        gameSettingsMenu.gameObject.SetActive(open);
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null)
@@ -463,7 +346,7 @@ public class LobbyManager : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(settingsFirstBtn);
                 players[i].PlayerInput.actions["Join"].Disable();
                 players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
-                players[i].PlayerInput.actions["Cancel"].performed += CloseMenu;
+                players[i].PlayerInput.actions["Cancel"].performed += gameSettingsMenu.CloseMenu;
                 players[i].DisableLobbyBindings();
             }
             else
@@ -471,36 +354,9 @@ public class LobbyManager : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(settingsOpenBtn);
                 players[i].PlayerInput.actions["Join"].Enable();
                 players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
-                players[i].PlayerInput.actions["Cancel"].performed -= CloseMenu;
+                players[i].PlayerInput.actions["Cancel"].performed -= gameSettingsMenu.CloseMenu;
                 players[i].EnableLobbyBindings();
             }
         }
-    }
-
-    public void SelectSetting(Selectable selected)
-    {
-        selectedSetting = selected;
-    }
-
-    private void CloseMenu(InputAction.CallbackContext ctx)
-    {
-        if (selectedSetting)
-        {
-            selectedSetting.Select();
-            selectedSetting = null;
-        }
-        else
-            OpenSettingsMenu(false);
-    }
-
-    public void SelectNext(GameObject gameObject)
-    {
-        StartCoroutine(SelectNextDelay(gameObject));
-    }
-
-    private IEnumerator SelectNextDelay(GameObject gameObject)
-    {
-        yield return new WaitForSeconds(SelectDelay);
-        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 }

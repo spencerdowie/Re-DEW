@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//[RequireComponent(typeof(Toggle))]
+[RequireComponent(typeof(Toggle))]
 public class UIToggle : MonoBehaviour
 {
     [SerializeField]

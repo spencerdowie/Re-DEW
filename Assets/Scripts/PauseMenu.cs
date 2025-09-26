@@ -279,7 +279,11 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenOptionsMenu()
     {
-        Debug.Log(EventSystem.current.gameObject);
         FindObjectOfType<OptionsManager>(true).OpenOptions(resumeBtn, pausePlayer);
+    }
+
+    public void CloseOptionsMenu()
+    {
+        FindObjectOfType<OptionsManager>(true).CloseOptionsMenu();
     }
 }

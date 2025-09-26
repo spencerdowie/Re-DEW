@@ -54,7 +54,7 @@ public class OptionsManager : MonoBehaviour
         LoadOptionValues();
 
         this.controllingPlayer = controllingPlayer;
-        this.controllingPlayer.PlayerInput.actions["Cancel"].performed += CloseMenu;
+        this.controllingPlayer.PlayerInput.actions["Cancel"].performed += CloseMenuCallback;
     }
 
     public void SelectSetting(Selectable selected)
@@ -62,7 +62,7 @@ public class OptionsManager : MonoBehaviour
         selectedSetting = selected;
     }
 
-    private void CloseMenu(InputAction.CallbackContext ctx)
+    private void CloseMenuCallback(InputAction.CallbackContext ctx)
     {
         if (selectedSetting != null)
         {
@@ -71,11 +71,17 @@ public class OptionsManager : MonoBehaviour
         }
         else
         {
-            //Close Options Menu
-            controllingPlayer.PlayerInput.actions["Cancel"].performed -= CloseMenu;
-            EventSystem.current.SetSelectedGameObject(returnSelection);
-            gameObject.SetActive(false);
+            CloseOptionsMenu();
         }
+    }
+
+    public void CloseOptionsMenu()
+    {
+        //Close Options Menu
+        controllingPlayer.PlayerInput.actions["Cancel"].performed -= CloseMenuCallback;
+        EventSystem.current.SetSelectedGameObject(returnSelection);
+        gameObject.SetActive(false);
+
     }
 
     public void SetBloom(bool bloomEnabled)
