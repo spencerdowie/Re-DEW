@@ -8,6 +8,8 @@ public class GameSettingsMenu : MonoBehaviour
 {
     private LobbyManager lobbyManager;
     [SerializeField]
+    private Selectable firstSelected = null;
+    [SerializeField]
     private float SelectDelay = 0.1f;
     [SerializeField]
     private TMPro.TextMeshProUGUI overviewStockText, overviewScoreText, overviewTimeText, gamemodeDescription;
@@ -31,6 +33,12 @@ public class GameSettingsMenu : MonoBehaviour
         SetStartStock(lastGameSetting.StartStocks);
         SetScoreLimit(lastGameSetting.ScoreLimit);
         ToggleTeamMode(lastGameSetting.IsTeams);
+    }
+
+    public void OpenGameSettings()
+    {
+        gameObject.SetActive(true);
+        firstSelected.Select();
     }
 
     public void ToggleTeamMode(bool teamMode)
@@ -128,7 +136,7 @@ public class GameSettingsMenu : MonoBehaviour
             selectedSetting = null;
         }
         else
-            lobbyManager.OpenSettingsMenu(false);
+            lobbyManager.CloseSettingsMenu();
     }
 
 }

@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class PauseMenu : MonoBehaviour
     private Vector2Int lerp = Vector2Int.right;
     private UnityEvent PauseGame = new UnityEvent(), ResumeGame = new UnityEvent();
     [SerializeField]
-    private GameObject resumeBtn;
+    private Selectable resumeBtn;
     private InputAction[] pauseActions = new InputAction[4];
     [SerializeField]
     private GameObject xboxControls, psControls;
@@ -53,8 +54,6 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
-
-    public GameObject ResumeBtn { get => resumeBtn; }
 
     private void Awake()
     {
@@ -173,7 +172,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
 
         prevSelected = eventSystem.currentSelectedGameObject;
-        eventSystem.SetSelectedGameObject(resumeBtn);
+        resumeBtn.Select();
 
         lerp = Vector2Int.up;
         if (timer > 0)
@@ -250,6 +249,7 @@ public class PauseMenu : MonoBehaviour
         if (lerp.y == 1)
         {
             Resume();
+            FindObjectOfType<OptionsManager>(true).CloseOptionsMenu();
         }
         else
         {
@@ -279,11 +279,6 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenOptionsMenu()
     {
-        FindObjectOfType<OptionsManager>(true).OpenOptions(resumeBtn, pausePlayer);
-    }
-
-    public void CloseOptionsMenu()
-    {
-        FindObjectOfType<OptionsManager>(true).CloseOptionsMenu();
+        FindObjectOfType<OptionsManager>(true).OpenOptionsMenu(pausePlayer);
     }
 }

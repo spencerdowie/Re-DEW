@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -12,7 +13,7 @@ using UnityEngine.UI;
 public class OptionsManager : MonoBehaviour
 {
     [SerializeField]
-    private Selectable firstSelected = null;
+    private Selectable firstSelected = null, returnSelection = null;
     [SerializeField]
     private TMPro.TextMeshProUGUI masterValue, BGMValue, SFXValue;
     [SerializeField]
@@ -31,8 +32,9 @@ public class OptionsManager : MonoBehaviour
     [SerializeField]
     private VolumeProfile volume;
 
-    private GameObject returnSelection;
     private Player controllingPlayer;
+
+    private UnityEvent onOptionClose = new UnityEvent();
 
     private void LoadOptionValues()
     {
@@ -46,15 +48,17 @@ public class OptionsManager : MonoBehaviour
         SetBloom(bloomValue);
     }
 
-    public void OpenOptions(GameObject returnSelection, Player controllingPlayer)
+    public void OpenOptionsMenu(Player controllingPlayer, UnityAction optionCloseCallback = null)
     {
-        this.returnSelection = returnSelection;
         gameObject.SetActive(true);
         firstSelected.Select();
         LoadOptionValues();
 
         this.controllingPlayer = controllingPlayer;
         this.controllingPlayer.PlayerInput.actions["Cancel"].performed += CloseMenuCallback;
+
+        if (optionCloseCallback != null)
+            onOptionClose.AddListener(optionCloseCallback);
     }
 
     public void SelectSetting(Selectable selected)
@@ -77,11 +81,11 @@ public class OptionsManager : MonoBehaviour
 
     public void CloseOptionsMenu()
     {
-        //Close Options Menu
         controllingPlayer.PlayerInput.actions["Cancel"].performed -= CloseMenuCallback;
-        EventSystem.current.SetSelectedGameObject(returnSelection);
+        returnSelection.Select();
+        onOptionClose?.Invoke();
         gameObject.SetActive(false);
-
+        onOptionClose.RemoveAllListeners();
     }
 
     public void SetBloom(bool bloomEnabled)
@@ -113,7 +117,6 @@ public class OptionsManager : MonoBehaviour
         SFXValue.text = (newVolume * 5).ToString();
         SFXVolume = (int)newVolume;
     }
-
 
     public void SelectNext(GameObject gameObject)
     {

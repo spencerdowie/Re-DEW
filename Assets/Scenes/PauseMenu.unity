@@ -744,6 +744,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -180
       objectReference: {fileID: 0}
+    - target: {fileID: 6158449221442653984, guid: 413356c719b17c6448a1c331ee5c7e9b,
+        type: 3}
+      propertyPath: returnSelection
+      value: 
+      objectReference: {fileID: 1670528644}
     - target: {fileID: 7076349747647288956, guid: 413356c719b17c6448a1c331ee5c7e9b,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1253,19 +1258,13 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1261507735}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1261507737 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8774994385525083614, guid: e8e0be64b2f07a248a74c802a06bbe12,
-    type: 3}
-  m_PrefabInstance: {fileID: 1261507735}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1261507738 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8045255926052224950, guid: e8e0be64b2f07a248a74c802a06bbe12,
     type: 3}
   m_PrefabInstance: {fileID: 1261507735}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1261507737}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -1391,7 +1390,7 @@ MonoBehaviour:
   eventSystem: {fileID: 0}
   animTimeMax: 0
   isPaused: 0
-  resumeBtn: {fileID: 1261507737}
+  resumeBtn: {fileID: 1261507738}
   xboxControls: {fileID: 7719004366773038801}
   psControls: {fileID: 1511537697}
   playerNameText: {fileID: 207682581}

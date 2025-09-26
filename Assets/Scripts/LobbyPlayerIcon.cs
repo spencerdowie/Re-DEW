@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using LobbyStatus = LobbyManager.LobbyStatus;
 
-public class LobbyPlayerIcon : MonoBehaviour
+public class LobbyPlayerIcon : Selectable
 {
     [SerializeField]
     private Material bannerMat;
@@ -21,8 +21,9 @@ public class LobbyPlayerIcon : MonoBehaviour
     [SerializeField]
     private GameObject xboxIcons, psIcons;
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         banner.material = Instantiate(bannerMat);
         SetPlayerStatus(LobbyStatus.NoPlayer);
     }

@@ -91,7 +91,6 @@ public class GameManager : MonoBehaviour
             if (player != null)
             {
                 pauseMenu.AddPlayerInput(player.PlayerInput);
-                player.EventSystem.firstSelectedGameObject = pauseMenu.ResumeBtn;
                 pauseMenu.AddPauseListeners(playerControlller.Pause, playerControlller.Resume);
             }
         }

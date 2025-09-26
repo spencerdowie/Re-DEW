@@ -751,6 +751,26 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4605068234669954170, guid: 54f3f9bb87bd18a4197e73ddfe98945c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4605068234669954170, guid: 54f3f9bb87bd18a4197e73ddfe98945c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 6158449221442653984}
+    - target: {fileID: 4605068234669954170, guid: 54f3f9bb87bd18a4197e73ddfe98945c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: CloseOptionsMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 4605068234669954170, guid: 54f3f9bb87bd18a4197e73ddfe98945c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: OptionsManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4740300459988764076, guid: 54f3f9bb87bd18a4197e73ddfe98945c,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1117,7 +1137,10 @@ MonoBehaviour:
   BGMSlider: {fileID: 4877823717276340928}
   SFXSlider: {fileID: 6991688897690612947}
   SelectDelay: 0.1
-  startVolume: 16
+  masterVolume: 16
+  BGMVolume: 16
+  SFXVolume: 16
+  bloomValue: 1
   BGMMixer: {fileID: 24100000, guid: e1e49255de75aff42baaec538889ff50, type: 2}
   SFXMixer: {fileID: 24100000, guid: 7499864b527025a4fb1f22b8d63a9960, type: 2}
   volume: {fileID: 11400000, guid: 73a9add35a5132c4496aceaf7de8f912, type: 2}

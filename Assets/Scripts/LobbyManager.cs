@@ -38,7 +38,7 @@ public class LobbyManager : MonoBehaviour
     public bool winCon = true;
     public int gameTime = 5, startStocks = 5, scoreLimit = 10, maxStocks = 20, maxScore = 40, maxTime = 15;
     [SerializeField]
-    private GameObject  settingsOpenBtn, settingsFirstBtn;
+    private Selectable gameSettingsBtn, optionsBtn;
     private bool[] colourChosen;
     //private bool unsavedSettings = false;
     [SerializeField]
@@ -130,17 +130,10 @@ public class LobbyManager : MonoBehaviour
 
     private void SelectUI(Player player)
     {
-
         if (!player.EventSystem.alreadySelecting)
         {
             player.EventSystem.SetSelectedGameObject(playerIcons[0].gameObject);
         }
-    }
-
-    private void DeselectUI()
-    {
-        if (EventSystem.current.alreadySelecting)
-            EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void OnPlayerJoin(Player player)
@@ -173,11 +166,6 @@ public class LobbyManager : MonoBehaviour
     private void OnPlayerLeave(Player player)
     {
         RemovePlayer(player.PlayerIndex);
-
-        if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
-        {
-            DeselectUI();
-        }
     }
 
     private void OnReady(int playerIndex)
@@ -213,6 +201,11 @@ public class LobbyManager : MonoBehaviour
     public void RemovePlayer(int playerIndex)
     {
         playerStatuses[playerIndex] = LobbyStatus.NoPlayer;
+        if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
         playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
         players[playerIndex].RemoveLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
     }
@@ -333,30 +326,64 @@ public class LobbyManager : MonoBehaviour
         SceneManager.UnloadSceneAsync((int)Scenes.Lobby);
     }
 
-    public void OpenSettingsMenu(bool open = true)
+    public void OpenSettingsMenu()
     {
-        gameSettingsMenu.gameObject.SetActive(open);
+        gameSettingsMenu.OpenGameSettings();
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null)
                 continue;
 
-            if (open)
-            {
-                EventSystem.current.SetSelectedGameObject(settingsFirstBtn);
-                players[i].PlayerInput.actions["Join"].Disable();
-                players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
-                players[i].PlayerInput.actions["Cancel"].performed += gameSettingsMenu.CloseMenu;
-                players[i].DisableLobbyBindings();
-            }
-            else
-            {
-                EventSystem.current.SetSelectedGameObject(settingsOpenBtn);
-                players[i].PlayerInput.actions["Join"].Enable();
-                players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
-                players[i].PlayerInput.actions["Cancel"].performed -= gameSettingsMenu.CloseMenu;
-                players[i].EnableLobbyBindings();
-            }
+            players[i].PlayerInput.actions["Join"].Disable();
+            players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
+            players[i].PlayerInput.actions["Cancel"].performed += gameSettingsMenu.CloseMenu;
+            players[i].DisableLobbyBindings();
+
         }
+    }
+
+    public void CloseSettingsMenu()
+    {
+        gameSettingsMenu.gameObject.SetActive(false);
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] == null)
+                continue;
+
+            players[i].PlayerInput.actions["Join"].Enable();
+            players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
+            players[i].PlayerInput.actions["Cancel"].performed -= gameSettingsMenu.CloseMenu;
+            players[i].EnableLobbyBindings();
+        }
+        gameSettingsBtn.Select();
+    }
+
+    public void OpenOptionsMenu()
+    {
+        FindObjectOfType<OptionsManager>(true).OpenOptionsMenu(players.First(p => p != null), CloseOptionsMenu);
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] == null)
+                continue;
+
+            players[i].PlayerInput.actions["Join"].Disable();
+            players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
+            players[i].DisableLobbyBindings();
+
+        }
+    }
+
+    public void CloseOptionsMenu()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] == null)
+                continue;
+
+            players[i].PlayerInput.actions["Join"].Enable();
+            players[i].PlayerInput.actions["Cancel"].performed += unreadyActions[i];
+            players[i].EnableLobbyBindings();
+        }
+        optionsBtn.Select();
     }
 }
