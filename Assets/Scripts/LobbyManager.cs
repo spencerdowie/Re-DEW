@@ -62,30 +62,6 @@ public class LobbyManager : MonoBehaviour
             (ctx)=>OnUnReady(2),
             (ctx)=>OnUnReady(3)
         };
-        rightBumpActions = new Action<InputAction.CallbackContext>[] {
-            (ctx)=>NextColour(0),
-            (ctx)=>NextColour(1),
-            (ctx)=>NextColour(2),
-            (ctx)=>NextColour(3)
-        };
-        leftBumpActions = new Action<InputAction.CallbackContext>[] {
-            (ctx)=>PrevColour(0),
-            (ctx)=>PrevColour(1),
-            (ctx)=>PrevColour(2),
-            (ctx)=>PrevColour(3)
-        };
-        nextColourAction = new Action<InputAction.CallbackContext>[] {
-            (ctx)=>NextColour(0),
-            (ctx)=>NextColour(1),
-            (ctx)=>NextColour(2),
-            (ctx)=>NextColour(3)
-        };
-        nextModelAction = new Action<InputAction.CallbackContext>[] {
-            (ctx)=>NextModel(0),
-            (ctx)=>NextModel(1),
-            (ctx)=>NextModel(2),
-            (ctx)=>NextModel(3)
-        };
 
         colourChosen = new bool[playerData.playerColoursOptions.Length];
         for (int i = 0; i < colourChosen.Length; i++)
@@ -141,7 +117,7 @@ public class LobbyManager : MonoBehaviour
         players[player.PlayerIndex] = player;
         playerStatuses[player.PlayerIndex] = LobbyStatus.Joined;
 
-        SetPlayerColour(player.PlayerIndex, player.PlayerColourIndex);
+        ChangePlayerColour(player.PlayerIndex, 0);
 
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetControllerType(player.ControllerType);
@@ -151,10 +127,6 @@ public class LobbyManager : MonoBehaviour
 
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
-        //player.PlayerInput.actions["RightBumper"].performed += rightBumpActions[player.PlayerIndex];
-        //player.PlayerInput.actions["LeftBumper"].performed += leftBumpActions[player.PlayerIndex];
-        //player.PlayerInput.actions["FaceNorth"].performed += nextColourAction[player.PlayerIndex];
-        //player.PlayerInput.actions["FaceWest"].performed += nextModelAction[player.PlayerIndex];
         player.AddLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
 
         if (player.PlayerIndex == 0)
@@ -225,16 +197,6 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    public void NextColour(int playerIndex)
-    {
-        ChangePlayerColour(playerIndex, 1);
-    }
-
-    public void PrevColour(int playerIndex)
-    {
-        ChangePlayerColour(playerIndex, -1);
-    }
-
     public void ChangePlayerColour(int playerIndex, int direction)
     {
         Player player = players[playerIndex];
@@ -261,29 +223,11 @@ public class LobbyManager : MonoBehaviour
                 % playerData.playerColoursOptions.Length;
         }
 
-        SetPlayerColour(playerIndex, colourIndex);
-    }
-
-    public void SetPlayerColour(int playerIndex, int colourIndex)
-    {
-        if (colourIndex < 0 || colourIndex >= playerData.playerColoursOptions.Length)
-            return;
-
-        Player player = players[playerIndex];
-
         colourChosen[colourIndex] = true;
+
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
-    }
-
-    public void NextModel(int playerIndex)
-    {
-        ChangePlayerModel(playerIndex, 1);
-    }
-
-    public void PrevModel(int playerIndex)
-    {
-        ChangePlayerModel(playerIndex, -1);
+        playerIcons[playerIndex].HighlightControl(0, direction);
     }
 
     public void ChangePlayerModel(int playerIndex, int direction)
@@ -294,6 +238,7 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerModel(modelIndex);
         playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+        playerIcons[playerIndex].HighlightControl(1, direction);
     }
 
     public void ChangePlayerWeapon(int playerIndex, int direction)
@@ -304,6 +249,7 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerWeapon(weaponIndex);
         playerIcons[playerIndex].SetPlayerWeapon(playerData.weaponsOptions[weaponIndex].WeaponName);
+        playerIcons[playerIndex].HighlightControl(2, direction);
     }
 
     public void ReturnToMainMenu()

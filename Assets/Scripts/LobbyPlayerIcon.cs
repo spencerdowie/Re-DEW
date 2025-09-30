@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,13 +20,23 @@ public class LobbyPlayerIcon : Selectable
     [SerializeField]
     private TMPro.TextMeshProUGUI weaponNameText;
     [SerializeField]
-    private GameObject xboxIcons, psIcons;
+    private GameObject xboxIcons, psIcons, highlights;
+    [SerializeField]
+    private float HighlightTime = 0.1f;
+    private Image[] controlIcons = new Image[6];
 
     private new void Awake()
     {
         base.Awake();
         banner.material = Instantiate(bannerMat);
         SetPlayerStatus(LobbyStatus.NoPlayer);
+        controlIcons = highlights.GetComponentsInChildren<Image>();
+
+        //If Images have no alpha they don't work, so need to remove it after load
+        foreach (Image control in controlIcons)
+        {
+            control.CrossFadeAlpha(0, 0, true);
+        }
     }
 
     public void SetControllerType(ControllerType controllerType)
@@ -84,5 +95,18 @@ public class LobbyPlayerIcon : Selectable
     public void SetPlayerWeapon(string weaponName)
     {
         weaponNameText.text = weaponName;
+    }
+
+    public void HighlightControl(int control, int direction)
+    {
+        int controlIndex = (control * 2) + Math.Max(direction, 0);
+        StartCoroutine(HighlightControlDelay(controlIcons[controlIndex]));
+    }
+
+    private IEnumerator HighlightControlDelay(Image control)
+    {
+        control.CrossFadeAlpha(1, 0, true);
+        yield return new WaitForSeconds(HighlightTime);
+        control.CrossFadeAlpha(0, 0, true);
     }
 }

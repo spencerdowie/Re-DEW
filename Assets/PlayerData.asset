@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerProfiles: []
   playerColoursOptions:
-  - {r: 2.2706032, g: 0.00000018721823, b: 0, a: 1}
+  - {r: 1.4980394, g: 0.00000012351796, b: 0, a: 1}
   - {r: 2.270603, g: 0, b: 2.0390904, a: 1}
-  - {r: 0, g: 0.6811017, b: 1.6643163, a: 1}
+  - {r: 0, g: 1.6643163, b: 1.4908384, a: 1}
   - {r: 1.7713081, g: 1.6762043, b: 0, a: 1}
-  - {r: 0, g: 2.2349389, b: 0, a: 1}
+  - {r: 0, g: 1.4980392, b: 0, a: 1}
   playerCharacterPrefab: {fileID: 4183734965851439249, guid: a1666c04e776a754cad6b4fc5d98019a,
     type: 3}
   characterPrefabs:
