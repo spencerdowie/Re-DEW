@@ -199,6 +199,17 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    public void ChangePlayerModel(int playerIndex, int direction)
+    {
+        Player player = players[playerIndex];
+        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
+            % playerData.characterPrefabs.Length;
+
+        player.SetPlayerModel(modelIndex);
+        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+        playerIcons[playerIndex].HighlightControl(0, direction);
+    }
+
     public void ChangePlayerColour(int playerIndex, int direction)
     {
         Player player = players[playerIndex];
@@ -229,17 +240,6 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
-        playerIcons[playerIndex].HighlightControl(0, direction);
-    }
-
-    public void ChangePlayerModel(int playerIndex, int direction)
-    {
-        Player player = players[playerIndex];
-        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
-            % playerData.characterPrefabs.Length;
-
-        player.SetPlayerModel(modelIndex);
-        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
         playerIcons[playerIndex].HighlightControl(1, direction);
     }
 
