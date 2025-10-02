@@ -43,6 +43,7 @@ public class LobbyManager : MonoBehaviour
     //private bool unsavedSettings = false;
     [SerializeField]
     private GameSettingsMenu gameSettingsMenu;
+    InputAction returnToMainMenuAction = new InputAction(binding: "<Gamepad>/buttonEast");
 
     private void Awake()
     {
@@ -71,6 +72,9 @@ public class LobbyManager : MonoBehaviour
 
         gameSettingsMenu.LoadGameSettings(this, playerData.LastGameSettings, playerData.GameModeDescription);
 
+        returnToMainMenuAction.performed += ReturnToMainMenu;
+        returnToMainMenuAction.Enable();
+
 #if UNITY_EDITOR
         minPlayers = 1;
 #endif
@@ -87,12 +91,9 @@ public class LobbyManager : MonoBehaviour
 
             players[i].PlayerInput.actions["Join"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
-            //players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
-            //players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
-            //players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
-            //players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
             players[i].RemoveLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
         }
+        returnToMainMenuAction.performed -= ReturnToMainMenu;
     }
 
     private void Start()
@@ -133,6 +134,8 @@ public class LobbyManager : MonoBehaviour
             SelectUI(player);
         else
             ReadyCheck();
+
+        returnToMainMenuAction.performed -= ReturnToMainMenu;
     }
 
     private void OnPlayerLeave(Player player)
@@ -178,6 +181,7 @@ public class LobbyManager : MonoBehaviour
         if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
         {
             EventSystem.current.SetSelectedGameObject(null);
+            returnToMainMenuAction.performed += ReturnToMainMenu;
         }
 
         playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
@@ -254,7 +258,7 @@ public class LobbyManager : MonoBehaviour
         playerIcons[playerIndex].HighlightControl(2, direction);
     }
 
-    public void ReturnToMainMenu()
+    public void ReturnToMainMenu(InputAction.CallbackContext ctx = new InputAction.CallbackContext())
     {
         playerManager.SetJoining(false);
         SceneManager.LoadScene(0);
