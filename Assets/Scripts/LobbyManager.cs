@@ -151,6 +151,7 @@ public class LobbyManager : MonoBehaviour
         {
             playerStatuses[playerIndex] = LobbyStatus.Ready;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Ready);
+            players[playerIndex].DisableLobbyBindings();
             ReadyCheck();
         }
     }
@@ -161,6 +162,7 @@ public class LobbyManager : MonoBehaviour
         {
             playerStatuses[playerIndex] = LobbyStatus.Joined;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            players[playerIndex].DisableLobbyBindings();
             ReadyCheck();
         }
         else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
