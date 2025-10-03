@@ -47,13 +47,13 @@ MonoBehaviour:
   isTeams: 0
   <Maps>k__BackingField:
   - sceneID: 6
-    sprite: {fileID: 21300000, guid: a8ede489771e0674d88e40c1636cfd1a, type: 3}
+    sprite: {fileID: 21300000, guid: 19483d5f9fd72b54bbd5ec3c94685fbf, type: 3}
     MapName: Lab Archive
     MapDescription: "Old experiments sit behind glass cases, forgotten (or underfunded).
       There\u2019s got to be something useful here to nab right? Looks like you\u2019re
       not the only ones who think so\u2026"
   - sceneID: 7
-    sprite: {fileID: 21300000, guid: 13244ca41a0c6d44eb1d455b2c07c5e3, type: 3}
+    sprite: {fileID: 21300000, guid: badd3655e38317940b0e38d464ace4a9, type: 3}
     MapName: Observation Deck
     MapDescription: "Built to be gala hall on top it all, it\u2019s since been turned
       into storage. Still, it\u2019s a great vantage point on key buildings in the

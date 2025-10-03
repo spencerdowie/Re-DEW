@@ -957,16 +957,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 310903524371706933, guid: 78b2ed9a484fc914899fa0ff2f418806,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 2287437149862427295, guid: 78b2ed9a484fc914899fa0ff2f418806,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 3117980554696742999, guid: 78b2ed9a484fc914899fa0ff2f418806,
         type: 3}
       propertyPath: m_RootOrder
@@ -1022,25 +1012,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6526941804165873360, guid: 78b2ed9a484fc914899fa0ff2f418806,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7379284943518179931, guid: 78b2ed9a484fc914899fa0ff2f418806,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 8317449298317992509, guid: 78b2ed9a484fc914899fa0ff2f418806,
         type: 3}
       propertyPath: m_Name
       value: Street
-      objectReference: {fileID: 0}
-    - target: {fileID: 8317449298317992509, guid: 78b2ed9a484fc914899fa0ff2f418806,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

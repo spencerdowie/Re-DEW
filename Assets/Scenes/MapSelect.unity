@@ -332,6 +332,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObsButton
       objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 167
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7266911135198485102, guid: e67568fb48f06e849a02e8edde3c4003,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -341,7 +371,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 13244ca41a0c6d44eb1d455b2c07c5e3,
+      objectReference: {fileID: 21300000, guid: badd3655e38317940b0e38d464ace4a9,
         type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -426,6 +456,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Observation Deck
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 30.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_margin.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_margin.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2663519179956281903, guid: 5a41246b25f5cd9459699cbff603daa6,
         type: 3}
@@ -1466,6 +1516,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: LabButton
       objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 310
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.428
+      objectReference: {fileID: 0}
+    - target: {fileID: 5568042554412592610, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 77.8997
+      objectReference: {fileID: 0}
     - target: {fileID: 7266911135198485102, guid: e67568fb48f06e849a02e8edde3c4003,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1473,10 +1548,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7645632186364573483, guid: e67568fb48f06e849a02e8edde3c4003,
         type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7645632186364573483, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: a8ede489771e0674d88e40c1636cfd1a,
+      objectReference: {fileID: 21300000, guid: 19483d5f9fd72b54bbd5ec3c94685fbf,
         type: 3}
+    - target: {fileID: 7645632186364573483, guid: e67568fb48f06e849a02e8edde3c4003,
+        type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1571,6 +1656,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Lab Archive
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 42.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 884255073276404779, guid: 5a41246b25f5cd9459699cbff603daa6,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2663519179956281903, guid: 5a41246b25f5cd9459699cbff603daa6,
         type: 3}
