@@ -132,7 +132,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "LobbyColour",
+                    "name": "LobbyModel",
                     "type": "Value",
                     "id": "e3b6b496-47d0-4935-8744-108d3f50f725",
                     "expectedControlType": "Axis",
@@ -141,7 +141,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "LobbyModel",
+                    "name": "LobbyColour",
                     "type": "Value",
                     "id": "97136432-8e96-489b-8fa2-4e0dfd69987d",
                     "expectedControlType": "Axis",
@@ -365,7 +365,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LobbyColour",
+                    "action": "LobbyModel",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -376,7 +376,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Xbox;Gamepad",
-                    "action": "LobbyColour",
+                    "action": "LobbyModel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -387,7 +387,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Xbox;Gamepad",
-                    "action": "LobbyColour",
+                    "action": "LobbyModel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -398,7 +398,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LobbyModel",
+                    "action": "LobbyColour",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -409,7 +409,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Xbox;Gamepad",
-                    "action": "LobbyModel",
+                    "action": "LobbyColour",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -420,7 +420,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Xbox;Gamepad",
-                    "action": "LobbyModel",
+                    "action": "LobbyColour",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

@@ -43,6 +43,7 @@ public class LobbyManager : MonoBehaviour
     //private bool unsavedSettings = false;
     [SerializeField]
     private GameSettingsMenu gameSettingsMenu;
+    InputAction returnToMainMenuAction = new InputAction(binding: "<Gamepad>/buttonEast");
 
     private void Awake()
     {
@@ -71,6 +72,9 @@ public class LobbyManager : MonoBehaviour
 
         gameSettingsMenu.LoadGameSettings(this, playerData.LastGameSettings, playerData.GameModeDescription);
 
+        returnToMainMenuAction.performed += ReturnToMainMenu;
+        returnToMainMenuAction.Enable();
+
 #if UNITY_EDITOR
         minPlayers = 1;
 #endif
@@ -87,12 +91,9 @@ public class LobbyManager : MonoBehaviour
 
             players[i].PlayerInput.actions["Join"].performed -= readyActions[i];
             players[i].PlayerInput.actions["Cancel"].performed -= unreadyActions[i];
-            //players[i].PlayerInput.actions["RightBumper"].performed -= rightBumpActions[i];
-            //players[i].PlayerInput.actions["LeftBumper"].performed -= leftBumpActions[i];
-            //players[i].PlayerInput.actions["FaceNorth"].performed -= nextColourAction[i];
-            //players[i].PlayerInput.actions["FaceWest"].performed -= nextModelAction[i];
             players[i].RemoveLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
         }
+        returnToMainMenuAction.performed -= ReturnToMainMenu;
     }
 
     private void Start()
@@ -133,6 +134,8 @@ public class LobbyManager : MonoBehaviour
             SelectUI(player);
         else
             ReadyCheck();
+
+        returnToMainMenuAction.performed -= ReturnToMainMenu;
     }
 
     private void OnPlayerLeave(Player player)
@@ -151,6 +154,7 @@ public class LobbyManager : MonoBehaviour
         {
             playerStatuses[playerIndex] = LobbyStatus.Ready;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Ready);
+            players[playerIndex].DisableLobbyBindings();
             ReadyCheck();
         }
     }
@@ -161,6 +165,7 @@ public class LobbyManager : MonoBehaviour
         {
             playerStatuses[playerIndex] = LobbyStatus.Joined;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
+            players[playerIndex].DisableLobbyBindings();
             ReadyCheck();
         }
         else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
@@ -176,6 +181,7 @@ public class LobbyManager : MonoBehaviour
         if (playerStatuses.Count(s => s > LobbyStatus.NoPlayer) == 0)
         {
             EventSystem.current.SetSelectedGameObject(null);
+            returnToMainMenuAction.performed += ReturnToMainMenu;
         }
 
         playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.NoPlayer);
@@ -195,6 +201,17 @@ public class LobbyManager : MonoBehaviour
             readyBanner.SetActive(false);
             gameReady = false;
         }
+    }
+
+    public void ChangePlayerModel(int playerIndex, int direction)
+    {
+        Player player = players[playerIndex];
+        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
+            % playerData.characterPrefabs.Length;
+
+        player.SetPlayerModel(modelIndex);
+        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+        playerIcons[playerIndex].HighlightControl(0, direction);
     }
 
     public void ChangePlayerColour(int playerIndex, int direction)
@@ -227,17 +244,6 @@ public class LobbyManager : MonoBehaviour
 
         player.SetPlayerColour(colourIndex);
         playerIcons[playerIndex].SetPlayerColour(player.PlayerColour);
-        playerIcons[playerIndex].HighlightControl(0, direction);
-    }
-
-    public void ChangePlayerModel(int playerIndex, int direction)
-    {
-        Player player = players[playerIndex];
-        int modelIndex = (player.PlayerModelIndex + playerData.characterPrefabs.Length + direction)
-            % playerData.characterPrefabs.Length;
-
-        player.SetPlayerModel(modelIndex);
-        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
         playerIcons[playerIndex].HighlightControl(1, direction);
     }
 
@@ -252,7 +258,7 @@ public class LobbyManager : MonoBehaviour
         playerIcons[playerIndex].HighlightControl(2, direction);
     }
 
-    public void ReturnToMainMenu()
+    public void ReturnToMainMenu(InputAction.CallbackContext ctx = new InputAction.CallbackContext())
     {
         playerManager.SetJoining(false);
         SceneManager.LoadScene(0);

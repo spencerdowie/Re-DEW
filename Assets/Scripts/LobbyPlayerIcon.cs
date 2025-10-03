@@ -20,7 +20,7 @@ public class LobbyPlayerIcon : Selectable
     [SerializeField]
     private TMPro.TextMeshProUGUI weaponNameText;
     [SerializeField]
-    private GameObject xboxIcons, psIcons, highlights;
+    private GameObject xboxIcons, psIcons, xboxHighlights, psHighlights;
     [SerializeField]
     private float HighlightTime = 0.1f;
     private Image[] controlIcons = new Image[6];
@@ -30,10 +30,16 @@ public class LobbyPlayerIcon : Selectable
         base.Awake();
         banner.material = Instantiate(bannerMat);
         SetPlayerStatus(LobbyStatus.NoPlayer);
-        controlIcons = highlights.GetComponentsInChildren<Image>();
 
+        xboxHighlights.SetActive(true);
+        psHighlights.SetActive(true);
+        controlIcons = xboxHighlights.GetComponentsInChildren<Image>();
         //If Images have no alpha they don't work, so need to remove it after load
-        foreach (Image control in controlIcons)
+        foreach (Image control in xboxHighlights.GetComponentsInChildren<Image>())
+        {
+            control.CrossFadeAlpha(0, 0, true);
+        }
+        foreach (Image control in psHighlights.GetComponentsInChildren<Image>())
         {
             control.CrossFadeAlpha(0, 0, true);
         }
@@ -45,11 +51,13 @@ public class LobbyPlayerIcon : Selectable
         {
             xboxIcons.SetActive(true);
             psIcons.SetActive(false);
+            controlIcons = xboxHighlights.GetComponentsInChildren<Image>();
         }
         else
         {
             xboxIcons.SetActive(false);
             psIcons.SetActive(true);
+            controlIcons = psHighlights.GetComponentsInChildren<Image>();
         }
     }
 
