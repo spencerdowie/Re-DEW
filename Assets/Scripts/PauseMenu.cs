@@ -249,7 +249,8 @@ public class PauseMenu : MonoBehaviour
         if (lerp.y == 1)
         {
             Resume();
-            FindObjectOfType<OptionsManager>(true).CloseOptionsMenu();
+            //if the option menu was already closed don't close again
+            GetComponentInChildren<OptionsManager>()?.CloseOptionsMenu();
         }
         else
         {

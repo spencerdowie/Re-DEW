@@ -13,6 +13,8 @@ using UnityEngine.UI;
 public class OptionsManager : MonoBehaviour
 {
     [SerializeField]
+    private PlayerDataSO playerData;
+    [SerializeField]
     private Selectable firstSelected = null, returnSelection = null;
     [SerializeField]
     private TMPro.TextMeshProUGUI masterValue, BGMValue, SFXValue;
@@ -24,9 +26,7 @@ public class OptionsManager : MonoBehaviour
     [SerializeField]
     private float SelectDelay = 0.1f;
     [SerializeField]
-    private int masterVolume = 16, BGMVolume = 16, SFXVolume = 16;
-    [SerializeField]
-    private bool bloomValue = true;
+    Settings settings = new Settings(16, 16, 16, true);
     [SerializeField]
     private AudioMixer BGMMixer, SFXMixer;
     [SerializeField]
@@ -38,14 +38,15 @@ public class OptionsManager : MonoBehaviour
 
     private void LoadOptionValues()
     {
-        masterSlider.SetValueWithoutNotify(masterVolume);
-        SetMasterVolume(masterVolume);
-        BGMSlider.SetValueWithoutNotify(BGMVolume);
-        SetBGMVolume(BGMVolume);
-        SFXSlider.SetValueWithoutNotify(SFXVolume);
-        SetSFXVolume(SFXVolume);
-        bloomToggle.SetIsOnWithoutNotify(bloomValue);
-        SetBloom(bloomValue);
+        settings = playerData.settings;
+        masterSlider.SetValueWithoutNotify(settings.MasterVolume);
+        SetMasterVolume(settings.MasterVolume);
+        BGMSlider.SetValueWithoutNotify(settings.BGMVolume);
+        SetBGMVolume(settings.BGMVolume);
+        SFXSlider.SetValueWithoutNotify(settings.SFXVolume);
+        SetSFXVolume(settings.SFXVolume);
+        bloomToggle.SetIsOnWithoutNotify(settings.BloomValue);
+        SetBloom(settings.BloomValue);
     }
 
     public void OpenOptionsMenu(Player controllingPlayer, UnityAction optionCloseCallback = null)
@@ -81,6 +82,8 @@ public class OptionsManager : MonoBehaviour
 
     public void CloseOptionsMenu()
     {
+        playerData.settings = settings;
+        PlayerPrefs.SetString("Settings", settings.ToJSON());
         controllingPlayer.PlayerInput.actions["Cancel"].performed -= CloseMenuCallback;
         returnSelection.Select();
         onOptionClose?.Invoke();
@@ -93,7 +96,7 @@ public class OptionsManager : MonoBehaviour
         if (volume.TryGet(out Bloom bloomVolume))
         {
             bloomVolume.active = bloomEnabled;
-            bloomValue = bloomEnabled;
+            settings.BloomValue = bloomEnabled;
         }
     }
 
@@ -101,21 +104,21 @@ public class OptionsManager : MonoBehaviour
     {
         AudioListener.volume = Mathf.Clamp01(newVolume / 20);
         masterValue.text = (newVolume * 5).ToString();
-        masterVolume = (int)newVolume;
+        settings.MasterVolume = (int)newVolume;
     }
 
     public void SetBGMVolume(float newVolume)
     {
         BGMMixer.SetFloat("volume", Mathf.Clamp((newVolume * 5) - 80f, -80f, 20f));
         BGMValue.text = (newVolume * 5).ToString();
-        BGMVolume = (int)newVolume;
+        settings.BGMVolume = (int)newVolume;
     }
 
     public void SetSFXVolume(float newVolume)
     {
         SFXMixer.SetFloat("volume", Mathf.Clamp((newVolume * 5) - 80f, -80f, 20f));
         SFXValue.text = (newVolume * 5).ToString();
-        SFXVolume = (int)newVolume;
+        settings.SFXVolume = (int)newVolume;
     }
 
     public void SelectNext(GameObject gameObject)

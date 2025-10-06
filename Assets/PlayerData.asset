@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   playerProfiles: []
+  settings:
+    MasterVolume: 16
+    BGMVolume: 16
+    SFXVolume: 16
+    BloomValue: 1
   playerColoursOptions:
   - {r: 1.4980394, g: 0.00000012351796, b: 0, a: 1}
   - {r: 2.270603, g: 0, b: 2.0390904, a: 1}

@@ -258,7 +258,9 @@ public class LobbyManager : MonoBehaviour
         playerIcons[playerIndex].HighlightControl(2, direction);
     }
 
-    public void ReturnToMainMenu(InputAction.CallbackContext ctx = new InputAction.CallbackContext())
+    public void ReturnToMainMenu(InputAction.CallbackContext ctx)
+        => ReturnToMainMenu();
+    public void ReturnToMainMenu()
     {
         playerManager.SetJoining(false);
         SceneManager.LoadScene(0);

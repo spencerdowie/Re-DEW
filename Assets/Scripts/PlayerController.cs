@@ -219,6 +219,7 @@ public class PlayerController : MonoBehaviour
         }
         if (disableFire)
             player.onFire.Disable();
+        GetComponentInChildren<SineLight>().StartPulse(invulnTime);
 
         yield return new WaitForSeconds(invulnTime);
 

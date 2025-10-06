@@ -3,7 +3,20 @@ guid: ac55809095f21d948bde690178c9db53
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
+  - firstSelected: {instanceID: 0}
+  - returnSelection: {instanceID: 0}
+  - masterValue: {instanceID: 0}
+  - BGMValue: {instanceID: 0}
+  - SFXValue: {instanceID: 0}
+  - bloomToggle: {instanceID: 0}
+  - masterSlider: {instanceID: 0}
+  - BGMSlider: {instanceID: 0}
+  - SFXSlider: {instanceID: 0}
+  - BGMMixer: {instanceID: 0}
+  - SFXMixer: {instanceID: 0}
+  - volume: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

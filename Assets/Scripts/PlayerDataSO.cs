@@ -12,6 +12,34 @@ public class PlayerProfile
 }
 
 [Serializable]
+public struct Settings
+{
+    //0-20
+    public int MasterVolume;
+    public int BGMVolume;
+    public int SFXVolume;
+    public bool BloomValue;
+
+    public Settings(int masterVolume, int bGMVolume, int sFXVolume, bool bloomValue)
+    {
+        MasterVolume = masterVolume;
+        BGMVolume = bGMVolume;
+        SFXVolume = sFXVolume;
+        BloomValue = bloomValue;
+    }
+
+    public static Settings FromJSON(string data)
+    {
+        return JsonUtility.FromJson<Settings>(data);
+    }
+
+    public string ToJSON()
+    {
+        return JsonUtility.ToJson(this);
+    }
+}
+
+[Serializable]
 public struct MapPreview
 {
     public int sceneID;
@@ -42,6 +70,9 @@ public class PlayerDataSO : ScriptableObject
 {
     [SerializeField]
     public PlayerProfile[] playerProfiles;
+
+    [SerializeField]
+    public Settings settings = new Settings(16, 16, 16, true);
 
     [SerializeField, ColorUsage(true, true)]
     public Color[] playerColoursOptions;

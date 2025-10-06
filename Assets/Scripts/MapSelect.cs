@@ -72,6 +72,9 @@ public class MapSelect : MonoBehaviour
 
     public void CancelMap(InputAction.CallbackContext ctx)
     {
+        if (mapConfirmed == false)
+            ReturnToLobby();
+
         foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
         {
             mapButton.interactable = true;

@@ -1128,6 +1128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac55809095f21d948bde690178c9db53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 8ed384d21d9f21f4d80bce7f02b2f83e, type: 2}
   firstSelected: {fileID: 6210691690386636565}
   returnSelection: {fileID: 0}
   masterValue: {fileID: 8628682061445408525}
@@ -1138,10 +1139,11 @@ MonoBehaviour:
   BGMSlider: {fileID: 4877823717276340928}
   SFXSlider: {fileID: 6991688897690612947}
   SelectDelay: 0.1
-  masterVolume: 16
-  BGMVolume: 16
-  SFXVolume: 16
-  bloomValue: 1
+  settings:
+    MasterVolume: 16
+    BGMVolume: 16
+    SFXVolume: 16
+    BloomValue: 1
   BGMMixer: {fileID: 24100000, guid: e1e49255de75aff42baaec538889ff50, type: 2}
   SFXMixer: {fileID: 24100000, guid: 7499864b527025a4fb1f22b8d63a9960, type: 2}
   volume: {fileID: 11400000, guid: 73a9add35a5132c4496aceaf7de8f912, type: 2}
