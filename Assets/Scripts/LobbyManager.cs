@@ -129,6 +129,7 @@ public class LobbyManager : MonoBehaviour
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
         player.PlayerInput.actions["Cancel"].performed += unreadyActions[player.PlayerIndex];
         player.AddLobbyBindings(ChangePlayerColour, ChangePlayerModel, ChangePlayerWeapon);
+        player.EnableLobbyBindings();
 
         if (player.PlayerIndex == 0)
             SelectUI(player);
@@ -165,7 +166,7 @@ public class LobbyManager : MonoBehaviour
         {
             playerStatuses[playerIndex] = LobbyStatus.Joined;
             playerIcons[playerIndex].SetPlayerStatus(LobbyStatus.Joined);
-            players[playerIndex].DisableLobbyBindings();
+            players[playerIndex].EnableLobbyBindings();
             ReadyCheck();
         }
         else if (playerStatuses[playerIndex] == LobbyStatus.Joined)
