@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 ///<summary>stock = 0, score = 1</summary>
@@ -136,6 +137,7 @@ public class GameManager : MonoBehaviour
     {
         int startingValue = GameSetting.WinCon == WinCon.STOCK ? GameSetting.StartStocks : 0;
         gameUI.SetupPlayers(players, startingValue);
+        gameCamera.GetUniversalAdditionalCameraData().cameraStack.Add(gameUI.UICamera);
         int numPlayers = 0;
         foreach (PlayerController player in players)
         {

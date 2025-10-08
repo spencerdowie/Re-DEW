@@ -7,9 +7,11 @@ using UnityEngine.UI;
 public class GameUIManager : MonoBehaviour
 {
     [SerializeField]
+    private PlayerDataSO playerData;
+    [SerializeField]
     private Canvas canvas;
     [SerializeField]
-    private PlayerDataSO playerData;
+    public Camera UICamera;
     [SerializeField]
     private PlayerUI[] UIPanels = new PlayerUI[4];
     [SerializeField]
