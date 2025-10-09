@@ -14,9 +14,25 @@ public class MusicManager : MonoBehaviour
     [field: SerializeField]
     public bool Shuffle { get; private set; }
     private int currentSong = -1;
+    [field: SerializeField]
+    public bool OverwriteExisting { get; private set; }
+    public static MusicManager Instance { get; private set; }
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            if (OverwriteExisting)
+                Destroy(Instance.gameObject);
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         audioSource = GetComponent<AudioSource>();
         foreach (AudioClip clip in playlist)
         {
@@ -34,13 +50,6 @@ public class MusicManager : MonoBehaviour
         audioSource.Play();
         musicCoroutine = StartCoroutine(PlayMusic());
     }
-
-    //public void NextSong()
-    //{
-    //    AudioClip nextSong = musicQueue.Dequeue();
-    //    audioSource.clip = nextSong;
-    //    musicQueue.Enqueue(nextSong);
-    //}
 
     public void NextSong()
     {

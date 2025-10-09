@@ -34,6 +34,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
+        Destroy(MusicManager.Instance.gameObject);
         SceneManager.LoadScene((int)Scenes.Lobby);
     }
 
