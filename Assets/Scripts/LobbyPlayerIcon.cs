@@ -18,7 +18,7 @@ public class LobbyPlayerIcon : Selectable
     [SerializeField]
     private Transform playerModelHolder;
     [SerializeField]
-    private TMPro.TextMeshProUGUI weaponNameText;
+    private TMPro.TextMeshProUGUI modelNameText, weaponNameText;
     [SerializeField]
     private GameObject xboxIcons, psIcons, xboxHighlights, psHighlights;
     [SerializeField]
@@ -93,11 +93,12 @@ public class LobbyPlayerIcon : Selectable
         }
     }
 
-    public void SetPlayerModel(GameObject newPlayerModel)
+    public void SetPlayerModel(GameObject newPlayerModel, string modelName)
     {
         Destroy(playerModelHolder.GetChild(0).gameObject);
 
         Instantiate(newPlayerModel, playerModelHolder);
+        modelNameText.text = modelName;
     }
 
     public void SetPlayerWeapon(string weaponName)

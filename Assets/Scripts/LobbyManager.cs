@@ -123,7 +123,8 @@ public class LobbyManager : MonoBehaviour
         LobbyPlayerIcon icon = playerIcons[player.PlayerIndex];
         icon.SetControllerType(player.ControllerType);
         icon.SetPlayerStatus(LobbyStatus.Joined);
-        icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex]);
+        icon.SetPlayerModel(playerData.characterPrefabs[player.PlayerModelIndex],
+            playerData.nameList[player.PlayerModelIndex]);
         icon.SetPlayerWeapon(playerData.weaponsOptions[player.PlayerWeaponIndex].WeaponName);
 
         player.PlayerInput.actions["Join"].performed += readyActions[player.PlayerIndex];
@@ -211,7 +212,8 @@ public class LobbyManager : MonoBehaviour
             % playerData.characterPrefabs.Length;
 
         player.SetPlayerModel(modelIndex);
-        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex]);
+        playerIcons[playerIndex].SetPlayerModel(playerData.characterPrefabs[modelIndex],
+            playerData.nameList[player.PlayerModelIndex]);
         playerIcons[playerIndex].HighlightControl(0, direction);
     }
 
