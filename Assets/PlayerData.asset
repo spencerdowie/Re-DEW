@@ -39,6 +39,12 @@ MonoBehaviour:
   - WeaponName: Short Bolt
     LaserPrefab: {fileID: 7177247423102359009, guid: af4749071d8fdb94187b5bb04a38262d,
       type: 3}
+  nameList:
+  - Lucy Civel
+  - Capt. Bronson
+  - Hugo MK.III
+  - 'Dr. Thompson '
+  - A.R.G.I.L.E.
   <MoveSpeed>k__BackingField: 6
   <SpeedChangeRate>k__BackingField: 10
   <RotationSmoothTime>k__BackingField: 0.12

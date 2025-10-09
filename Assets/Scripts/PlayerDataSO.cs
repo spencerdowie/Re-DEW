@@ -80,6 +80,7 @@ public class PlayerDataSO : ScriptableObject
     public GameObject playerCharacterPrefab;
     public GameObject[] characterPrefabs;
     public WeaponData[] weaponsOptions;
+    public string[] nameList;
 
 
     [field: SerializeField, Header("Player Settings"), Space]
