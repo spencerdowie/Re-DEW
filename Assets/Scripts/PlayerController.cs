@@ -38,10 +38,17 @@ public class PlayerController : MonoBehaviour
     private int hitLayer;
     private bool holdPlayer = false;
 
+    [SerializeField]
+    private AudioClip laserSFX, spawnSFX;
+    [SerializeField]
+    private AudioClip footstepSFX;
+    private AudioSource audioSource;
+
     private void Awake()
     {
         //Debug.Log(name + " Spawned");
         rigidbody = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -93,6 +100,8 @@ public class PlayerController : MonoBehaviour
         transform.position = spawnPos;
         rigidbody.velocity = Vector3.zero;
         HoldPlayer(false);
+
+        audioSource.PlayOneShot(spawnSFX);
         //rigidbody.enabled = true; //Otherwise it resets postion to origin
         StartCoroutine(MakeInvuln(playerData.RespawnInvulnTime, true));
     }
@@ -152,6 +161,7 @@ public class PlayerController : MonoBehaviour
             Transform laserTransform = Instantiate(laserPrefab, laserSpawn).transform;
             laserTransform.GetComponent<Laser>().Setup(PlayerIndex, hitLayer, PlayerColour, () => UpdateAmmo(1));
             UpdateAmmo(-1);
+            audioSource.PlayOneShot(laserSFX);
         }
     }
 
