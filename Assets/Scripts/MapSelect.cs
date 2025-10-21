@@ -21,7 +21,7 @@ public class MapSelect : MonoBehaviour
     private GameObject readyBanner;
     private int selectedMapIndex = 1;
     private GameSetting gameSetting;
-    private bool mapConfirmed = false;
+    private bool mapConfirmed = false, isLoading = false;
 
     private void Awake()
     {
@@ -86,8 +86,9 @@ public class MapSelect : MonoBehaviour
 
     public void StartGame(InputAction.CallbackContext ctx)
     {
-        if (mapConfirmed)
+        if (mapConfirmed && !isLoading)
         {
+            isLoading = true;
             StartCoroutine(LoadGameScene(playerData.Maps[selectedMapIndex].sceneID));
         }
     }
@@ -97,7 +98,7 @@ public class MapSelect : MonoBehaviour
         this.gameSetting = gameSetting;
         foreach (Player player in players)
         {
-            if (player == null)
+            if (player == null || player.PlayerIndex != 0)
                 continue;
 
             player.PlayerInput.actions["Join"].performed += StartGame;
