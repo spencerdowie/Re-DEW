@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.SetActive(true);
         transform.position = spawnPos;
-        rigidbody.velocity = Vector3.zero;
+        rigidbody.linearVelocity = Vector3.zero;
         HoldPlayer(false);
 
         audioSource.PlayOneShot(spawnSFX);
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
         float speed = 0f;
         float targetSpeed = player.inputMove == Vector2.zero ? 0f : playerData.MoveSpeed * player.inputMove.magnitude;
 
-        float currentSpeed = new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude;
+        float currentSpeed = new Vector2(rigidbody.linearVelocity.x, rigidbody.linearVelocity.z).magnitude;
 
         if (Mathf.Abs(targetSpeed - currentSpeed) > 0.1f)
         {
@@ -145,8 +145,8 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("X", relativeMoveDir.x / playerData.MoveSpeed);
         animator.SetFloat("Y", relativeMoveDir.z / playerData.MoveSpeed);
-        Vector3 gravVel = rigidbody.velocity.y * Vector3.up;
-        rigidbody.velocity = moveDirection + gravVel;
+        Vector3 gravVel = rigidbody.linearVelocity.y * Vector3.up;
+        rigidbody.linearVelocity = moveDirection + gravVel;
         rigidbody.angularVelocity = Vector3.zero;
         //animator.SetFloat("MoveSpeed", speed);
         if (gravVel.y < -1)
@@ -246,7 +246,7 @@ public class PlayerController : MonoBehaviour
     public void HoldPlayer(bool holdPlayer = true)
     {
         this.holdPlayer = holdPlayer;
-        rigidbody.velocity = Vector3.zero;
+        rigidbody.linearVelocity = Vector3.zero;
         if (holdPlayer)
             player.onFire.Disable();
         else
