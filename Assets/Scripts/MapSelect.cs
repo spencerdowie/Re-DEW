@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class MapSelect : MonoBehaviour
     [SerializeField]
     private GameObject readyBanner;
     private int selectedMapIndex = 1;
+    private Button[] mapButtons;
     private GameSetting gameSetting;
     private bool mapConfirmed = false, isLoading = false;
 
@@ -27,11 +29,13 @@ public class MapSelect : MonoBehaviour
     {
         playerManager = FindObjectOfType<PlayerManager>();
         int index = 0;
-        foreach (MapButton button in mapButtonHolder.GetComponentsInChildren<MapButton>())
+        mapButtons = new Button[mapButtonHolder.childCount];
+        foreach (MapButton mapButton in mapButtonHolder.GetComponentsInChildren<MapButton>())
         {
-            button.Setup(index);
-            button.onSelect += SelectMap;
-            button.GetComponent<Button>().onClick.AddListener(ConfirmMap);
+            mapButton.Setup(index);
+            mapButton.onSelect += SelectMap;
+            mapButtons[index] = mapButton.GetComponent<Button>();
+            mapButtons[index].onClick.AddListener(ConfirmMap);
             index++;
         }
         EventSystem.current.SetSelectedGameObject(mapButtonHolder.GetChild(0).gameObject);
@@ -62,10 +66,12 @@ public class MapSelect : MonoBehaviour
 
     public void ConfirmMap()
     {
-        foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
-        {
-            mapButton.interactable = false;
-        }
+        //foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
+        //{
+        //    mapButton.interactable = false;
+        //}
+        mapButtons[selectedMapIndex].interactable = false;
+        EventSystem.current.SetSelectedGameObject(null);
         readyBanner.SetActive(true);
         mapConfirmed = true;
     }
@@ -75,11 +81,9 @@ public class MapSelect : MonoBehaviour
         if (mapConfirmed == false)
             ReturnToLobby();
 
-        foreach (Button mapButton in mapButtonHolder.GetComponentsInChildren<Button>())
-        {
-            mapButton.interactable = true;
-        }
-        EventSystem.current.SetSelectedGameObject(mapButtonHolder.GetChild(selectedMapIndex).gameObject);
+
+        mapButtons[selectedMapIndex].interactable = true;
+        EventSystem.current.SetSelectedGameObject(mapButtons[selectedMapIndex].gameObject);
         readyBanner.SetActive(false);
         mapConfirmed = false;
     }

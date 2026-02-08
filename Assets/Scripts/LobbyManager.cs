@@ -317,7 +317,7 @@ public class LobbyManager : MonoBehaviour
 
     public void OpenOptionsMenu()
     {
-        FindObjectOfType<OptionsManager>(true).OpenOptionsMenu(players.First(p => p != null), CloseOptionsMenu);
+        FindObjectOfType<OptionsUI>(true).OpenOptionsMenu(players.First(p => p != null), CloseOptionsMenu);
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null)

@@ -250,7 +250,7 @@ public class PauseMenu : MonoBehaviour
         {
             Resume();
             //if the option menu was already closed don't close again
-            GetComponentInChildren<OptionsManager>()?.CloseOptionsMenu();
+            GetComponentInChildren<OptionsUI>()?.CloseOptionsMenu();
         }
         else
         {
@@ -280,6 +280,6 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenOptionsMenu()
     {
-        FindObjectOfType<OptionsManager>(true).OpenOptionsMenu(pausePlayer);
+        FindObjectOfType<OptionsUI>(true).OpenOptionsMenu(pausePlayer);
     }
 }

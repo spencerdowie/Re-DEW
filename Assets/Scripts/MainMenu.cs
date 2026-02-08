@@ -16,17 +16,6 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync((int)Scenes.DebugMenu, LoadSceneMode.Additive);
         EventSystem.current.SetSelectedGameObject(StartButton);
 
-        if (PlayerPrefs.HasKey("Settings"))
-        {
-            playerData.settings = Settings.FromJSON(PlayerPrefs.GetString("Settings"));
-        }
-
-        if (!playerData.LastGameSettings.IsInitialized)
-        {
-            playerData.LastGameSettings = playerData.DefaultGameSettings();
-        }
-        Debug.Log(playerData.LastGameSettings.ToString());
-
 #if PLATFORM_WEBGL
         GameObject.Find("Quit").SetActive(false);
 #endif
