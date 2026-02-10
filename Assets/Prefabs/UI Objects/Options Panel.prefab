@@ -1480,6 +1480,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Credits
       objectReference: {fileID: 0}
+    - target: {fileID: 8774994385525083614, guid: e8e0be64b2f07a248a74c802a06bbe12,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9155492110168500924, guid: e8e0be64b2f07a248a74c802a06bbe12,
         type: 3}
       propertyPath: m_text

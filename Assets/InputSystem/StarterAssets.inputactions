@@ -206,17 +206,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f3d66d4b-7266-4d45-94af-3fe563a33584",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad;Xbox",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "78a9ebb6-411d-4170-82c6-d9e18d065c93",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",

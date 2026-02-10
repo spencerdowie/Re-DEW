@@ -96,6 +96,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //pauseMenu.AddPauseListeners(MuffleBGM, UnMuffleBGM);
+
         pauseMenu.EnablePause();
 
         if (!Testing)
@@ -284,7 +286,19 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game Over");
         //Time.timeScale = 0f;
-        PauseMenu.Instance.DisablePause();
+        //UnMuffleBGM();
+        PauseMenu pauseMenu = PauseMenu.Instance;
+        pauseMenu.DisablePause();
+        foreach (PlayerController playerControlller in players)
+        {
+            Player player = playerControlller?.Player;
+            if (player != null)
+            {
+                pauseMenu.RemovePlayerInput(player.PlayerInput);
+                pauseMenu.RemovePauseListeners(playerControlller.Pause, playerControlller.Resume);
+            }
+        }
+        //pauseMenu.RemovePauseListeners(MuffleBGM, UnMuffleBGM);
         SceneManager.UnloadSceneAsync((int)Scenes.GameUI);
         yield return SceneManager.LoadSceneAsync((int)Scenes.GameEndScreen, LoadSceneMode.Additive);
         GameOverUI gameOverUI = FindObjectOfType<GameOverUI>();
@@ -356,5 +370,17 @@ public class GameManager : MonoBehaviour
     public void SetClockTimeDebug(int time)
     {
         gameUI.DebugSetTime(time);
+    }
+
+    public void MuffleBGM()
+    {
+        gameCamera.GetComponent<AudioHighPassFilter>().enabled = true;
+        gameCamera.GetComponent<AudioLowPassFilter>().enabled = true;
+    }
+
+    public void UnMuffleBGM()
+    {
+        gameCamera.GetComponent<AudioHighPassFilter>().enabled = false;
+        gameCamera.GetComponent<AudioLowPassFilter>().enabled = false;
     }
 }

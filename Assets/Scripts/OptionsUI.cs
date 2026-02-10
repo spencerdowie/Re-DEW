@@ -107,19 +107,30 @@ public class OptionsUI : MonoBehaviour
         settings.MasterVolume = (int)newVolume;
     }
 
-    public void SetBGMVolume(float newVolume)
+    public void SetBGMVolume(float newVolumeRaw)
     {
-        float rescaled = Mathf.Lerp(0, 1, newVolume / 20);
-        BGMMixer.SetFloat("volume", Mathf.Clamp((rescaled * 20), -10f, 10f));
-        BGMValue.text = (newVolume * 5).ToString();
-        settings.BGMVolume = (int)newVolume;
+        float newVolume = -80f;
+        if (newVolumeRaw > 0)
+        {
+            float rescaledVolume = Mathf.Lerp(0, 1, newVolumeRaw / 20);
+            newVolume = Mathf.Clamp(rescaledVolume * 20, -10f, 10f);
+        }
+        BGMMixer.SetFloat("volume", newVolume);
+        BGMValue.text = (newVolumeRaw * 5).ToString();
+        settings.BGMVolume = (int)newVolumeRaw;
     }
 
-    public void SetSFXVolume(float newVolume)
+    public void SetSFXVolume(float newVolumeRaw)
     {
-        SFXMixer.SetFloat("volume", Mathf.Clamp((newVolume * 5) - 80f, -80f, 20f));
-        SFXValue.text = (newVolume * 5).ToString();
-        settings.SFXVolume = (int)newVolume;
+        float newVolume = -80f;
+        if (newVolumeRaw > 0)
+        {
+            float rescaledVolume = Mathf.Lerp(0, 1, newVolumeRaw / 20);
+            newVolume = Mathf.Clamp(rescaledVolume * 20, -10f, 10f);
+        }
+        SFXMixer.SetFloat("volume", newVolume);
+        SFXValue.text = (newVolumeRaw * 5).ToString();
+        settings.SFXVolume = (int)newVolumeRaw;
     }
 
     public void SelectNext(GameObject gameObject)
